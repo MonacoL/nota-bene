@@ -30,6 +30,10 @@ _Avoid_: solfeggio, esercizio di lettura, esercizio a prima vista
 Lettura che ha tra i Prerequisiti il Capitolo "DO mobile avanzato", perché contiene Sillabe cromatiche o una Mutazione.
 _Avoid_: lettura difficile, livello 2
 
+**Lettura ritirata**:
+Lettura tolta dall'elenco dopo la pubblicazione, per esempio per un problema di licenza. Il suo indirizzo resta e dice che la Lettura non è più disponibile.
+_Avoid_: lettura cancellata, lettura eliminata
+
 **Soluzione**:
 Le Sillabe di una Lettura, scritte su un rigo separato dal Testo. Restano nascoste finché il corista non chiede di vederle.
 _Avoid_: risposta, aiuto

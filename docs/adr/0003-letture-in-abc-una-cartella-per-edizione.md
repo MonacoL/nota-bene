@@ -25,3 +25,9 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
   - il numero di battute;
   - la durata di ogni Battuta;
   - il registro `letture/pubblicate.txt`, a cui gli id si aggiungono e da cui non si tolgono mai.
+- La licenza si documenta com'era il giorno dell'import. In `edizione.yml` vanno la licenza come compare nella pagina, l'URL, la data di consultazione e almeno una prova: uno snapshot su archive.org oppure `licenza.pdf` nella cartella. Un'Edizione PD che non dichiara la sua fonte porta `fonte_dichiarata: no`.
+- Una seconda Edizione dello stesso Brano va in una cartella `<brano>-<editore>/`. La prima non si rinomina, perché gli id pubblicati non cambiano. La CI vieta due cartelle con la stessa Fonte e lo stesso numero di Edizione.
+- Gli aggiornamenti dell'Edizione sulla Fonte non si seguono: fa fede il sorgente copiato. Per adottarli si rifà l'import, aggiornando hash e data di consultazione. Correggere una Lettura non ne cambia l'id, cambia solo la data della modifica.
+- Una Lettura ritirata resta nel registro e la sua pagina rimane, con un avviso e un link all'elenco, invece di un 404.
+- Una Lettura può avere `da_verificare` con un motivo, quando la scelta tra cromatismo e Mutazione o i Prerequisiti vanno confermati dal maestro. Il campo non si vede sul sito.
+- Il flusso di import è descritto in `docs/letture.md`.
