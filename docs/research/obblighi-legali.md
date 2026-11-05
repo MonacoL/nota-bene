@@ -103,7 +103,7 @@ Fonti:
 
 ### Che cosa dice l'art. 50(4), secondo comma
 
-I *deployer* di un sistema di AI che genera o manipola testo "pubblicato allo scopo di informare il pubblico su questioni di interesse pubblico" devono rendere noto che il testo è stato generato o manipolato artificialmente. L'obbligo **non si applica** "where the AI-generated content has undergone a process of human review or editorial control and where a natural or legal person holds editorial responsibility for the publication of the content" (testo dell'articolo come riportato nel Code of Practice, p. 32 circa). L'informazione va data in modo chiaro e distinguibile al più tardi alla prima esposizione (art. 50(5)).
+I *deployer* di un sistema di AI che genera o manipola testo "pubblicato allo scopo di informare il pubblico su questioni di interesse pubblico" devono rendere noto che il testo è stato generato o manipolato artificialmente. L'obbligo **non si applica** "where the AI-generated content has undergone a process of human review or editorial control and where a natural or legal person holds editorial responsibility for the publication of the content" (testo dell'articolo come riportato nel Code of Practice, p. 29). L'informazione va data in modo chiaro e distinguibile al più tardi alla prima esposizione (art. 50(5)).
 
 **Data di applicazione**: 2 agosto 2026 (art. 113; FAQ: "Article 50 of the AI Act applies as from 2 August 2026"). Il periodo transitorio fino al 2 dicembre 2026 introdotto dall'Omnibus riguarda solo la marcatura tecnica a carico dei *provider* (art. 50(2)), non i deployer (Linee guida, par. 153). I testi pubblicati prima del 2 agosto 2026 non vanno etichettati retroattivamente, ma quelli generati prima e pubblicati dopo sì (Linee guida, par. 154).
 
