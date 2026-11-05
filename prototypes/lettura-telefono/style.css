@@ -23,7 +23,11 @@ small { color: var(--muted); }
 #score svg { display: block; }
 #score .riga-sillabe { fill: var(--sol); font-weight: 600; }
 #score .abcjs-annotation { fill: var(--mut); text-anchor: middle; }
-#score .abcjs-note:has(.abcjs-annotation) path { fill: var(--mut); }
+#score:not(.mut-nascosta) .abcjs-note:has(.abcjs-annotation) path { fill: var(--mut); }
+#score.mut-nascosta .abcjs-annotation { visibility: hidden; }
+#score.sillabe-nascoste .riga-sillabe { visibility: hidden; }
+#score .suona, #score .suona path { fill: #d9480f; stroke: #d9480f; }
+#score text.suona, #score .suona tspan { fill: #d9480f; }
 #score svg { overflow: visible; }
 
 .box-soluzione { margin-top: 8px; padding: 8px 10px; border-left: 3px solid var(--sol); background: #fbf4f1; font-size: .9rem; }

@@ -12,7 +12,7 @@ const params = new URLSearchParams(location.search);
 const state = {
   variant: CHIAVI.includes(params.get('variant')) ? params.get('variant') : 'A',
   resa: params.get('resa') === 'scala' ? 'scala' : 'acapo',
-  mut: params.get('mut') === 'soluzione' ? 'soluzione' : 'sempre',
+  mut: params.get('mut') === 'sempre' ? 'sempre' : 'soluzione',
   corpo: Number(params.get('corpo')) || 15,
   zoom: Number(params.get('zoom')) || 0.8,
   spaziatura: Number(params.get('spaziatura')) || 1.1,
@@ -45,10 +45,29 @@ function syncUrl() {
 // ---------- ABC ----------
 
 function buildAbc(l) {
-  const mostraMut = l.mutazione && (state.mut === 'sempre' || state.soluzione);
-  const note = l.note.replace('{MUT}', mostraMut ? `"^${l.mutazione.etichetta}"` : '');
-  let abc = `X:1\n%%vocalfont Helvetica ${state.corpo}\n%%annotationfont Helvetica-Bold 13\n${l.head}\n${note}\nw: ${l.testo}\n`;
-  if (state.soluzione) abc += `w: ${l.sillabe}\n`;
+  // Sillabe e segno di Mutazione si disegnano SEMPRE, così lo spazio è riservato e
+  // mostrare la Soluzione non sposta gli a capo; quando sono nascosti li rende
+  // invisibili il CSS (decisione Q3 del ticket).
+  const note = l.note.replace('{MUT}', l.mutazione ? `"^${l.mutazione.etichetta}"` : '');
+  return `X:1\n%%vocalfont Helvetica ${state.corpo}\n%%annotationfont Helvetica-Bold 13\n${l.head}\n${note}\nw: ${l.testo}\nw: ${l.sillabe}\n`;
+}
+
+// Divide note, Testo e Sillabe per Battuta (le righe w: usano | allineato alle Battute).
+function battuteDi(l) {
+  const note = l.note.replace('{MUT}', l.mutazione ? `"^${l.mutazione.etichetta}"` : '')
+    .split(/\|\]?/).map((x) => x.trim()).filter(Boolean);
+  const dividi = (t) => { const v = t.split('|').map((x) => x.trim()); while (v.length < note.length) v.push(''); return v; };
+  return { n: note.length, note, testo: dividi(l.testo), sillabe: dividi(l.sillabe) };
+}
+
+// ABC con a capo espliciti: ogni gruppo [i, j) di Battute è un rigo con le sue righe w:.
+function abcRighe(l, b, gruppi) {
+  let abc = `X:1\n%%stretchlast 1\n%%vocalfont Helvetica ${state.corpo}\n%%annotationfont Helvetica-Bold 13\n${l.head}\n`;
+  for (const [i, j] of gruppi) {
+    abc += b.note.slice(i, j).join(' | ') + (j === b.n ? ' |]' : ' |') + '\n';
+    abc += 'w: ' + b.testo.slice(i, j).join(' | ') + ' |\n';
+    abc += 'w: ' + b.sillabe.slice(i, j).join(' | ') + ' |\n';
+  }
   return abc;
 }
 
@@ -64,24 +83,62 @@ function renderScore() {
     // Misurato: in abcjs 6.7.2 staffwidth è già in px di uscita; scale rimpicciolisce
     // solo i simboli, quindi con scale < 1 in un rigo ci stanno più Battute.
     opts.scale = state.zoom;
-    opts.staffwidth = w - 4;
+    opts.staffwidth = w - 24;   // margine a destra per l'etichetta della Mutazione
     opts.wrap = { minSpacing: state.spaziatura, maxSpacing: 2.6, lastLineLimit: 0.5 };
     if (state.perRigo) opts.wrap.preferredMeasuresPerLine = state.perRigo;
   } else {
     opts.staffwidth = 860;
     opts.responsive = 'resize';
   }
-  const res = ABCJS.renderAbc(el, buildAbc(l), opts);
-  visualObj = res[0];
+  // Responsive: si riempie ogni rigo con quante più Battute possibile. Si aggiunge
+  // una Battuta alla volta e la si tiene solo se il rigo, disegnato da solo alla
+  // larghezza dello schermo, non fa toccare nessuna sillaba (Testo o Soluzione)
+  // e non esce dal bordo. Se l'intero estratto ci sta, resta su un rigo solo.
+  let tentativi = 0;
+  let urti = 0;
+  if (state.resa === 'acapo' && !state.perRigo) {
+    const b = battuteDi(l);
+    const prova = { ...opts };
+    delete prova.wrap;
+    const ciSta = (i, j) => {
+      tentativi++;
+      const vo = ABCJS.renderAbc(el, abcRighe(l, b, [[i, j]]), prova)[0];
+      const svg = el.querySelector('svg');
+      const destra = el.getBoundingClientRect().right + 2;
+      const esce = [...svg.querySelectorAll('.abcjs-note, .abcjs-bar, .abcjs-lyric')]
+        .some((e) => e.getBoundingClientRect().right > destra);
+      const dbg = { righe: vo.lines.filter((x) => x.staff).length, urti: contaUrti(el), esce };
+      return dbg.righe === 1 && dbg.urti === 0 && !esce;
+    };
+    const gruppi = [];
+    for (let i = 0; i < b.n;) {
+      let j = i + 1;
+      while (j < b.n && ciSta(i, j + 1)) j++;
+      gruppi.push([i, j]);
+      i = j;
+    }
+    visualObj = ABCJS.renderAbc(el, abcRighe(l, b, gruppi), prova)[0];
+    urti = contaUrti(el);
+    opts.wrap = { battutePerRigo: gruppi.map(([i, j]) => j - i).join('+') };
+  } else {
+    visualObj = ABCJS.renderAbc(el, buildAbc(l), opts)[0];
+    urti = contaUrti(el);
+  }
 
   // abcjs mette Testo e Sillabe della stessa nota in un solo <text> con un <tspan>
   // per riga w:. Il secondo tspan è la Soluzione: lo marchiamo per colorarlo.
-  if (state.soluzione) el.querySelectorAll('.abcjs-lyric tspan:nth-child(2)').forEach((t) => t.classList.add('riga-sillabe'));
+  el.querySelectorAll('.abcjs-lyric tspan:nth-child(2)').forEach((t) => t.classList.add('riga-sillabe'));
+  el.classList.toggle('sillabe-nascoste', !state.soluzione);
+  el.classList.toggle('mut-nascosta', !(state.mut === 'sempre' || state.soluzione));
 
   const svg = el.querySelector('svg');
   const vb = svg && svg.viewBox && svg.viewBox.baseVal;
   state.render = {
     contenitore: w + 'px',
+    spaziaturaUsata: opts.wrap ? opts.wrap.minSpacing : '-',
+    battutePerRigoUsate: opts.wrap && (opts.wrap.battutePerRigo || opts.wrap.preferredMeasuresPerLine) || 'auto',
+    candidatiProvati: tentativi,
+    urtiRimasti: urti,
     staffwidth: opts.staffwidth,
     righe: visualObj.lines.filter((x) => x.staff).length,
     svg: svg ? Math.round(svg.getBoundingClientRect().width) + '×' + Math.round(svg.getBoundingClientRect().height) + 'px' : '-',
@@ -90,10 +147,47 @@ function renderScore() {
   renderProtoState();
 }
 
+// Conta le coppie di sillabe vicine sulla stessa riga che si toccano (meno di 4px).
+function contaUrti(el) {
+  const righe = new Map();
+  el.querySelectorAll('.abcjs-lyric').forEach((t) => {
+    const parti = t.querySelectorAll('tspan');
+    (parti.length ? [...parti] : [t]).forEach((p) => {
+      if (!p.textContent.trim()) return;
+      const r = p.getBoundingClientRect();
+      if (!r.width) return;
+      const k = Math.round(r.top / 4);
+      if (!righe.has(k)) righe.set(k, []);
+      righe.get(k).push({ left: r.left, right: r.right, t: p.textContent });
+    });
+  });
+  let n = 0;
+  righe.forEach((rs) => {
+    rs.sort((a, b) => a.left - b.left);
+    for (let i = 1; i < rs.length; i++) if (rs[i].left < rs[i - 1].right + 4) n++;
+  });
+  return n;
+}
+
 // ---------- Audio ----------
 
 let AC = null;
 let synth = null;
+let cursore = null;   // ABCJS.TimingCallbacks che illumina le note durante l'Ascolto
+
+function evidenzia(ev) {
+  document.querySelectorAll('#score .suona').forEach((e) => e.classList.remove('suona'));
+  if (!ev || !ev.elements) return;
+  ev.elements.flat().forEach((e) => e.classList.add('suona'));
+  // Su telefono la partitura è più alta dello schermo: tieni in vista la nota che suona.
+  const primo = ev.elements.flat()[0];
+  if (primo) {
+    const r = primo.getBoundingClientRect();
+    const barra = document.querySelector('.va-bar');
+    const basso = innerHeight - (barra ? barra.offsetHeight : 0) - 40;
+    if (r.top < 60 || r.bottom > basso) primo.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+}
 
 function audioCtx() {
   // Sblocco nel gesto, prima di qualunque await (vedi research/audio-browser).
@@ -147,9 +241,13 @@ async function ascoltoDiVerifica() {
     await synth.init({ audioContext: ctx, visualObj, options: { program: 0 } });
     await synth.prime();
     synth.start();
+    cursore = new ABCJS.TimingCallbacks(visualObj, {
+      eventCallback: (ev) => { evidenzia(ev); return ev ? undefined : 'continue'; },
+    });
+    cursore.start();
     setAudio('ascolto', 'Ascolto di verifica in corso (tocca di nuovo per fermare)');
     const durata = visualObj.getTotalTime ? visualObj.getTotalTime() : 20;
-    setTimeout(() => state.audio === 'ascolto' && setAudio('fermo', ''), (durata + 1) * 1000);
+    setTimeout(() => { if (state.audio === 'ascolto') { evidenzia(null); setAudio('fermo', ''); } }, (durata + 1) * 1000);
   } catch (e) {
     console.error(e);
     setAudio('errore', 'Suoni non disponibili (serve la rete per il soundfont nel prototipo)');
@@ -158,6 +256,8 @@ async function ascoltoDiVerifica() {
 
 function stopAscolto() {
   if (synth) { try { synth.stop(); } catch (e) { /* ignora */ } synth = null; }
+  if (cursore) { cursore.stop(); cursore = null; }
+  evidenzia(null);
   if (state.audio === 'ascolto' || state.audio === 'caricamento') setAudio('fermo', '');
 }
 
@@ -217,8 +317,9 @@ function VariantA(l) {
     </header>
     <section class="score-card"><div id="score"></div>${boxSoluzione(l)}</section>
     <p class="stato-audio" hidden></p>
+    <p class="vc-attrib">${l.autore}. Fonte <a href="${l.fonte.url}" target="_blank" rel="noopener">${l.fonte.archivio}</a>, ${l.fonte.edizione}. Licenza: ${l.fonte.licenza}.</p>
     <details class="va-fonte">
-      <summary>Brano, Voce e Fonte · ${l.fonte.archivio}, ${l.fonte.licenza}</summary>
+      <summary>Dettagli su Brano, Voce e Fonte</summary>
       ${fonteDl(l)}
     </details>
     <nav class="va-bar" aria-label="Comandi della Lettura">

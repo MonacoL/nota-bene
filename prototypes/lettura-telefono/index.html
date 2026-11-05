@@ -4,6 +4,10 @@
   Domanda: com'è fatta la schermata di una Lettura a 360 px e come si adatta a desktop?
   Tre varianti sulla stessa pagina, scelte con ?variant=A|B|C e la barra scura in basso.
   Altre manopole (sempre nella barra): ?resa=acapo|scala, ?mut=sempre|soluzione.
+  A capo automatico: ogni rigo prende quante più Battute possibile finché nessuna
+  sillaba (Testo o Soluzione) tocca la vicina; se l'estratto ci sta, resta su un rigo.
+  Le Sillabe hanno sempre il loro spazio, anche nascoste (la partitura non salta).
+  Ascolto di verifica: la nota che suona e la sua sillaba si colorano.
   Niente persistenza, niente test: si butta via dopo aver deciso.
   Avvio: cd prototypes/lettura-telefono && npm start  →  http://localhost:8008/
   (abcjs è già copiato in vendor/; npm install + npm run vendor solo per aggiornarlo.)
@@ -45,7 +49,7 @@
         <option value="1">1</option>
       </select>
     </label>
-    <label>Spaziatura minima (wrap.minSpacing)
+    <label>Spaziatura minima (wrap.minSpacing, solo con Battute fisse)
       <select id="proto-spaziatura">
         <option value="1.1">1.1 (più Battute per rigo)</option>
         <option value="1.5">1.5</option>
@@ -54,7 +58,7 @@
     </label>
     <label>Battute per rigo (wrap.preferredMeasuresPerLine)
       <select id="proto-perrigo">
-        <option value="0">decide abcjs</option>
+        <option value="0">automatico: più Battute possibile per rigo</option>
         <option value="2">2 fisse</option>
         <option value="3">3 fisse</option>
       </select>
