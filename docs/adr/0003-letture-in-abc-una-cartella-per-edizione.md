@@ -31,3 +31,4 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
 - Una Lettura ritirata resta nel registro e la sua pagina rimane, con un avviso e un link all'elenco, invece di un 404.
 - Una Lettura può avere `da_verificare` con un motivo, quando la scelta tra cromatismo e Mutazione o i Prerequisiti vanno confermati dal maestro. Il campo non si vede sul sito.
 - Il flusso di import è descritto in `docs/letture.md`.
+- Chiave di violino ottava bassa: abcjs disegna `clef=treble-8` come la chiave di violino, senza spostare le note. L'ABC di una Voce di tenore va quindi scritto un'ottava sopra le Note reali, e chi calcola Note o Sillabe dall'ABC (ADR-0004) deve riportarle giù di un'ottava. È stato verificato nel prototipo [Interazione negli Esercizi di teoria da telefono](https://github.com/MonacoL/nota-bene/issues/7).

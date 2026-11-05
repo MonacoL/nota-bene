@@ -22,6 +22,10 @@ _Avoid_: livello, difficoltà numerica
 Domanda su un singolo concetto, creata dalla piattaforma. Ce ne sono di otto tipi: nominare una Nota (o la sua Sillaba) in una Chiave, riconoscere un Intervallo, rivoltare un Intervallo, costruire una scala, trovare la Tonalità da un'Armatura, trovare Tonica e Modo di una melodia, completare una Battuta, riconoscere il Tempo.
 _Avoid_: quiz, test
 
+**Serie**:
+Dieci Esercizi di teoria dello stesso tipo, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva.
+_Avoid_: sessione, quiz, test
+
 **Lettura**:
 Esercizio di lettura a prima vista: un estratto di poche battute di una sola Voce di un Brano reale, da cantare con il DO mobile. Non è mai creato dalla piattaforma.
 _Avoid_: solfeggio, esercizio di lettura, esercizio a prima vista
