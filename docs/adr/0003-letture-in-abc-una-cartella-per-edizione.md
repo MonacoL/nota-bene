@@ -22,7 +22,8 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
   - il file sorgente, che deve esserci e avere l'hash dichiarato;
   - il parsing di abcjs, che non deve dare avvisi;
   - la Voce, che deve essere una sola;
-  - il numero di battute;
+  - il numero di battute, da 4 a 12 (il levare iniziale non conta);
+  - i limiti musicali dell'estratto: niente gruppi irregolari (terzine e simili), nessun salto più ampio di un'ottava, estensione fino a una decima, nessuna pausa più lunga di 2 Battute, Armatura fino a 3 alterazioni (fino a 4 in una Lettura avanzata). Sono gli argomenti che il Percorso non insegna o che un principiante non regge;
   - la durata di ogni Battuta;
   - il registro `letture/pubblicate.txt`, a cui gli id si aggiungono e da cui non si tolgono mai.
 - La licenza si documenta com'era il giorno dell'import. In `edizione.yml` vanno la licenza come compare nella pagina, l'URL, la data di consultazione e almeno una prova: uno snapshot su archive.org oppure `licenza.pdf` nella cartella. Un'Edizione PD che non dichiara la sua fonte porta `fonte_dichiarata: no`.
