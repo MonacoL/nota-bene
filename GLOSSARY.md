@@ -26,6 +26,10 @@ _Avoid_: quiz, test
 Esercizio di lettura a prima vista: un estratto di poche battute di una sola Voce di un Brano reale, da cantare con il DO mobile. Non è mai creato dalla piattaforma.
 _Avoid_: solfeggio, esercizio di lettura, esercizio a prima vista
 
+**Lettura avanzata**:
+Lettura che ha tra i Prerequisiti il Capitolo "DO mobile avanzato", perché contiene Sillabe cromatiche o una Mutazione.
+_Avoid_: lettura difficile, livello 2
+
 **Soluzione**:
 Le Sillabe di una Lettura, scritte su un rigo separato dal Testo. Restano nascoste finché il corista non chiede di vederle.
 _Avoid_: risposta, aiuto
