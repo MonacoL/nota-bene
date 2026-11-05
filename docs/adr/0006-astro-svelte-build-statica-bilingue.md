@@ -23,3 +23,5 @@ Il sito si costruisce con **Astro**, senza Starlight, in TypeScript strict e con
 - Il calcolo delle Sillabe e i generatori degli Esercizi sono moduli TypeScript puri, testati con Vitest. La validazione in CI e la build usano lo stesso codice.
 - La pipeline di CI è: controllo dei tipi, validazione delle Letture (ADR-0003), build di Astro, test Playwright, deploy su Pages.
 - Font e librerie (abcjs, smplr, campioni) sono serviti dal sito stesso, mai da CDN di terzi.
+- Le pagine di servizio stanno in `contenuti/pagine/it/` e `contenuti/pagine/en/`. A differenza dei Capitoli non hanno ripiego: se ne manca una in inglese la CI blocca il deploy, perché privacy e uso dell'AI non si mostrano in una lingua che il lettore potrebbe non capire. Le sezioni "Brani" e "asset di terzi" della pagina dei crediti sono generate alla build da `edizione.yml` e dai file di licenza degli asset.
+- Ogni Capitolo ha nel frontmatter `revisione: { da, data }`, cioè la revisione umana che la pagina "Uso dell'intelligenza artificiale" dichiara. Un Capitolo senza revisione fa fallire la CI.
