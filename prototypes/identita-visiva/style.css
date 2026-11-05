@@ -165,3 +165,17 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .nobar .proto-bar { display: none; }
 /* l'etichetta della Mutazione può uscire di poco a destra: non tagliarla */
 #score, #score div, #score svg { overflow: visible !important; }
+
+/* E = scelta finale: font e forme di B, colori di A, segno nota (B) */
+[data-v="E"] {
+  --font-body: "Alterazioni", "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-head: var(--font-body);
+  --vocal: "Atkinson Hyperlegible Next";
+  --bg: #faf7f0; --surface: #ffffff; --ink: #1e1a16; --muted: #5e554b; --line: #d9cfbf;
+  --accent: #8a1c2c; --accent-ink: #ffffff; --sol: #1f4f8f; --suona: #c2410c;
+  --ok: #1e6b3a; --ok-bg: #e7f3ea; --ko: #a3261b; --ko-bg: #fbe9e6;
+  --radius: 12px; --head-weight: 700;
+}
+[data-v="E"][data-scuro] { --bg: #171411; --surface: #221e1a; --ink: #ede6da; --muted: #b3a898; --line: #3d352d;
+  --accent: #e89aa4; --accent-ink: #2a0c11; --sol: #8db7f0; --suona: #f2a65a;
+  --ok: #7ccb93; --ok-bg: #1b2e21; --ko: #f2958a; --ko-bg: #3a1d1a; }

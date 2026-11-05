@@ -6,6 +6,7 @@ const VARIANTI = {
   B: 'Leggibile: Atkinson + blu',
   C: 'Caldo: Fraunces/Inter + verde',
   D: 'Sistema: font del telefono + viola',
+  E: 'Scelta: B con i colori di A',
 };
 const CHIAVI = Object.keys(VARIANTI);
 const SCHERMATE = ['percorso', 'capitolo', 'esercizio', 'lettura'];
@@ -47,12 +48,14 @@ const SEGNO = {
   C: () => `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="var(--accent)"/><text x="15" y="20.5" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="16" fill="var(--accent-ink)">nb</text></svg>`,
   // D: solo testo.
   D: () => '',
+  E: (...a) => SEGNO.B(...a),
 };
 // Le favicon non vedono i font web: solo forme.
 const FAVICON = {
   A: (c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="${c}"/><path d="M5 22a11 11 0 0 1 22 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="16" cy="20" r="3.4" fill="#fff"/></svg>`,
   B: (c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="${c}"/><ellipse cx="13" cy="22" rx="7" ry="5" transform="rotate(-22 13 22)" fill="#fff"/><rect x="18.2" y="5" width="3" height="17" rx="1.5" fill="#fff"/></svg>`,
   C: (c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="${c}"/><text x="16" y="22" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="17" fill="#fff">nb</text></svg>`,
+  E: (c) => FAVICON.B(c),
   D: (c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="${c}"/><text x="16" y="23" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="20" fill="#fff">N</text></svg>`,
 };
 
@@ -242,7 +245,7 @@ function contrasti() {
   }).join('\n');
 }
 
-const PESI = { A: 'Source Serif 4 600/700 + Source Sans 3 400/600/700 = 90 KB', B: 'Atkinson Hyperlegible Next 400/700 = 25 KB', C: 'Fraunces 600/700 + Inter 400/600/700 = 109 KB', D: 'nessun font scaricato = 0 KB' };
+const PESI = { A: 'Source Serif 4 600/700 + Source Sans 3 400/600/700 = 90 KB', B: 'Atkinson Hyperlegible Next 400/700 = 25 KB', C: 'Fraunces 600/700 + Inter 400/600/700 = 109 KB', D: 'nessun font scaricato = 0 KB', E: 'Atkinson Hyperlegible Next 400/700 = 25 KB' };
 
 function renderProtoState() {
   $('#proto-label').textContent = `${state.variant} (${VARIANTI[state.variant]})`;
