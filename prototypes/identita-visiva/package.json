@@ -1,0 +1,8 @@
+{
+  "name": "prototype-identita-visiva",
+  "private": true,
+  "description": "PROTOTIPO usa-e-getta per l'issue #20 (identità visiva). Non è codice di produzione.",
+  "scripts": {
+    "start": "python3 -m http.server 8010"
+  }
+}

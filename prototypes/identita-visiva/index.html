@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+  PROTOTIPO usa-e-getta per l'issue #20 "Identità visiva".
+  Domanda: tipografia, colori, tema scuro e segno del nome di Nota Bene.
+  Quattro identità (?variant=A|B|C|D) applicate alle schermate già decise nei
+  prototipi #7 e #8: Percorso, Capitolo, Esercizio di teoria, Lettura (?schermata=).
+  Le disposizioni sono quelle già scelte; qui cambiano solo font, colori, segno.
+  Tema: ?tema=auto|chiaro|scuro. In produzione c'è solo "auto" (prefers-color-scheme,
+  nulla salvato); chiaro/scuro forzati servono solo a confrontare.
+  Il pannello ⚙ calcola dal vivo i contrasti WCAG dei colori della variante.
+  La barra del prototipo sta in ALTO per non coprire la barra comandi in basso.
+  Avvio: cd prototypes/identita-visiva && npm start  →  http://localhost:8010/
+-->
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nota Bene (prototipo identità)</title>
+<link id="favicon" rel="icon" href="">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<div id="proto-bar" class="proto-bar" aria-label="Controlli del prototipo">
+  <div class="proto-row">
+    <button data-proto="prev" title="Variante precedente (←)">←</button>
+    <span id="proto-label" class="proto-label"></span>
+    <button data-proto="next" title="Variante successiva (→)">→</button>
+    <button data-proto="more" title="Altre opzioni">⚙</button>
+  </div>
+  <div id="proto-more" class="proto-more" hidden>
+    <label>Schermata
+      <select id="proto-schermata">
+        <option value="percorso">Percorso (home)</option>
+        <option value="capitolo">Capitolo</option>
+        <option value="esercizio">Esercizio di teoria</option>
+        <option value="lettura">Lettura</option>
+      </select>
+    </label>
+    <label>Tema
+      <select id="proto-tema">
+        <option value="auto">auto (prefers-color-scheme)</option>
+        <option value="chiaro">chiaro forzato</option>
+        <option value="scuro">scuro forzato</option>
+      </select>
+    </label>
+    <label>Esito (Esercizio)
+      <select id="proto-esito">
+        <option value="nessuno">nessuno</option>
+        <option value="giusto">giusto</option>
+        <option value="sbagliato">sbagliato</option>
+      </select>
+    </label>
+    <pre id="proto-state" class="proto-state"></pre>
+  </div>
+</div>
+
+<script src="vendor/abcjs-basic-min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
