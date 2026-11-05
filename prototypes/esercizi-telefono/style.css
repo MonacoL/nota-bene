@@ -1,0 +1,119 @@
+/* PROTOTIPO usa-e-getta (issue #7). Stile grezzo, solo per giudicare la struttura. */
+:root {
+  --bg: #f6f3ee; --card: #fff; --ink: #1d1b18; --muted: #6b655c; --accent: #2f5d8a;
+  --ok: #2e7d4f; --okbg: #eaf5ee; --no: #b0452b; --nobg: #fbf0ec; --line: #e2ddd4;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+a { color: var(--accent); }
+small { color: var(--muted); }
+button { font: inherit; color: var(--ink); cursor: pointer; }
+
+.sito { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--card); }
+.sito .logo { font-weight: 700; text-decoration: none; color: var(--ink); }
+.sito nav { display: flex; gap: 14px; font-size: .9rem; align-items: center; }
+.lingue { color: var(--muted); }
+
+.pag { padding: 12px 16px 40px; max-width: 640px; margin: 0 auto; }
+.pag.con-fisso { padding-bottom: 260px; }
+.pag.con-fisso.fisso-alto { padding-bottom: 300px; }
+.indietro { font-size: .9rem; display: inline-block; margin-bottom: 8px; }
+.kicker { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+h1 { font-size: 1.3rem; margin: 2px 0 10px; }
+
+.schede { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
+.schede button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 12px; font-size: .88rem; white-space: nowrap; min-height: 40px; }
+.schede button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.contatore { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+.barra { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--accent); }
+
+.esercizio { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 16px; }
+.domanda { font-size: 1.05rem; font-weight: 600; margin: 0 0 8px; }
+.pent { display: flex; justify-content: center; min-height: 90px; }
+.pent svg { display: block; }
+.na { margin-top: 10px; padding: 10px; background: #f3f0ea; border-radius: 8px; font-size: .9rem; color: var(--muted); }
+
+/* A: scelta multipla */
+.opzioni { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.opzioni.col { grid-template-columns: 1fr; }
+.opzioni button { min-height: 56px; border: 2px solid var(--line); background: var(--card); border-radius: 10px; font-size: 1.02rem; padding: 8px; }
+.opzioni.col button { text-align: left; padding: 10px 14px; font-size: .98rem; }
+.opzioni .giusta { border-color: var(--ok); background: var(--okbg); font-weight: 600; }
+.opzioni .sbagliata { border-color: var(--no); background: var(--nobg); text-decoration: line-through; }
+
+/* comuni ai pad */
+.riga { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+.riga > button { flex: 1; min-height: 46px; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 4px 2px; }
+.riga > button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.riga.acc > button { font-size: 1.25rem; }
+.riga.acc.piccola > button { flex: 0 0 52px; }
+.riga.nomi > button { font-size: .95rem; padding: 4px 0; }
+.riga.qual > button { font-size: .85rem; }
+.riga.figure > button { display: flex; flex-direction: column; align-items: center; line-height: 1.05; min-height: 58px; }
+.glifo { font-size: 1.5rem; }
+.riga.figure small { font-size: .62rem; }
+.slotrow .slot { flex: 1; padding: 0 6px; font-weight: 600; font-size: 1rem; }
+.slot.vuoto { color: var(--muted); font-weight: 400; }
+.riga > button.primario, .esito button.primario { background: var(--accent); color: #fff; border: 0; border-radius: 8px; min-height: 46px; padding: 0 18px; flex: 0 0 auto; font-weight: 600; }
+.riga > button.quadro { flex: 0 0 52px; font-size: 1.1rem; }
+.spento { opacity: .35; pointer-events: none; }
+.aiuto { font-size: .82rem; color: var(--muted); flex: 1; }
+button.link { background: none; border: 0; color: var(--accent); text-decoration: underline; flex: 0 0 auto !important; min-height: 46px; }
+
+/* B e C: area fissa in basso */
+.fisso { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--line);
+  padding: 4px 10px calc(10px + env(safe-area-inset-bottom)); z-index: 5; box-shadow: 0 -4px 12px rgba(0,0,0,.05); }
+.fisso > * { max-width: 620px; margin-left: auto; margin-right: auto; }
+.fisso.spento-tutto { opacity: .4; pointer-events: none; }
+
+/* C: pianoforte */
+.piano { position: relative; height: 150px; display: flex; margin-top: 8px; }
+.piano .bianco { flex: 1; border: 1px solid #bbb; background: #fff; border-radius: 0 0 6px 6px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: .85rem; color: var(--muted); }
+.piano .bianco:active, .piano .nero:active { background: #dfe8f1; }
+.piano .nero { position: absolute; top: 0; width: 9%; height: 60%; background: #222; border: 0; border-radius: 0 0 5px 5px; color: #ddd; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
+.piano .nero small { color: #ccc; font-size: .55rem; line-height: 1.1; }
+.piano .nero:active { background: #456; }
+
+/* D: pentagramma toccabile */
+.tocco { position: relative; touch-action: none; user-select: none; margin: 4px 0; background: #fdfcf9; border-radius: 8px; }
+.tocco svg { display: block; }
+.tocco .linea { stroke: #555; stroke-width: 1.2; }
+.tocco .guida { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; opacity: .6; }
+.tocco .chiave { fill: #333; font-family: "Noto Music", "Bravura", serif; }
+.tocco .alt { fill: #333; font-family: serif; }
+.tocco .testa.data { fill: #333; }
+.tocco .testa.mia { fill: var(--accent); }
+.tocco .alt.mia { fill: var(--accent); }
+.tocco .testa.fantasma, .tocco .alt.fantasma { fill: var(--accent); opacity: .35; }
+
+/* riscontro */
+.esito { margin-top: 12px; padding: 10px 12px; border-radius: 10px; border-left: 4px solid; }
+.esito.ok { background: var(--okbg); border-color: var(--ok); }
+.esito.no { background: var(--nobg); border-color: var(--no); }
+.esito p { margin: 4px 0; }
+.esito .titolo { font-weight: 700; font-size: 1.05rem; }
+.esito.ok .titolo { color: var(--ok); }
+.esito.no .titolo { color: var(--no); }
+.esito .spieg { font-size: .92rem; line-height: 1.4; }
+.esito .riga button.largo { flex: 1; }
+.foglio { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; background: var(--card); border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgba(0,0,0,.12); border-radius: 14px 14px 0 0; padding: 4px 12px calc(12px + env(safe-area-inset-bottom)); }
+.foglio .esito { max-width: 620px; margin: 8px auto 0; }
+
+.fine { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
+.grande-num { font-size: 2.4rem; font-weight: 700; margin: 4px 0; }
+.fine button { width: 100%; min-height: 50px; }
+
+/* barra del prototipo: in alto, scura, chiaramente non parte del design */
+.proto-bar { position: fixed; top: 6px; right: 6px; z-index: 50; background: #111; color: #fff; border-radius: 12px; padding: 4px; font-size: .78rem; box-shadow: 0 4px 14px rgba(0,0,0,.35); max-width: calc(100vw - 12px); }
+.proto-row { display: flex; gap: 4px; align-items: center; }
+.proto-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; min-width: 30px; height: 28px; }
+.proto-label { padding: 0 4px; white-space: nowrap; }
+.proto-more { display: grid; gap: 6px; padding: 8px 4px 4px; max-height: 70vh; overflow: auto; }
+.proto-more label { display: grid; gap: 2px; }
+.proto-more select { font-size: .78rem; }
+.proto-more pre { font-size: .62rem; max-width: 300px; white-space: pre-wrap; margin: 0; color: #9c9; }
+.proto-more[hidden] { display: none; }

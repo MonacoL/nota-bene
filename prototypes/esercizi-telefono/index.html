@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+  PROTOTIPO usa-e-getta per l'issue #7 "Interazione negli Esercizi di teoria da telefono".
+  Domanda: come risponde il corista agli Esercizi di teoria da telefono, cosa vede dopo
+  la risposta e come passa al successivo?
+  Quattro varianti sulla futura pagina /it/capitoli/<id>/esercizi/, scelte con ?variant=A|B|C|D:
+    A scelta multipla · B pulsanti (nota per nota) · C tastiera di pianoforte · D tocco sul pentagramma.
+  Altre manopole nella barra (⚙): Capitolo, cosa succede dopo una risposta giusta o sbagliata,
+  dove compare il riscontro, serie di 10 o senza fine, nomi sui tasti, distanza tra le righe.
+  La barra del prototipo sta IN ALTO per lasciare libera la zona del pollice, che è parte della domanda.
+  Niente persistenza, niente test: si butta via dopo aver deciso.
+  Avvio: cd prototypes/esercizi-telefono && npm start  →  http://localhost:8009/
+-->
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esercizi (prototipo)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="proto-bar" class="proto-bar" aria-label="Controlli del prototipo">
+  <div class="proto-row">
+    <button data-proto="prev" title="Variante precedente (←)">←</button>
+    <span id="proto-label" class="proto-label"></span>
+    <button data-proto="next" title="Variante successiva (→)">→</button>
+    <button data-proto="more" title="Altre opzioni del prototipo">⚙</button>
+  </div>
+  <div id="proto-more" class="proto-more" hidden></div>
+</div>
+<div id="app"></div>
+<script src="vendor/abcjs-basic-min.js"></script>
+<script src="teoria.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

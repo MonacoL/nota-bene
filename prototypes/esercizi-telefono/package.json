@@ -1,0 +1,8 @@
+{
+  "name": "prototype-esercizi-telefono",
+  "private": true,
+  "description": "PROTOTIPO usa-e-getta per l'issue #7 (interazione negli Esercizi di teoria da telefono). Non è codice di produzione.",
+  "scripts": {
+    "start": "python3 -m http.server 8009"
+  }
+}
