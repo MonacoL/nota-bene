@@ -53,8 +53,12 @@ Le parole cantate di un Brano (es. il latino di un mottetto), mostrate sotto le 
 _Avoid_: parole, lyrics, sillabe (riservato alle Sillabe del DO mobile)
 
 **Fonte**:
-Archivio pubblico da cui proviene un Brano (CPDL o Mutopia), insieme a editore e licenza dell'edizione usata.
+Archivio pubblico da cui proviene un Brano (CPDL o Mutopia).
 _Avoid_: database, sorgente
+
+**Edizione**:
+Una precisa versione di un Brano pubblicata su una Fonte, con il suo editore, la sua licenza e il suo identificativo. Ogni Lettura viene da una sola Edizione e ne eredita la licenza.
+_Avoid_: versione, copia, file
 
 ## Teoria
 
