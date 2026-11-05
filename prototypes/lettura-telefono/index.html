@@ -1,0 +1,77 @@
+<!doctype html>
+<!--
+  PROTOTIPO usa-e-getta per l'issue #8 "Schermata della Lettura su telefono".
+  Domanda: com'è fatta la schermata di una Lettura a 360 px e come si adatta a desktop?
+  Tre varianti sulla stessa pagina, scelte con ?variant=A|B|C e la barra scura in basso.
+  Altre manopole (sempre nella barra): ?resa=acapo|scala, ?mut=sempre|soluzione.
+  Niente persistenza, niente test: si butta via dopo aver deciso.
+  Avvio: cd prototypes/lettura-telefono && npm start  →  http://localhost:8008/
+  (abcjs è già copiato in vendor/; npm install + npm run vendor solo per aggiornarlo.)
+-->
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lettura (prototipo)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<div id="proto-bar" class="proto-bar" aria-label="Controlli del prototipo">
+  <div class="proto-row">
+    <button data-proto="prev" title="Variante precedente (←)">←</button>
+    <span id="proto-label" class="proto-label"></span>
+    <button data-proto="next" title="Variante successiva (→)">→</button>
+    <button data-proto="more" title="Altre opzioni del prototipo">⚙</button>
+  </div>
+  <div id="proto-more" class="proto-more" hidden>
+    <label>Resa partitura
+      <select id="proto-resa">
+        <option value="acapo">a capo (staffwidth = larghezza)</option>
+        <option value="scala">una riga, scalata</option>
+      </select>
+    </label>
+    <label>Segno di Mutazione
+      <select id="proto-mut">
+        <option value="sempre">sempre visibile</option>
+        <option value="soluzione">solo con la Soluzione</option>
+      </select>
+    </label>
+    <label>Zoom partitura (scale di abcjs, solo "a capo")
+      <select id="proto-zoom">
+        <option value="0.65">0.65</option>
+        <option value="0.8">0.8</option>
+        <option value="1">1</option>
+      </select>
+    </label>
+    <label>Spaziatura minima (wrap.minSpacing)
+      <select id="proto-spaziatura">
+        <option value="1.1">1.1 (più Battute per rigo)</option>
+        <option value="1.5">1.5</option>
+        <option value="1.9">1.9 (note più larghe)</option>
+      </select>
+    </label>
+    <label>Battute per rigo (wrap.preferredMeasuresPerLine)
+      <select id="proto-perrigo">
+        <option value="0">decide abcjs</option>
+        <option value="2">2 fisse</option>
+        <option value="3">3 fisse</option>
+      </select>
+    </label>
+    <label>Corpo di Testo e Sillabe
+      <select id="proto-corpo">
+        <option value="13">13 pt (default abcjs)</option>
+        <option value="15">15 pt</option>
+        <option value="17">17 pt</option>
+      </select>
+    </label>
+    <pre id="proto-state" class="proto-state"></pre>
+  </div>
+</div>
+
+<script src="vendor/abcjs-basic-min.js"></script>
+<script src="letture.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

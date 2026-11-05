@@ -1,0 +1,12 @@
+{
+  "name": "prototype-lettura-telefono",
+  "private": true,
+  "description": "PROTOTIPO usa-e-getta per l'issue #8 (schermata della Lettura su telefono). Non è codice di produzione.",
+  "scripts": {
+    "vendor": "mkdir -p vendor && cp node_modules/abcjs/dist/abcjs-basic-min.js vendor/ && cp node_modules/abcjs/LICENSE.md vendor/abcjs-LICENSE.md",
+    "start": "python3 -m http.server 8008"
+  },
+  "devDependencies": {
+    "abcjs": "6.7.2"
+  }
+}

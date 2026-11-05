@@ -1,0 +1,112 @@
+/* PROTOTIPO usa-e-getta (issue #8). Stile grezzo, solo per giudicare la struttura. */
+:root {
+  --bg: #f6f3ee;
+  --card: #fff;
+  --ink: #1d1b18;
+  --muted: #6b655c;
+  --accent: #2f5d8a;
+  --sol: #b0452b;   /* Sillabe della Soluzione */
+  --mut: #7a3fa0;   /* Mutazione */
+  --line: #e2ddd4;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+h1 { font-size: 1.2rem; margin: 0 0 4px; line-height: 1.25; }
+.kicker { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+a { color: var(--accent); }
+small { color: var(--muted); }
+
+.score-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 8px; }
+#score { width: 100%; }
+#score svg { display: block; }
+#score .riga-sillabe { fill: var(--sol); font-weight: 600; }
+#score .abcjs-annotation { fill: var(--mut); text-anchor: middle; }
+#score .abcjs-note:has(.abcjs-annotation) path { fill: var(--mut); }
+#score svg { overflow: visible; }
+
+.box-soluzione { margin-top: 8px; padding: 8px 10px; border-left: 3px solid var(--sol); background: #fbf4f1; font-size: .9rem; }
+.box-soluzione p { margin: 4px 0; }
+.tag-mut { display: inline-block; background: var(--mut); color: #fff; border-radius: 4px; padding: 0 6px; font-size: .75rem; font-weight: 600; }
+
+.meta { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: .88rem; margin: 8px 0 0; }
+.meta dt { color: var(--muted); }
+.meta dd { margin: 0; }
+
+.az { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 999px; padding: 10px 14px; font: inherit; font-size: .9rem; cursor: pointer; min-height: 44px; }
+.az .ic { font-weight: 700; color: var(--accent); min-width: 1.2em; text-align: center; }
+.az.attivo { background: var(--accent); color: #fff; border-color: var(--accent); }
+.az.attivo .ic { color: #fff; }
+.az.primario { background: var(--accent); color: #fff; border-color: var(--accent); }
+.az.primario .ic { color: #fff; }
+.stato-audio { font-size: .85rem; color: var(--muted); margin: 6px 0; }
+button.link { background: none; border: 0; color: var(--accent); text-decoration: underline; font: inherit; padding: 0; cursor: pointer; }
+.grande { width: 100%; margin-top: 14px; min-height: 52px; border: 0; border-radius: 10px; background: var(--ink); color: #fff; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+
+/* ---------- Variante A: barra in basso ---------- */
+.va { padding: 12px 16px 150px; max-width: 760px; margin: 0 auto; }
+.va-head { margin-bottom: 10px; }
+.va-fonte { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+.va-fonte summary { cursor: pointer; }
+.va-bar { position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--card); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); z-index: 10; }
+.va-bar .az { flex-direction: column; gap: 2px; border: 0; border-radius: 8px; padding: 6px 2px; font-size: .72rem; background: none; }
+.va-bar .az .ic { font-size: 1.1rem; }
+.va-bar .az.attivo { background: #e7eef6; color: var(--accent); }
+.va-bar .az.attivo .ic { color: var(--accent); }
+@media (min-width: 900px) {
+  .va { padding-bottom: 40px; }
+  .va-bar { position: static; margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; }
+  .va-bar .az { flex-direction: row; font-size: .9rem; justify-content: center; }
+}
+
+/* ---------- Variante B: comandi sopra ---------- */
+.vb { padding: 12px 16px 120px; display: grid; gap: 12px; max-width: 1100px; margin: 0 auto; }
+.vb-voce { margin: 2px 0; }
+.vb-fonte-breve { font-size: .8rem; color: var(--muted); margin: 4px 0 10px; }
+.vb-comandi { display: flex; flex-wrap: wrap; gap: 6px; }
+.vb-comandi .az { flex: 1 1 auto; justify-content: center; padding: 8px 10px; font-size: .82rem; }
+@media (min-width: 900px) {
+  .vb { grid-template-columns: 300px 1fr; align-items: start; padding-top: 32px; }
+  .vb-side { position: sticky; top: 16px; }
+  .vb-comandi { flex-direction: column; }
+  .vb-comandi .az { justify-content: flex-start; }
+  .grande { width: auto; padding: 0 28px; float: right; }
+}
+
+/* ---------- Variante C: percorso a passi ---------- */
+.vc { padding: 12px 16px 120px; display: grid; gap: 14px; max-width: 1100px; margin: 0 auto; }
+.vc-attrib { font-size: .75rem; color: var(--muted); margin: 6px 2px; }
+.vc-passi { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.vc-passi li { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.vc-tit { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; padding: 10px 12px; font: inherit; font-weight: 600; text-align: left; cursor: pointer; color: var(--muted); }
+.vc-tit .num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line); font-size: .85rem; }
+.vc-passi li.fatto .num { background: var(--line); }
+.vc-passi li.corrente { border-color: var(--accent); }
+.vc-passi li.corrente .vc-tit { color: var(--ink); }
+.vc-passi li.corrente .num { border-color: var(--accent); background: var(--accent); color: #fff; }
+.vc-corpo { display: none; padding: 0 12px 12px 48px; }
+.vc-passi li.corrente .vc-corpo { display: block; }
+.vc-corpo p { margin: 0 0 8px; font-size: .88rem; color: var(--muted); }
+.vc-az { display: flex; flex-wrap: wrap; gap: 6px; }
+@media (min-width: 900px) {
+  .vc { grid-template-columns: 1fr 320px; align-items: start; padding-top: 32px; }
+  .vc-passi { position: sticky; top: 16px; }
+}
+
+/* ---------- Barra del prototipo (non fa parte del design) ---------- */
+.proto-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 12px; z-index: 100;
+  background: #111; color: #fff; border-radius: 16px; padding: 6px 8px; box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  font: 12px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; max-width: calc(100vw - 16px); }
+.variante-A ~ .proto-bar { bottom: 78px; }
+@media (min-width: 900px) { .variante-A ~ .proto-bar { bottom: 12px; } }
+.proto-row { display: flex; align-items: center; gap: 6px; justify-content: center; }
+.proto-bar button { background: #333; color: #fff; border: 0; border-radius: 10px; min-width: 32px; height: 28px; cursor: pointer; font: inherit; }
+.proto-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+.proto-more { display: grid; gap: 6px; padding: 8px 4px 2px; width: min(320px, calc(100vw - 32px)); }
+.proto-more[hidden] { display: none; }
+.proto-more label { display: grid; gap: 2px; }
+.proto-more select { font: inherit; }
+.proto-state { margin: 0; max-height: 30vh; overflow: auto; background: #222; padding: 6px; border-radius: 6px; font-size: 11px; }
