@@ -2,7 +2,7 @@
 
 Ogni Lettura è un piccolo file ABC: una sola Voce, solo le battute scelte, il Testo su una riga `w:`. È questo file che fa fede e si corregge a mano. Le Fonti forniscono MusicXML (CPDL) o LilyPond (Mutopia), mai ABC: la conversione, per esempio con xml2abc o con una trascrizione a mano, si fa quando si prepara la Lettura e non entra nel sito. Le Letture di uno stesso Brano stanno in una cartella `letture/<brano>/`, che corrisponde a una sola Edizione. Lì ci sono `edizione.yml`, con i dati dell'Edizione e l'elenco delle sue Letture, il file sorgente originale e un `.abc` per ogni Lettura. L'identificativo `<brano>/<voce>-<inizio>-<fine>` si assegna alla pubblicazione e poi non cambia più.
 
-Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Letture sia gli Esercizi di teoria. Inoltre l'estratto di una Voce si legge e si corregge in una PR.
+Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna sia le Letture sia gli Esercizi di teoria e ne fornisce i tempi per l'audio (il suono lo produce smplr, vedi ADR-0008). Inoltre l'estratto di una Voce si legge e si corregge in una PR.
 
 ## Considered Options
 
@@ -12,7 +12,7 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
 
 ## Consequences
 
-- Nei metadati si scrive a mano solo ciò che la musica non dice: Voce, battute di origine, Prerequisiti, Mutazioni e data della modifica. Chiave, Tempo, Testo e Tonalità si ricavano dall'ABC: la Tonalità sta nel `K:` con il Modo esplicito (vedi ADR-0004).
+- Nei metadati si scrive a mano solo ciò che la musica non dice: Voce, battute di origine, Prerequisiti, Mutazioni e data della modifica. Chiave, Tempo, Andamento, Testo e Tonalità si ricavano dall'ABC: la Tonalità sta nel `K:` con il Modo esplicito (vedi ADR-0004).
 - La nota delle modifiche, richiesta dalla CPDL License, si genera dai dati in italiano e in inglese. Un campo libero facoltativo copre le eccezioni.
 - La CI blocca il deploy se uno di questi controlli fallisce:
   - lo schema di `edizione.yml`;
@@ -25,6 +25,7 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
   - il numero di battute, da 4 a 12 (il levare iniziale non conta);
   - i limiti musicali dell'estratto: niente gruppi irregolari (terzine e simili), nessun salto più ampio di un'ottava, estensione fino a una decima, nessuna pausa più lunga di 2 Battute, Armatura fino a 3 alterazioni (fino a 4 in una Lettura avanzata). Sono gli argomenti che il Percorso non insegna o che un principiante non regge;
   - la durata di ogni Battuta;
+  - l'Andamento, che deve esserci come `Q:` (ADR-0008);
   - il registro `letture/pubblicate.txt`, a cui gli id si aggiungono e da cui non si tolgono mai.
 - La licenza si documenta com'era il giorno dell'import. In `edizione.yml` vanno la licenza come compare nella pagina, l'URL, la data di consultazione e almeno una prova: uno snapshot su archive.org oppure `licenza.pdf` nella cartella. Un'Edizione PD che non dichiara la sua fonte porta `fonte_dichiarata: no`.
 - Una seconda Edizione dello stesso Brano va in una cartella `<brano>-<editore>/`. La prima non si rinomina, perché gli id pubblicati non cambiano. La CI vieta due cartelle con la stessa Fonte e lo stesso numero di Edizione.

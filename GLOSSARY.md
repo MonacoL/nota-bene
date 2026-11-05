@@ -54,7 +54,7 @@ _Avoid_: risposta, aiuto
 _In inglese_: Solution
 
 **Riferimento tonale**:
-Suono facoltativo, su richiesta, che prima di una Lettura dà la tonalità (tonica o accordo) e la nota di partenza, come il La dato dal maestro.
+Suono facoltativo, su richiesta, che prima di una Lettura dà la tonalità con l'accordo di tonica e poi la nota di partenza, come fa il maestro in prova.
 _Avoid_: intonazione, diapason, la
 _In inglese_: Starting pitch _(evitare: pitch reference, tuning)_
 
