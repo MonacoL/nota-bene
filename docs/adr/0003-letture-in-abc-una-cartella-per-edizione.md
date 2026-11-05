@@ -12,7 +12,7 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna e suona sia le Let
 
 ## Consequences
 
-- Nei metadati si scrive a mano solo ciò che la musica non dice: Voce, battute di origine, Prerequisiti, la Tonalità quando l'Armatura non basta e la data della modifica. Chiave, Tempo e Testo si ricavano dall'ABC.
+- Nei metadati si scrive a mano solo ciò che la musica non dice: Voce, battute di origine, Prerequisiti, Mutazioni e data della modifica. Chiave, Tempo, Testo e Tonalità si ricavano dall'ABC: la Tonalità sta nel `K:` con il Modo esplicito (vedi ADR-0004).
 - La nota delle modifiche, richiesta dalla CPDL License, si genera dai dati in italiano e in inglese. Un campo libero facoltativo copre le eccezioni.
 - La CI blocca il deploy se uno di questi controlli fallisce:
   - lo schema di `edizione.yml`;
