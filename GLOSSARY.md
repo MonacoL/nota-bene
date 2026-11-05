@@ -19,7 +19,7 @@ _Avoid_: livello, difficoltà numerica
 ## Esercizi
 
 **Esercizio di teoria**:
-Domanda su un singolo concetto, creata dalla piattaforma. Ce ne sono di quattro tipi: nominare una Nota (o la sua Sillaba) in una Chiave, riconoscere un Intervallo, costruire una scala, trovare la Tonalità da un'Armatura.
+Domanda su un singolo concetto, creata dalla piattaforma. Ce ne sono di otto tipi: nominare una Nota (o la sua Sillaba) in una Chiave, riconoscere un Intervallo, rivoltare un Intervallo, costruire una scala, trovare la Tonalità da un'Armatura, trovare Tonica e Modo di una melodia, completare una Battuta, riconoscere il Tempo.
 _Avoid_: quiz, test
 
 **Lettura**:
@@ -62,8 +62,16 @@ _Avoid_: database, sorgente
 Metodo in cui la tonica di una tonalità maggiore si canta DO, qualunque sia la sua altezza; nelle tonalità minori la tonica si canta LA.
 _Avoid_: solmisazione relativa, do relativo
 
+**Tonica**:
+La Nota su cui si regge un passaggio e verso cui la melodia tende a concludere; è il primo grado della scala.
+_Avoid_: fondamentale, nota base
+
+**Modo**:
+Il carattere maggiore o minore di un passaggio, dato dalla scala costruita sulla sua Tonica. In Nota Bene indica solo maggiore o minore, mai i modi ecclesiastici (dorico, frigio...).
+_Avoid_: tono, colore
+
 **Tonalità**:
-La scala, maggiore o minore, su cui si regge un passaggio. Stabilisce dove sta il DO (in maggiore) o il LA (in minore).
+La coppia Tonica più Modo su cui si regge un passaggio (es. Re minore). Stabilisce dove sta il DO (in maggiore) o il LA (in minore).
 _Avoid_: tono, chiave
 
 **Armatura**:
@@ -89,6 +97,26 @@ _Avoid_: cambio di DO, cambio di tonalità
 **Chiave**:
 Uno dei tre segni usati in partitura: chiave di violino, chiave di violino ottava bassa (per i tenori), chiave di basso.
 _Avoid_: chiave di Do (non trattata)
+
+**Figura**:
+Il segno che indica la durata di una nota o di una pausa (semibreve, minima, semiminima, croma, semicroma).
+_Avoid_: valore, nota (riservato alla Nota)
+
+**Battuta**:
+Lo spazio tra due stanghette, che contiene le Pulsazioni stabilite dal Tempo.
+_Avoid_: misura, battito
+
+**Pulsazione**:
+Il singolo battito regolare su cui si conta una Battuta.
+_Avoid_: tempo, movimento, beat
+
+**Tempo**:
+L'indicazione scritta all'inizio del brano (es. 3/4, 6/8) che dice quante Pulsazioni ha una Battuta e come si suddividono. Può essere semplice o composto.
+_Avoid_: metro, ritmo; non usarlo per la velocità (Andamento) né per il singolo battito (Pulsazione)
+
+**Andamento**:
+La velocità a cui si esegue un brano (es. Allegro, ♩ = 100).
+_Avoid_: tempo, velocità, BPM
 
 **Intervallo**:
 Distanza tra due note, indicata con numero e qualità (es. terza maggiore).
