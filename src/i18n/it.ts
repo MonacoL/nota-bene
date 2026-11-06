@@ -18,7 +18,7 @@ export const it = {
   eserciziInPreparazione: 'Gli esercizi di questo capitolo sono in preparazione.',
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo" },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità' },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
     domande: {
@@ -32,6 +32,7 @@ export const it = {
     note: { C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si' },
     numeri: { 2: '2ª', 3: '3ª', 4: '4ª', 5: '5ª', 6: '6ª', 7: '7ª', 8: '8ª' },
     qualita: { minore: 'minore', maggiore: 'maggiore', giusta: 'giusta', aumentata: 'aumentata', diminuita: 'diminuita' },
+    cancella: "Cancella l'ultima nota",
     verifica: 'Verifica',
     riscontro: 'Riscontro',
     giusto: '✓ Giusto',

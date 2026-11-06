@@ -1,12 +1,12 @@
 <script lang="ts">
-  // Il rigo di un Esercizio: poche note, ingrandite, centrate.
+  // Il rigo di un Esercizio: poche note, ingrandite, centrate. Una scala intera chiede più spazio e meno ingrandimento.
   import { disegna } from '../../scripts/abc';
 
-  let { abc }: { abc: string } = $props();
+  let { abc, larghezzaMassima = 260, scala = 1.5 }: { abc: string; larghezzaMassima?: number; scala?: number } = $props();
   let contenitore: HTMLDivElement;
 
   $effect(() => {
-    const ridisegna = () => disegna(contenitore, abc, { larghezzaMassima: 260, scala: 1.5 });
+    const ridisegna = () => disegna(contenitore, abc, { larghezzaMassima, scala });
     ridisegna();
     const osservatore = new ResizeObserver(ridisegna);
     osservatore.observe(contenitore);
