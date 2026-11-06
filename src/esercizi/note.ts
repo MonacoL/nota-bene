@@ -29,3 +29,8 @@ const SEMITONI: Record<Lettera, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, 
 export function tasto(nota: Pick<Nota, 'lettera' | 'alterazione'>): number {
   return (SEMITONI[nota.lettera] + nota.alterazione + 12) % 12;
 }
+
+/** L'altezza in semitoni, con l'ottava: Do4 = 48, Do♯4 = 49. */
+export function semitoni(nota: Nota): number {
+  return nota.ottava * 12 + SEMITONI[nota.lettera] + nota.alterazione;
+}

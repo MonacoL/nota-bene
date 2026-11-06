@@ -73,3 +73,19 @@ for (const lingua of LINGUE) {
     });
   }
 }
+
+// "Riconosci l'intervallo" a 360 px, con numero e qualità scelti: il tastierino a due righe deve stare nello schermo.
+for (const tema of ['light', 'dark'] as const) {
+  test(`esercizi intervalli it, tema ${tema}`, async ({ page }, info) => {
+    test.skip(info.project.name !== 'phone-360-chromium', 'solo a 360 px');
+    await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+    await page.goto(`it/capitoli/${CAPITOLI[7]}/esercizi/?seed=${SEED_FOGLIO}`);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('.esercizio .pentagramma svg')).toHaveCount(1);
+    const tastierino = page.getByRole('group', { name: 'Risposta' });
+    await tastierino.getByRole('button', { name: '3ª', exact: true }).click();
+    await tastierino.getByRole('button', { name: 'maggiore', exact: true }).click();
+    await page.mouse.move(-1, -1);
+    await expect(page).toHaveScreenshot(`esercizi-intervalli-it-${tema}.png`);
+  });
+}
