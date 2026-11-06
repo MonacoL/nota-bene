@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Cambio di lingua "IT · EN". Il link all'altra lingua è già giusto nell'HTML statico;
+  // Cambio di lingua "IT / EN". Il link all'altra lingua è già giusto nell'HTML statico;
   // nel browser si aggiunge la query string (per esempio il filtro ?voce=), così si resta sulla stessa vista.
   import { onMount } from 'svelte';
 
@@ -19,9 +19,9 @@
 
 <nav class="lingua" aria-label={etichetta}>
   {#if lingua === 'it'}
-    <span aria-current="true">IT</span> · <a href={destinazione} hreflang="en" lang="en" title={nomeAltraLingua}>EN</a>
+    <span aria-current="true">IT</span> / <a href={destinazione} hreflang="en" lang="en" title={nomeAltraLingua}>EN</a>
   {:else}
-    <a href={destinazione} hreflang="it" lang="it" title={nomeAltraLingua}>IT</a> · <span aria-current="true">EN</span>
+    <a href={destinazione} hreflang="it" lang="it" title={nomeAltraLingua}>IT</a> / <span aria-current="true">EN</span>
   {/if}
 </nav>
 

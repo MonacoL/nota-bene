@@ -66,7 +66,7 @@ describe('frontmatter dei Capitoli', () => {
 describe('scaletta del Percorso', () => {
   const scaletta = ordina(parse(readFileSync('contenuti/percorso.yml', 'utf8')).map((v: unknown) => schemaVocePercorso.parse(v)));
 
-  it('ha i 10 Capitoli, con "Prova le Letture" solo nel 9 e nel 10', () => {
+  it('ha i 10 Capitoli, con "Prova le letture" solo nel 9 e nel 10', () => {
     expect(scaletta).toHaveLength(10);
     expect(scaletta.filter((v) => v.prova_letture).map((v) => [v.numero, v.prova_letture])).toEqual([
       [9, 'letture'],

@@ -39,17 +39,17 @@ export const en: Dizionario = {
   },
   capitoloPrecedente: '← Previous chapter',
   capitoloSuccessivo: 'Next chapter →',
-  provaLetture: 'Try the Readings',
-  provaLettureAvanzate: 'Try the advanced Readings',
+  provaLetture: 'Try the readings',
+  provaLettureAvanzate: 'Try the advanced readings',
   navCapitoli: 'Chapters',
   avvisoNonTradotto: 'This chapter has not been translated yet, so it is shown in Italian.',
   ingressoLetture: 'Once you know movable do, put your sight-singing to the test with excerpts from real choral pieces.',
-  vaiAlleLetture: 'Go to the Readings',
+  vaiAlleLetture: 'Go to the readings',
   paginaInPreparazione: 'This page is being prepared.',
   tornaAllaHome: 'Back to home',
   piePagina: {
     licenze:
-      'Code under the MIT license. Text under CC BY-SA 4.0. Each Reading carries the license of its Edition.',
+      'Code under the MIT license. Text under CC BY-SA 4.0. Each reading carries the license of its edition.',
     paginaServizio: 'Service pages',
   },
   pagine: {

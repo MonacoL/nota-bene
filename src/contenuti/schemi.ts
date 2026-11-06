@@ -32,7 +32,7 @@ export const schemaVocePercorso = z
   .object({
     id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
     numero: z.number().int().positive(),
-    /** Solo nei Capitoli 9 e 10: il link "Prova le Letture", alle Letture o alle Letture avanzate. */
+    /** Solo nei Capitoli 9 e 10: il link "Prova le letture", alle Letture o alle Letture avanzate. */
     prova_letture: z.enum(['letture', 'avanzate']).optional(),
     it: testiPercorso,
     en: testiPercorso,

@@ -5,12 +5,12 @@
 
 - id: note-toni-e-semitoni
   numero: 1
-  it: { titolo: "Note, toni e semitoni", riga: "Il pentagramma, i nomi delle Note e le distanze più piccole fra loro." }
+  it: { titolo: "Note, toni e semitoni", riga: "Il pentagramma, i nomi delle note e le distanze più piccole fra loro." }
   en: { titolo: "Notes, whole steps, and half steps", riga: "The staff, the names of the notes, and the smallest distances between them." }
 
 - id: chiavi
   numero: 2
-  it: { titolo: "Chiavi", riga: "Violino, violino ottava bassa e basso: quale Voce usa quale, e dove sta il Do4." }
+  it: { titolo: "Chiavi", riga: "Violino, violino ottava bassa e basso: quale voce usa quale, e dove sta il Do4." }
   en: { titolo: "Clefs", riga: "Treble, tenor, and bass: which voice part uses which, and where C4 sits." }
 
 - id: figure-e-pause
@@ -20,12 +20,12 @@
 
 - id: tempi-semplici-e-composti
   numero: 4
-  it: { titolo: "Tempi semplici e composti", riga: "Battute e Pulsazioni: come si conta la musica." }
+  it: { titolo: "Tempi semplici e composti", riga: "Battute e pulsazioni: come si conta la musica." }
   en: { titolo: "Simple and compound time", riga: "Measures and beats: how music is counted." }
 
 - id: scala-maggiore
   numero: 5
-  it: { titolo: "Scala maggiore", riga: "Toni e semitoni in fila, la Tonalità e la sua Armatura." }
+  it: { titolo: "Scala maggiore", riga: "Toni e semitoni in fila, la tonalità e la sua armatura." }
   en: { titolo: "The major scale", riga: "Whole and half steps in a row, the key, and its key signature." }
 
 - id: scala-minore
@@ -35,7 +35,7 @@
 
 - id: modo-maggiore-e-minore
   numero: 7
-  it: { titolo: "Modo maggiore e minore", riga: "Trovare la Tonica e capire se un passaggio è maggiore o minore." }
+  it: { titolo: "Modo maggiore e minore", riga: "Trovare la tonica e capire se un passaggio è maggiore o minore." }
   en: { titolo: "Major and minor mode", riga: "Finding the tonic and telling whether a passage is major or minor." }
 
 - id: intervalli
@@ -46,11 +46,11 @@
 - id: do-mobile
   numero: 9
   prova_letture: letture
-  it: { titolo: "DO mobile", riga: "Le Sillabe DO RE MI FA SOL LA TI, a partire dalla Tonica." }
+  it: { titolo: "DO mobile", riga: "Le sillabe DO RE MI FA SOL LA TI, a partire dalla tonica." }
   en: { titolo: "Movable do", riga: "The syllables DO RE MI FA SOL LA TI, starting from the tonic." }
 
 - id: do-mobile-avanzato
   numero: 10
   prova_letture: avanzate
-  it: { titolo: "DO mobile avanzato", riga: "Sillabe cromatiche e Mutazione, quando la musica cambia Tonalità." }
+  it: { titolo: "DO mobile avanzato", riga: "Sillabe cromatiche e mutazione, quando la musica cambia tonalità." }
   en: { titolo: "Advanced movable do", riga: "Chromatic syllables and do shifts, for when the music changes key." }
