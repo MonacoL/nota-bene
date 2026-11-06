@@ -1,6 +1,10 @@
 // Screenshot di confronto nei due temi (ADR-0009), sulle configurazioni scelte in playwright.config.ts.
 import { expect, test } from '@playwright/test';
+import { genera } from '../../src/esercizi';
 import { CAPITOLI, LINGUE } from './pagine';
+
+/** Un seed il cui primo Esercizio è un Sol♭3 in chiave di violino ottava bassa: mostra l'8 e un'alterazione. */
+const SEED_FOGLIO = 13;
 
 const SCHERMATE = [
   { nome: 'home', percorso: '' },
@@ -20,6 +24,32 @@ for (const { nome, percorso } of SCHERMATE) {
         await expect(page.locator('.pentagramma:not(:has(svg))')).toHaveCount(0);
         await page.mouse.move(-1, -1);
         await expect(page).toHaveScreenshot(`${nome}-${lingua}-${tema}.png`, { fullPage: true });
+      });
+    }
+  }
+}
+
+// Il foglio di riscontro, giusto e sbagliato, sul primo Esercizio del Capitolo 2 con seed fisso.
+// Lo screenshot è della finestra e non della pagina intera, perché il foglio è fisso in basso.
+for (const esito of ['giusto', 'sbagliato'] as const) {
+  for (const lingua of LINGUE) {
+    for (const tema of ['light', 'dark'] as const) {
+      test(`esercizi foglio ${esito} ${lingua}, tema ${tema}`, async ({ page }, info) => {
+        const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
+        test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
+        const { nota } = genera('nomina-la-nota', { chiavi: ['violino', 'violino-ottava-bassa', 'basso'] }, SEED_FOGLIO);
+        const risposta = esito === 'giusto' ? nota : { lettera: nota.lettera === 'C' ? 'D' : 'C', alterazione: 0 };
+        await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+        await page.goto(`${lingua}/capitoli/${CAPITOLI[1]}/esercizi/?seed=${SEED_FOGLIO}`);
+        await page.evaluate(() => document.fonts.ready);
+        await expect(page.locator('.esercizio .pentagramma svg')).toHaveCount(1);
+        const tastierino = page.locator('.tastierino');
+        await tastierino.locator('.alterazioni button').nth(risposta.alterazione + 1).click();
+        await tastierino.locator('.nomi button').nth('CDEFGAB'.indexOf(risposta.lettera)).click();
+        await tastierino.locator('.verifica').click();
+        await expect(page.locator('.foglio')).toBeVisible();
+        await page.mouse.move(-1, -1);
+        await expect(page).toHaveScreenshot(`esercizi-foglio-${esito}-${lingua}-${tema}.png`);
       });
     }
   }

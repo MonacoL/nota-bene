@@ -1,27 +1,55 @@
 ---
-// Pagina provvisoria: gli Esercizi arrivano con il ticket "Pagina Esercizi con la prima Serie: «Nomina la nota»".
 import Base from '../../../../layouts/Base.astro';
+import Serie from '../../../../components/esercizi/Serie.svelte';
 import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
-import { capitoli, type Capitolo } from '../../../../contenuti/capitoli';
+import { capitoli, vicini, type Capitolo } from '../../../../contenuti/capitoli';
 
 export async function getStaticPaths() {
   const pagine = [];
   for (const lang of LINGUE) {
-    for (const capitolo of await capitoli(lang)) pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo } });
+    const percorso = await capitoli(lang);
+    for (const capitolo of percorso) {
+      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, successivo: vicini(percorso, capitolo.id).successivo } });
+    }
   }
   return pagine;
 }
 
 interface Props {
   capitolo: Capitolo;
+  successivo?: Capitolo;
 }
-const { capitolo } = Astro.props;
+const { capitolo, successivo } = Astro.props;
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
 const titolo = t.eserciziDi.replace('{titolo}', capitolo.titolo);
+const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
 ---
 <Base lingua={lingua} titolo={titolo}>
+  <p class="indietro"><a href={url(lingua, `capitoli/${capitolo.id}/`)}>{t.tornaAlCapitolo}</a></p>
   <h1>{titolo}</h1>
-  <p class="muted">{t.eserciziInPreparazione}</p>
-  <p><a href={url(lingua, `capitoli/${capitolo.id}/`)}>{t.tornaAlCapitolo}</a></p>
+
+  {capitolo.esercizi.length
+    ? <Serie
+        client:only="svelte"
+        lingua={lingua}
+        t={t.serie}
+        dichiarazioni={capitolo.esercizi}
+        successivo={successivoHref ? { href: successivoHref, etichetta: t.capitoloSuccessivo } : undefined}
+      />
+    : <p class="muted">{t.eserciziInPreparazione}</p>}
+
+  {/* Sotto la Serie e non in alto: a 320 px ogni riga sopra il pentagramma lo spinge sotto il tastierino. */}
+  {successivoHref && (
+    <nav class="seguito" aria-label={t.navCapitoli}>
+      <a rel="next" href={successivoHref}>{t.capitoloSuccessivo}</a>
+    </nav>
+  )}
 </Base>
+
+<style>
+  .indietro { margin: 8px 0 0; }
+  .indietro a, .seguito a { display: inline-flex; align-items: center; min-height: 48px; }
+  h1 { margin-top: 0.2em; }
+  .seguito { display: flex; justify-content: flex-end; margin-top: 1.5em; padding-top: 1em; border-top: 1px solid var(--line); }
+</style>

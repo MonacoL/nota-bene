@@ -15,7 +15,7 @@ test('la home elenca i 10 Capitoli in ordine, con i loro Esercizi, e porta alle 
     await expect(voce.locator('.riga')).not.toBeEmpty();
     await expect(voce.getByRole('link', { name: /^Esercizi: / })).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/esercizi/`);
   }
-  await expect(page.locator('main').getByRole('link', { name: 'Vai alle Letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
+  await expect(page.locator('main').getByRole('link', { name: 'Vai alle letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
 });
 
 test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page }) => {
@@ -27,7 +27,7 @@ test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page
   const seguito = page.locator('nav.seguito');
   await expect(seguito.getByRole('link', { name: 'Esercizi' })).toHaveAttribute('href', `/nota-bene/it/capitoli/${PRIMO}/esercizi/`);
   await expect(seguito.getByRole('link', { name: '← Capitolo precedente' })).toHaveCount(0);
-  await expect(seguito.getByRole('link', { name: /Prova le Letture/ })).toHaveCount(0);
+  await expect(seguito.getByRole('link', { name: /Prova le letture/ })).toHaveCount(0);
 
   await seguito.getByRole('link', { name: 'Capitolo successivo →' }).click();
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${CAPITOLI[1]}/$`));
@@ -50,19 +50,19 @@ test('gli esempi abc diventano pentagrammi nel colore del testo', async ({ page 
   }
 });
 
-test('nei Capitoli 9 e 10 c\'è "Prova le Letture"; il 10 porta alle avanzate ed è l\'ultimo', async ({ page }) => {
+test('nei Capitoli 9 e 10 c\'è "Prova le letture"; il 10 porta alle avanzate ed è l\'ultimo', async ({ page }) => {
   await page.goto(`it/capitoli/${CAPITOLI[8]}/`);
-  await expect(page.locator('nav.seguito').getByRole('link', { name: 'Prova le Letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
+  await expect(page.locator('nav.seguito').getByRole('link', { name: 'Prova le letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
 
   await page.goto(`it/capitoli/${CAPITOLI[9]}/`);
   const seguito = page.locator('nav.seguito');
-  await expect(seguito.getByRole('link', { name: 'Prova le Letture avanzate' })).toHaveAttribute('href', '/nota-bene/it/letture/#avanzate');
+  await expect(seguito.getByRole('link', { name: 'Prova le letture avanzate' })).toHaveAttribute('href', '/nota-bene/it/letture/#avanzate');
   await expect(seguito.getByRole('link', { name: 'Capitolo successivo →' })).toHaveCount(0);
 });
 
 test('un Capitolo senza testo è in preparazione', async ({ page }) => {
-  await page.goto(`it/capitoli/${CAPITOLI[1]}/`);
-  await expect(page.getByText('Questo Capitolo è in preparazione.')).toBeVisible();
+  await page.goto(`it/capitoli/${CAPITOLI[2]}/`);
+  await expect(page.getByText('Questo capitolo è in preparazione.')).toBeVisible();
 });
 
 test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso', async ({ page }) => {
@@ -76,6 +76,6 @@ test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso
 
 test('dagli Esercizi si torna al Capitolo', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/esercizi/`);
-  await page.getByRole('link', { name: '← Torna al Capitolo' }).click();
+  await page.getByRole('link', { name: '← Torna al capitolo' }).click();
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
 });

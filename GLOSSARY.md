@@ -4,6 +4,8 @@ Piattaforma di studio per coristi che partono da zero: teoria musicale di base e
 
 Ogni termine ha il suo nome inglese (`_In inglese_`) in inglese americano (ADR-0007): traduzioni e interfaccia usano quello, e una revisione umana ne controlla l'uso.
 
+La maiuscola dei termini serve solo a riconoscerli in questo glossario, negli ADR, nei ticket e nei commenti del codice. Nei testi del sito (interfaccia, Capitoli, spiegazioni degli Esercizi) si scrivono come nomi comuni, in minuscolo a metà frase: "torna al capitolo", "prova le letture", "la tonalità e la sua armatura". Restano maiuscoli solo i nomi delle Note (Do4, Sol♯), le Sillabe (DO RE MI) e il nome del sito.
+
 ## Percorso
 
 **Percorso**:
