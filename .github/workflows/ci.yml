@@ -1,0 +1,82 @@
+# Controllo dei tipi → build → Playwright nell'immagine ufficiale → deploy su Pages (ADR-0006).
+# Il deploy parte solo da un push su main, e solo se tutti i job prima sono passati.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  check:
+    name: Tipi e test unitari
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .node-version, cache: npm }
+      - run: npm ci
+      - run: npm run check
+      - run: npm run test:unit
+
+  build:
+    name: Build
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .node-version, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v7
+        with: { name: sito, path: dist/, if-no-files-found: error, retention-days: 7 }
+
+  e2e:
+    name: Playwright (${{ matrix.motore }})
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      # Stessa versione di @playwright/test in package.json: si aggiornano insieme, poi si rigenerano le baseline.
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        motore: [chromium, webkit, firefox]
+    steps:
+      - uses: actions/checkout@v7
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with: { name: sito, path: dist/ }
+      - run: npx playwright test --project="*-${{ matrix.motore }}"
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with: { name: playwright-report-${{ matrix.motore }}, path: playwright-report/, retention-days: 14 }
+
+  deploy:
+    name: Deploy su Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [check, build, e2e]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with: { name: sito, path: dist/ }
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with: { path: dist/ }
+      - id: deployment
+        uses: actions/deploy-pages@v5

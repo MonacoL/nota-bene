@@ -1,0 +1,8 @@
+# Solo le GitHub Actions. Playwright resta fuori: pacchetto npm e immagine Docker vanno aggiornati insieme,
+# e dopo l'aggiornamento si rigenerano le baseline in un commit dedicato.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

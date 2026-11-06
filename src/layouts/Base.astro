@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import Segno from '../components/Segno.astro';
+import CambioLingua from '../components/CambioLingua.svelte';
+import { IN_COSTRUZIONE } from '../config';
+import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
+
+interface Props {
+  lingua: Lingua;
+  titolo?: string;
+}
+const { lingua, titolo } = Astro.props;
+const t = testi(lingua);
+const tAltra = testi(altraLingua(lingua));
+const titoloPagina = titolo ? `${titolo} · ${t.nomeSito}` : t.nomeSito;
+const base = import.meta.env.BASE_URL;
+const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'] as const;
+---
+<!doctype html>
+<html lang={lingua}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titoloPagina}</title>
+    <meta name="description" content={t.descrizioneSito} />
+    {IN_COSTRUZIONE && <meta name="robots" content="noindex" />}
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="alternate" hreflang={altraLingua(lingua)} href={urlInAltraLingua(Astro.url.pathname, lingua)} />
+  </head>
+  <body>
+    <a class="salta" href="#contenuto">{t.vaiAlContenuto}</a>
+    {IN_COSTRUZIONE && <p class="costruzione" role="note">{t.inCostruzione}</p>}
+    <header class="top">
+      <div class="wrap">
+        <a class="marchio" href={url(lingua)}><Segno /><span class="nome">{t.nomeSito}</span></a>
+        <nav class="nav" aria-label={t.navPrincipale}>
+          <a href={url(lingua, 'letture/')}>{t.letture}</a>
+        </nav>
+        <CambioLingua
+          client:load
+          lingua={lingua}
+          href={urlInAltraLingua(Astro.url.pathname, lingua)}
+          etichetta={t.cambiaLingua}
+          nomeAltraLingua={tAltra.lingua}
+        />
+      </div>
+    </header>
+    <main id="contenuto" class="wrap">
+      <slot />
+    </main>
+    <footer class="piede">
+      <div class="wrap">
+        <nav aria-label={t.piePagina.paginaServizio}>
+          <ul>
+            {pagineServizio.map((p) => <li><a href={url(lingua, `${p}/`)}>{t.pagine[p]}</a></li>)}
+          </ul>
+        </nav>
+        <p class="licenze">{t.piePagina.licenze}</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .costruzione {
+    margin: 0; padding: 8px 16px; text-align: center; font-size: 0.9rem;
+    background: var(--surface); color: var(--muted); border-bottom: 1px solid var(--line);
+  }
+  .top { border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; min-height: 56px; }
+  .marchio {
+    display: flex; align-items: center; gap: 8px; min-height: 48px;
+    color: var(--ink); text-decoration: none;
+  }
+  .nome { font-weight: 700; font-size: 1.2rem; letter-spacing: 0.01em; white-space: nowrap; }
+  .nav { margin-left: auto; }
+  .nav a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font-weight: 700; }
+  .piede { border-top: 1px solid var(--line); font-size: 0.9rem; color: var(--muted); padding: 16px 0 24px; }
+  .piede ul { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 0 16px; }
+  .piede li a { display: inline-flex; align-items: center; min-height: 48px; }
+  .licenze { margin: 0; }
+</style>

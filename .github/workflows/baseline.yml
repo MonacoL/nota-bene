@@ -1,0 +1,23 @@
+# Rigenera le baseline degli screenshot nell'immagine di Playwright e le pubblica come artifact,
+# per chi non ha Docker. Non fa commit: le immagini si scaricano, si controllano e si aggiungono alla PR.
+name: Baseline degli screenshot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@v7
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright test screenshot.spec.ts --update-snapshots=all
+      - uses: actions/upload-artifact@v7
+        with: { name: baseline, path: tests/e2e/__screenshots__/, if-no-files-found: error }
