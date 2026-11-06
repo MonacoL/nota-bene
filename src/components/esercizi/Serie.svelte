@@ -11,6 +11,8 @@
   import TastierinoSillaba from './TastierinoSillaba.svelte';
   import TastierinoIntervallo from './TastierinoIntervallo.svelte';
   import TastierinoScala from './TastierinoScala.svelte';
+  import TastierinoFigure from './TastierinoFigure.svelte';
+  import SceltaTempo from './SceltaTempo.svelte';
   import Foglio from './Foglio.svelte';
 
   interface Props {
@@ -97,10 +99,10 @@
 
     <div class="esercizio" class:risposto={riscontro}>
       <p class="domanda">{'domanda' in esercizio ? esercizio.domanda[lingua] : t.domande[esercizio.tipo]}</p>
-      {#if esercizio.tipo === 'costruisci-la-scala'}
-        <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={1.2} />
+      {#if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'riconosci-il-tempo'}
+        <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={esercizio.tipo === 'costruisci-la-scala' ? 1.2 : 1.1} />
       {:else}
-        <Pentagramma abc={esercizio.abc} />
+        <Pentagramma abc={bozza ?? esercizio.abc} />
       {/if}
     </div>
 
@@ -111,6 +113,10 @@
         {#key `${serieIniziate}-${n}`}
           {#if dichiarazione.tipo === 'nomina-la-sillaba'}
             <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'completa-la-battuta'}
+            <TastierinoFigure {t} tempo={esercizio.tempo} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'riconosci-il-tempo'}
+            <SceltaTempo {t} scelte={esercizio.scelte} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'costruisci-la-scala'}
             <TastierinoScala {t} tonica={esercizio.tonica} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if dichiarazione.tipo === 'riconosci-intervallo' || dichiarazione.tipo === 'rivolta-intervallo'}

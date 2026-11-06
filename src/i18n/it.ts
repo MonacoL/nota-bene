@@ -18,7 +18,7 @@ export const it = {
   eserciziInPreparazione: 'Gli esercizi di questo capitolo sono in preparazione.',
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità' },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo' },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
     domande: {
@@ -26,6 +26,8 @@ export const it = {
       'nomina-la-sillaba': 'Che sillaba è questa nota?',
       'riconosci-intervallo': 'Che intervallo è?',
       'rivolta-intervallo': 'Qual è il rivolto di questo intervallo?',
+      'completa-la-battuta': 'Quali figure completano la battuta?',
+      'riconosci-il-tempo': 'In che tempo sono queste battute?',
     },
     risposta: 'Risposta',
     alterazioni: { bemolle: 'bemolle', bequadro: 'bequadro', diesis: 'diesis' },
@@ -33,6 +35,8 @@ export const it = {
     numeri: { 2: '2ª', 3: '3ª', 4: '4ª', 5: '5ª', 6: '6ª', 7: '7ª', 8: '8ª' },
     qualita: { minore: 'minore', maggiore: 'maggiore', giusta: 'giusta', aumentata: 'aumentata', diminuita: 'diminuita' },
     cancella: "Cancella l'ultima nota",
+    figure: { semibreve: 'semibreve', minima: 'minima', semiminima: 'semiminima', croma: 'croma' },
+    punto: 'punto',
     verifica: 'Verifica',
     riscontro: 'Riscontro',
     giusto: '✓ Giusto',

@@ -1,6 +1,6 @@
 // Schemi dei contenuti (ADR-0006). Stanno qui, fuori da content.config.ts, così i test unitari li usano senza Astro.
 import { z } from 'astro/zod';
-import { CHIAVI, FORME } from '../esercizi';
+import { CHIAVI, FORME, TEMPI } from '../esercizi';
 
 /** La revisione umana che la pagina "Uso dell'intelligenza artificiale" dichiara: senza, la build fallisce. */
 const revisione = z.object({
@@ -14,6 +14,8 @@ const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('nomina-la-sillaba'), chiavi: z.array(z.enum(CHIAVI)).nonempty(), cromatiche: z.boolean() }).strict(),
   z.object({ tipo: z.literal('costruisci-la-scala'), forme: z.array(z.enum(FORME)).nonempty() }).strict(),
   z.object({ tipo: z.literal('trova-la-tonalita'), modi: z.array(z.enum(['maggiore', 'minore'])).nonempty() }).strict(),
+  z.object({ tipo: z.literal('completa-la-battuta'), tempi: z.array(z.enum(TEMPI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('riconosci-il-tempo'), tempi: z.array(z.enum(TEMPI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('riconosci-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('rivolta-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
 ]);
