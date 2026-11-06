@@ -22,6 +22,19 @@ for (const percorso of [...PAGINE, 'questa-pagina-non-esiste/']) {
   });
 }
 
+for (const percorso of PAGINE) {
+  test(`${percorso}: intestazione su una riga sola`, async ({ page }) => {
+    await page.goto(percorso);
+    await page.evaluate(() => document.fonts.ready);
+    const header = page.locator('header');
+    const scatole = await Promise.all(
+      [header.locator('.marchio'), header.locator('nav').first(), header.locator('.lingua')].map((l) => l.boundingBox()),
+    );
+    const centri = scatole.map((b) => b!.y + b!.height / 2);
+    expect(Math.max(...centri) - Math.min(...centri), "un elemento dell'intestazione è andato a capo").toBeLessThan(4);
+  });
+}
+
 for (const lingua of LINGUE) {
   test(`${lingua}: intestazione e piè di pagina`, async ({ page }) => {
     await page.goto(`${lingua}/privacy/`);

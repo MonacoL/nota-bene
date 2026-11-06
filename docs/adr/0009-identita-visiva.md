@@ -1,13 +1,13 @@
 # Identità visiva: Atkinson Hyperlegible, carta e bordeaux, tema scuro automatico
 
-Il sito usa un solo font, **Atkinson Hyperlegible Next** (OFL), in due pesi: 400 per il testo e 700 per i titoli. È disegnato perché le lettere simili non si confondano, il che aiuta chi legge da telefono e chi parte da zero. I colori sono quelli di una carta da musica: fondo avorio, inchiostro quasi nero, accento **bordeaux**. Il tema scuro c'è, e segue `prefers-color-scheme`. Il segno del nome è una testa di nota col gambo, nel colore d'accento, prima della scritta "Nota Bene". La scelta viene dal prototipo [Identità visiva](https://github.com/MonacoL/nota-bene/issues/20) (branch `prototype/identita-visiva`, variante E).
+Il sito usa un solo font, **Atkinson Hyperlegible Next** (OFL), in due pesi: 400 per il testo e 700 per i titoli. È disegnato perché le lettere simili non si confondano, il che aiuta chi legge da telefono e chi parte da zero. I colori sono quelli di una carta da musica: fondo avorio, inchiostro quasi nero, accento **bordeaux**. Il tema scuro c'è, e segue `prefers-color-scheme`. Il segno del nome sono due crome legate, una per parola, prima della scritta "Nota Bene": la prima e "Nota" hanno il colore dell'inchiostro, la seconda e "Bene" quello d'accento (prototipo `prototype/segno`, variante B; il segno potrà cambiare ancora). La scelta viene dal prototipo [Identità visiva](https://github.com/MonacoL/nota-bene/issues/20) (branch `prototype/identita-visiva`, variante E).
 
 ## Considered Options
 
 - **Serif per i titoli e sans per il testo** (Source Serif 4 + Source Sans 3, oppure Fraunces + Inter): più editoriali, ma pesano 90–110 KB contro 25 KB, e il serif da telefono non legge meglio.
 - **Font di sistema**: zero byte, ma il sito cambierebbe aspetto da un telefono all'altro, e le Sillabe nella partitura avrebbero misure diverse a ogni dispositivo.
 - **Solo tema chiaro nella v1**: meno colori da tenere, ma lo studio la sera da telefono è un caso tipico, e abcjs segue il tema senza altro lavoro.
-- **Altri segni**: corona (fermata), timbro "nb", solo testo. La testa di nota si riconosce anche a 16 px come favicon.
+- **Altri segni**: corona (fermata), timbro "nb", solo testo. Nel prototipo `prototype/segno`: una sola nota col gambo (il primo segno scelto), la "o" di "Nota" disegnata come una nota, una nota sul rigo, un timbro "N.B." con teste di nota al posto dei punti. Le due crome legano il segno ai due colori della scritta.
 
 ## Consequences
 
@@ -33,5 +33,6 @@ Il sito usa un solo font, **Atkinson Hyperlegible Next** (OFL), in due pesi: 400
 - **Tipografia**: corpo del testo a 17 px, Testo e Sillabe nella partitura a circa 15–16 px (vedi "Schermata della Lettura su telefono"), pulsanti alti almeno 48 px. Angoli arrotondati a 12 px. Il nome del font va passato ad abcjs tra virgolette (`%%vocalfont "Atkinson Hyperlegible Next" 15`): senza virgolette abcjs legge male il nome e scrive le sillabe minuscole.
 - **♭ ♮ ♯**: Atkinson non li ha, e non li hanno nemmeno gli altri font provati nei sottoinsiemi latini. Si usa un secondo `@font-face` con `unicode-range: U+266D-266F`, ricavato da **Noto Music** (OFL) e ridotto ai tre glifi (2,6 KB), con `size-adjust: 150%`, perché senza quell'ingrandimento i segni vengono minuscoli.
 - **Peso**: circa 28 KB di font in tutto (Atkinson 400 e 700 in sottoinsieme latino, più le alterazioni), serviti dal sito (ADR-0006) e con `font-display: swap`. Le licenze OFL vanno nella pagina dei crediti, tra gli asset di terzi.
-- **Segno e favicon**: il segno è un SVG nel codice, colorato con `--accent`, quindi segue il tema. La favicon è lo stesso disegno, bianco su un quadrato bordeaux arrotondato. Non ha testo, perché le favicon non caricano i font web.
+- **Segno e favicon**: il segno è un SVG nel codice, colorato con `--ink` e `--accent`, quindi segue il tema. La favicon è lo stesso disegno, tutto bianco su un quadrato bordeaux arrotondato. Non ha testo, perché le favicon non caricano i font web.
+- **Intestazione**: segno, scritta, "Letture" e cambio di lingua stanno su una riga anche a 320 px; sotto i 360 px segno e scritta si rimpiccioliscono. Un test Playwright lo verifica su tutte le configurazioni.
 - **Inglese**: valgono gli stessi font e colori. Atkinson copre i caratteri dell'italiano e dell'inglese nel sottoinsieme latino.
