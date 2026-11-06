@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Segno from '../components/Segno.astro';
+import MarchioPrototipo from '../components/MarchioPrototipo.astro';
 import CambioLingua from '../components/CambioLingua.svelte';
 import { IN_COSTRUZIONE } from '../config';
 import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
@@ -32,7 +32,7 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
     {IN_COSTRUZIONE && <p class="costruzione" role="note">{t.inCostruzione}</p>}
     <header class="top">
       <div class="wrap">
-        <a class="marchio" href={url(lingua)}><Segno /><span class="nome">{t.nomeSito}</span></a>
+        <a class="marchio" href={url(lingua)} aria-label={t.nomeSito}><MarchioPrototipo /></a>
         <nav class="nav" aria-label={t.navPrincipale}>
           <a href={url(lingua, 'letture/')}>{t.letture}</a>
         </nav>

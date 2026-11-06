@@ -1,0 +1,99 @@
+---
+// PROTOTIPO (branch prototype/segno): varianti del segno e della scritta in due colori.
+// Si sceglie con ?variant=A…E; la barra in basso cambia variante. Non va su main.
+---
+<span class="pv" data-v="A" title="A · segno attuale, scritta in due colori">
+  <svg width="22" height="28" viewBox="0 0 22 28" aria-hidden="true"><ellipse cx="9" cy="21" rx="7.2" ry="5" transform="rotate(-22 9 21)" fill="var(--accent)"/><rect x="14.6" y="2" width="2.6" height="19" rx="1.3" fill="var(--accent)"/></svg>
+  <span class="w"><span class="a">Nota</span> <span class="b">Bene</span></span>
+</span>
+
+<span class="pv" data-v="B" title="B · due crome legate: una per parola">
+  <svg width="34" height="30" viewBox="0 0 34 30" aria-hidden="true">
+    <path d="M10.2 4.5 L29.6 1.2 L29.6 6.4 L10.2 9.7 Z" fill="var(--ink)"/>
+    <rect x="8.4" y="5" width="2.4" height="18" rx="1.2" fill="var(--ink)"/>
+    <ellipse cx="5.6" cy="23.2" rx="5.6" ry="4" transform="rotate(-22 5.6 23.2)" fill="var(--ink)"/>
+    <rect x="27.8" y="2" width="2.4" height="17.5" rx="1.2" fill="var(--accent)"/>
+    <ellipse cx="25" cy="19.8" rx="5.6" ry="4" transform="rotate(-22 25 19.8)" fill="var(--accent)"/>
+  </svg>
+  <span class="w"><span class="a">Nota</span> <span class="b">Bene</span></span>
+</span>
+
+<span class="pv" data-v="C" title="C · la o di Nota è una nota">
+  <span class="w grande"><span class="a">N<svg class="o" viewBox="0 0 14 26" aria-hidden="true"><ellipse cx="6" cy="20" rx="5.6" ry="4.2" transform="rotate(-22 6 20)" fill="var(--accent)"/><rect x="9.8" y="0" width="2.2" height="20" rx="1.1" fill="var(--accent)"/></svg>ta</span> <span class="b">Bene</span></span>
+</span>
+
+<span class="pv" data-v="D" title="D · nota sul rigo, Nota in grassetto e Bene leggero">
+  <svg width="40" height="30" viewBox="0 0 40 30" aria-hidden="true">
+    <g stroke="var(--muted)" stroke-width="1.1" opacity=".7"><path d="M0 7h40M0 12h40M0 17h40M0 22h40M0 27h40"/></g>
+    <ellipse cx="17" cy="19.5" rx="5.4" ry="3.9" transform="rotate(-22 17 19.5)" fill="var(--accent)"/>
+    <rect x="20.6" y="1" width="2.2" height="18" rx="1.1" fill="var(--accent)"/>
+  </svg>
+  <span class="w"><span class="a">Nota</span>&#8202;<span class="b leggero">Bene</span></span>
+</span>
+
+<span class="pv" data-v="E" title="E · timbro N.B. con teste di nota al posto dei punti">
+  <svg width="48" height="30" viewBox="0 0 48 30" aria-hidden="true">
+    <rect width="48" height="30" rx="8" fill="var(--accent)"/>
+    <text x="5" y="22.5" font-family="Atkinson Hyperlegible Next" font-weight="700" font-size="18" fill="var(--accent-ink)">N</text>
+    <ellipse cx="21" cy="20.6" rx="2.6" ry="1.9" transform="rotate(-22 21 20.6)" fill="var(--accent-ink)"/>
+    <text x="25" y="22.5" font-family="Atkinson Hyperlegible Next" font-weight="700" font-size="18" fill="var(--accent-ink)">B</text>
+    <ellipse cx="40.6" cy="20.6" rx="2.6" ry="1.9" transform="rotate(-22 40.6 20.6)" fill="var(--accent-ink)"/>
+  </svg>
+  <span class="w"><span class="a">Nota</span> <span class="b">Bene</span></span>
+</span>
+
+<div class="pbar" hidden>
+  <button type="button" data-d="-1" aria-label="variante precedente">←</button>
+  <span class="plab"></span>
+  <button type="button" data-d="1" aria-label="variante successiva">→</button>
+</div>
+
+<script>
+  const CHIAVI = ['A', 'B', 'C', 'D', 'E'];
+  const params = new URLSearchParams(location.search);
+  let v = CHIAVI.includes(params.get('variant') ?? '') ? params.get('variant')! : 'A';
+  const bar = document.querySelector<HTMLElement>('.pbar')!;
+  function mostra() {
+    document.querySelectorAll<HTMLElement>('.pv').forEach((el) => (el.hidden = el.dataset.v !== v));
+    const att = document.querySelector<HTMLElement>(`.pv[data-v="${v}"]`)!;
+    bar.querySelector('.plab')!.textContent = att.title;
+    const u = new URL(location.href);
+    u.searchParams.set('variant', v);
+    history.replaceState(null, '', u);
+  }
+  function passo(d: number) {
+    v = CHIAVI[(CHIAVI.indexOf(v) + d + CHIAVI.length) % CHIAVI.length]!;
+    mostra();
+  }
+  if (!params.has('nobar')) bar.hidden = false;
+  bar.addEventListener('click', (e) => {
+    const d = (e.target as HTMLElement).closest('button')?.dataset.d;
+    if (d) { e.preventDefault(); passo(Number(d)); }
+  });
+  addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') passo(-1);
+    if (e.key === 'ArrowRight') passo(1);
+  });
+  mostra();
+</script>
+
+<style>
+  .pv { display: flex; align-items: center; gap: 8px; }
+  .pv[hidden] { display: none; }
+  .pv svg { display: block; flex: none; }
+  .w { font-weight: 700; font-size: 1.2rem; letter-spacing: 0.01em; white-space: nowrap; }
+  .a { color: var(--ink); }
+  .b { color: var(--accent); }
+  .leggero { font-weight: 400; }
+  .grande { font-size: 1.35rem; }
+  .pv svg.o { display: inline-block; width: 0.5em; height: 0.95em; vertical-align: -0.02em; margin: 0 0.02em; }
+  .pbar {
+    position: fixed; z-index: 99; left: 50%; bottom: 12px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 6px; padding: 4px; max-width: calc(100vw - 16px);
+    background: #111; color: #fff; border-radius: 14px; box-shadow: 0 4px 16px rgb(0 0 0 / .4);
+    font: 13px/1.3 system-ui, sans-serif;
+  }
+  .pbar[hidden] { display: none; }
+  .pbar button { background: #333; color: #fff; border: 0; border-radius: 10px; min-width: 32px; height: 30px; font-size: 15px; }
+  .plab { padding: 0 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
