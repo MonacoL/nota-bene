@@ -3,6 +3,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { avvisiTraduzione, controllaFile, ordina, scegliTesto, vicini } from './percorso';
 import type { Lingua } from '../i18n';
+import type { DichiarazioneEsercizio } from './schemi';
 
 export type Capitolo = {
   id: string;
@@ -10,6 +11,8 @@ export type Capitolo = {
   titolo: string;
   riga: string;
   provaLetture?: 'letture' | 'avanzate';
+  /** Gli Esercizi dichiarati nel file italiano, che fa fede in tutte e due le lingue; vuoto se mancano. */
+  esercizi: DichiarazioneEsercizio[];
   /** Il file da mostrare in questa lingua; manca se il Capitolo è ancora in preparazione. */
   testo?: { voce: CollectionEntry<'capitoliIt'> | CollectionEntry<'capitoliEn'>; lingua: Lingua; ripiego: boolean };
 };
@@ -44,6 +47,7 @@ export async function capitoli(lingua: Lingua): Promise<Capitolo[]> {
     titolo: v[lingua].titolo,
     riga: v[lingua].riga,
     provaLetture: v.prova_letture,
+    esercizi: it.get(v.id)?.data.esercizi ?? [],
     testo: (() => {
       const scelta = scegliTesto<CollectionEntry<'capitoliIt'> | CollectionEntry<'capitoliEn'>>(lingua, it.get(v.id), en.get(v.id));
       return scelta && { voce: scelta.testo, lingua: scelta.lingua, ripiego: scelta.ripiego };

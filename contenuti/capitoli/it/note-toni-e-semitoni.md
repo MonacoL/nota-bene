@@ -1,6 +1,8 @@
 ---
 # Testo provvisorio: quello vero arriva con il ticket "Testi dei 10 Capitoli in italiano".
 revisione: { da: "nessuno, testo provvisorio", data: 2026-11-06 }
+esercizi:
+  - { tipo: nomina-la-nota, chiavi: [violino] }
 ---
 
 _Testo provvisorio: serve a provare la pagina, non è ancora la spiegazione definitiva._

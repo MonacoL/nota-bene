@@ -61,7 +61,7 @@ test('nei Capitoli 9 e 10 c\'è "Prova le Letture"; il 10 porta alle avanzate ed
 });
 
 test('un Capitolo senza testo è in preparazione', async ({ page }) => {
-  await page.goto(`it/capitoli/${CAPITOLI[1]}/`);
+  await page.goto(`it/capitoli/${CAPITOLI[2]}/`);
   await expect(page.getByText('Questo Capitolo è in preparazione.')).toBeVisible();
 });
 

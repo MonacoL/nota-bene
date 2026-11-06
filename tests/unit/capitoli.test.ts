@@ -30,6 +30,34 @@ describe('frontmatter dei Capitoli', () => {
     expect(schemaCapitoloEn.safeParse({ revisione, tradotto_da: '2026-11-06' }).success).toBe(true);
   });
 
+  describe('Esercizi dichiarati', () => {
+    const revisione = { da: 'Luca Monaco', data: '2026-11-06' };
+    const conEsercizi = (esercizi: unknown) => schemaCapitoloIt.safeParse({ revisione, esercizi }).success;
+
+    it('accetta un tipo con le Chiavi ammesse, e un Capitolo senza Esercizi', () => {
+      expect(conEsercizi([{ tipo: 'nomina-la-nota', chiavi: ['violino'] }])).toBe(true);
+      expect(conEsercizi([{ tipo: 'nomina-la-nota', chiavi: ['violino', 'violino-ottava-bassa', 'basso'] }])).toBe(true);
+      expect(schemaCapitoloIt.safeParse({ revisione }).success).toBe(true);
+    });
+
+    it('rifiuta tipi e Chiavi sconosciuti, Chiavi mancanti, campi in più e un tipo dichiarato due volte', () => {
+      expect(conEsercizi([{ tipo: 'nomina-la-sillaba-x', chiavi: ['violino'] }])).toBe(false);
+      expect(conEsercizi([{ tipo: 'nomina-la-nota', chiavi: ['do'] }])).toBe(false);
+      expect(conEsercizi([{ tipo: 'nomina-la-nota', chiavi: [] }])).toBe(false);
+      expect(conEsercizi([{ tipo: 'nomina-la-nota', chiavi: ['violino'], chiave: 'basso' }])).toBe(false);
+      expect(conEsercizi([])).toBe(false);
+      expect(conEsercizi([
+        { tipo: 'nomina-la-nota', chiavi: ['violino'] },
+        { tipo: 'nomina-la-nota', chiavi: ['basso'] },
+      ])).toBe(false);
+    });
+
+    it('si dichiarano solo in italiano: il Capitolo inglese usa quelli dell\'originale', () => {
+      const esercizi = [{ tipo: 'nomina-la-nota', chiavi: ['violino'] }];
+      expect(schemaCapitoloEn.safeParse({ revisione, tradotto_da: '2026-11-06', esercizi }).success).toBe(false);
+    });
+  });
+
   it('rifiuta i campi sconosciuti, così un errore di battitura non passa inosservato', () => {
     expect(schemaCapitoloIt.safeParse({ revisione: { da: 'L', data: '2026-11-06' }, revsione: {} }).success).toBe(false);
   });
