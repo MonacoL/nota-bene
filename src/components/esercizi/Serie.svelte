@@ -10,6 +10,7 @@
   import TastierinoNota from './TastierinoNota.svelte';
   import TastierinoSillaba from './TastierinoSillaba.svelte';
   import TastierinoIntervallo from './TastierinoIntervallo.svelte';
+  import TastierinoScala from './TastierinoScala.svelte';
   import Foglio from './Foglio.svelte';
 
   interface Props {
@@ -32,6 +33,8 @@
   let n = $state(0);
   let giuste = $state(0);
   let riscontro = $state<Riscontro | undefined>();
+  /** Il rigo mentre il corista risponde, quando la risposta compare sul rigo ("Costruisci la scala"). */
+  let bozza = $state<string | undefined>();
   // Durante la Serie <html> ha data-serie (lo mette già la pagina, prima del primo disegno): col dito la pagina
   // è alta quanto lo schermo e non scorre (regole nella pagina degli Esercizi). Nel riepilogo torna normale.
   $effect(() => {
@@ -50,6 +53,7 @@
     n = 0;
     giuste = 0;
     riscontro = undefined;
+    bozza = undefined;
   }
 
   function scegliScheda(i: number) {
@@ -65,6 +69,7 @@
 
   function avanti() {
     riscontro = undefined;
+    bozza = undefined;
     n += 1;
   }
 
@@ -91,8 +96,12 @@
     </div>
 
     <div class="esercizio" class:risposto={riscontro}>
-      <p class="domanda">{t.domande[esercizio.tipo]}</p>
-      <Pentagramma abc={esercizio.abc} />
+      <p class="domanda">{'domanda' in esercizio ? esercizio.domanda[lingua] : t.domande[esercizio.tipo]}</p>
+      {#if esercizio.tipo === 'costruisci-la-scala'}
+        <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={1.2} />
+      {:else}
+        <Pentagramma abc={esercizio.abc} />
+      {/if}
     </div>
 
     <div class="fondo">
@@ -102,6 +111,8 @@
         {#key `${serieIniziate}-${n}`}
           {#if dichiarazione.tipo === 'nomina-la-sillaba'}
             <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'costruisci-la-scala'}
+            <TastierinoScala {t} tonica={esercizio.tonica} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if dichiarazione.tipo === 'riconosci-intervallo' || dichiarazione.tipo === 'rivolta-intervallo'}
             <TastierinoIntervallo {t} onrisposta={rispondi} />
           {:else}

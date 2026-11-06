@@ -1,8 +1,8 @@
 // Le Armature e le Tonalità maggiori che le hanno, dal giro delle quinte: n diesis (n > 0) o -n bemolle (n < 0).
 import { LETTERE, type Alterazione, type Lettera } from './note';
 
-const DIESIS: Lettera[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
-const BEMOLLE: Lettera[] = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
+export const DIESIS: Lettera[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+export const BEMOLLE: Lettera[] = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
 
 /** L'alterazione che l'Armatura dà a ogni lettera. */
 export function armatura(quinte: number): Record<Lettera, Alterazione> {

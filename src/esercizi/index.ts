@@ -1,15 +1,22 @@
 // Esercizi di teoria: genera(tipo, parametri, seed) → Esercizio e valuta(Esercizio, risposta) → Riscontro.
 // TypeScript puro, senza Astro né DOM: gira nel browser e nei test. Ogni tipo sta nel suo file.
+import * as costruisciLaScala from './costruisci-la-scala';
 import * as nominaLaNota from './nomina-la-nota';
 import * as nominaLaSillaba from './nomina-la-sillaba';
 import * as riconosciIntervallo from './riconosci-intervallo';
 import * as rivoltaIntervallo from './rivolta-intervallo';
+import * as trovaLaTonalita from './trova-la-tonalita';
 import type { Testi } from './testi';
 
 export type { Nota, Lettera, Alterazione } from './note';
 export type { Testi } from './testi';
 export { CHIAVI, type Chiave } from './nomina-la-nota';
 export type EsercizioNominaLaNota = nominaLaNota.Esercizio;
+export type EsercizioCostruisciLaScala = costruisciLaScala.Esercizio;
+export type EsercizioTrovaLaTonalita = trovaLaTonalita.Esercizio;
+export type { Modo } from './trova-la-tonalita';
+export { abcScala, inScala } from './costruisci-la-scala';
+export { FORME, type Forma } from './scale';
 export type EsercizioNominaLaSillaba = nominaLaSillaba.Esercizio;
 export type { Sillaba } from '../sillabe';
 export type EsercizioRiconosciIntervallo = riconosciIntervallo.Esercizio;
@@ -20,8 +27,10 @@ export { NUMERI, QUALITA, type Numero, type Qualita, type Intervallo } from './i
 type Tipi = {
   'nomina-la-nota': { parametri: nominaLaNota.Parametri; esercizio: nominaLaNota.Esercizio; risposta: nominaLaNota.Risposta };
   'nomina-la-sillaba': { parametri: nominaLaSillaba.Parametri; esercizio: nominaLaSillaba.Esercizio; risposta: nominaLaSillaba.Risposta };
+  'costruisci-la-scala': { parametri: costruisciLaScala.Parametri; esercizio: costruisciLaScala.Esercizio; risposta: costruisciLaScala.Risposta };
   'riconosci-intervallo': { parametri: riconosciIntervallo.Parametri; esercizio: riconosciIntervallo.Esercizio; risposta: riconosciIntervallo.Risposta };
   'rivolta-intervallo': { parametri: rivoltaIntervallo.Parametri; esercizio: rivoltaIntervallo.Esercizio; risposta: rivoltaIntervallo.Risposta };
+  'trova-la-tonalita': { parametri: trovaLaTonalita.Parametri; esercizio: trovaLaTonalita.Esercizio; risposta: trovaLaTonalita.Risposta };
 };
 export type Tipo = keyof Tipi;
 export type Parametri<T extends Tipo = Tipo> = Tipi[T]['parametri'];
@@ -43,6 +52,10 @@ export function genera<T extends Tipo>(tipo: T, parametri: Parametri<T>, seed: n
       return nominaLaNota.genera(parametri as Parametri<'nomina-la-nota'>, seed) as Esercizio<T>;
     case 'nomina-la-sillaba':
       return nominaLaSillaba.genera(parametri as Parametri<'nomina-la-sillaba'>, seed) as Esercizio<T>;
+    case 'costruisci-la-scala':
+      return costruisciLaScala.genera(parametri as Parametri<'costruisci-la-scala'>, seed) as Esercizio<T>;
+    case 'trova-la-tonalita':
+      return trovaLaTonalita.genera(parametri as Parametri<'trova-la-tonalita'>, seed) as Esercizio<T>;
     case 'riconosci-intervallo':
       return riconosciIntervallo.genera(parametri as Parametri<'riconosci-intervallo'>, seed) as Esercizio<T>;
     case 'rivolta-intervallo':
@@ -56,6 +69,10 @@ export function valuta<T extends Tipo>(esercizio: Esercizio<T>, risposta: Rispos
       return nominaLaNota.valuta(esercizio, risposta as Risposta<'nomina-la-nota'>);
     case 'nomina-la-sillaba':
       return nominaLaSillaba.valuta(esercizio, risposta as Risposta<'nomina-la-sillaba'>);
+    case 'costruisci-la-scala':
+      return costruisciLaScala.valuta(esercizio, risposta as Risposta<'costruisci-la-scala'>);
+    case 'trova-la-tonalita':
+      return trovaLaTonalita.valuta(esercizio, risposta as Risposta<'trova-la-tonalita'>);
     case 'riconosci-intervallo':
       return riconosciIntervallo.valuta(esercizio, risposta as Risposta<'riconosci-intervallo'>);
     case 'rivolta-intervallo':

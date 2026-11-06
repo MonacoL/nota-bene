@@ -19,7 +19,7 @@ export const en: Dizionario = {
   eserciziInPreparazione: 'The exercises for this chapter are being prepared.',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
     domande: {
@@ -33,6 +33,7 @@ export const en: Dizionario = {
     note: { C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'B' },
     numeri: { 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 8: '8th' },
     qualita: { minore: 'minor', maggiore: 'major', giusta: 'perfect', aumentata: 'augmented', diminuita: 'diminished' },
+    cancella: 'Delete the last note',
     verifica: 'Check',
     riscontro: 'Feedback',
     giusto: '✓ Correct',
