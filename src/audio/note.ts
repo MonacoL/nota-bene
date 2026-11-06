@@ -2,7 +2,7 @@
 // Riferimento tonale e le note da caricare. Lo usano la pagina della Lettura alla build e il controllo dei
 // campioni in CI. Le altezze sono numeri MIDI reali (Do centrale = C4 = 60): il tenore in chiave di violino
 // ottava bassa è già un'ottava sotto la scritta, perché leggiAbc riporta le Note reali (ADR-0003).
-import { semitoni, type Nota } from '../esercizi/note';
+import { semitoni, tasto, type Nota } from '../esercizi/note';
 import { leggiAbc } from '../letture/abc';
 import type { Tonalita } from '../sillabe';
 
@@ -19,20 +19,20 @@ export type AudioDellaLettura = {
   note: number[];
 };
 
-const SEMITONI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 } as const;
-
 /** Il numero MIDI di una Nota reale: Do4 = 60. */
 export function midi(nota: { lettera: Nota['lettera']; alterazione: number; ottava: number }): number {
   return semitoni({ ...nota, alterazione: 0 }) + nota.alterazione + 12;
 }
+
+/** Il resto della divisione per 12, sempre fra 0 e 11: quanti semitoni sopra un Do. */
+const dentroLOttava = (n: number) => ((n % 12) + 12) % 12;
 
 /**
  * ADR-0008: la tonica è la prima occorrenza sotto la nota di partenza, o su di essa; sopra, la terza (maggiore o
  * minore secondo il Modo) e la quinta.
  */
 export function riferimentoTonale(tonalita: Tonalita, partenza: number): Riferimento {
-  const classe = (((SEMITONI[tonalita.tonica.lettera] + tonalita.tonica.alterazione) % 12) + 12) % 12;
-  const tonica = partenza - ((((partenza - classe) % 12) + 12) % 12);
+  const tonica = partenza - dentroLOttava(partenza - tasto(tonalita.tonica));
   const terza = tonalita.modo === 'maggiore' ? 4 : 3;
   return { accordo: [tonica, tonica + terza, tonica + 7], partenza };
 }
@@ -41,14 +41,14 @@ export function riferimentoTonale(tonalita: Tonalita, partenza: number): Riferim
 export type NotaDaSuonare = { midi: number; inizio: number; durata: number };
 
 /** ADR-0008: le durate del Riferimento tonale sono fisse e non dipendono dall'Andamento della Lettura. */
-export const ACCORDO = 1.5;
-export const PAUSA = 0.5;
-export const PARTENZA = 1.5;
+export const DURATA_ACCORDO = 1.5;
+export const DURATA_PAUSA = 0.5;
+export const DURATA_PARTENZA = 1.5;
 
 export function noteDelRiferimento(riferimento: Riferimento): NotaDaSuonare[] {
   return [
-    ...riferimento.accordo.map((midi) => ({ midi, inizio: 0, durata: ACCORDO })),
-    { midi: riferimento.partenza, inizio: ACCORDO + PAUSA, durata: PARTENZA },
+    ...riferimento.accordo.map((midi) => ({ midi, inizio: 0, durata: DURATA_ACCORDO })),
+    { midi: riferimento.partenza, inizio: DURATA_ACCORDO + DURATA_PAUSA, durata: DURATA_PARTENZA },
   ];
 }
 

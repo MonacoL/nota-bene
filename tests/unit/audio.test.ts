@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { Lettera } from '../../src/esercizi';
 import { campioniPer } from '../../src/audio/campioni';
-import { controllaCampioni } from '../../src/audio/controllo';
+import { controllaCampioni } from '../../scripts/limiti-campioni';
 import { audioDellaLettura, noteDelRiferimento } from '../../src/audio/note';
 import type { Tonalita } from '../../src/sillabe';
 

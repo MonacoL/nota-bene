@@ -54,7 +54,7 @@ export function creaLettore(opzioni: Opzioni) {
     return ctx;
   }
 
-  function caricaPiano(c: AudioContext): Promise<boolean> {
+  function caricaPiano(ctx: AudioContext): Promise<boolean> {
     let mancano = false;
     // I campioni restano in CacheStorage (solo in https, o su localhost); le risposte sbagliate non si salvano.
     const archivio = {
@@ -72,7 +72,7 @@ export function creaLettore(opzioni: Opzioni) {
         return risposta;
       },
     };
-    piano = SplendidGrandPiano(c, {
+    piano = SplendidGrandPiano(ctx, {
       baseUrl: opzioni.campioni.replace(/\/$/, ''),
       storage: archivio,
       formats: ['ogg', 'm4a'],
@@ -110,11 +110,11 @@ export function creaLettore(opzioni: Opzioni) {
    * gestore del click, prima di ogni await.
    */
   function tocca(funzione: Funzione, note: () => NotaDaSuonare[], evidenzia?: (indice: number) => void) {
-    const c = sblocca();
+    const ctx = sblocca();
     const eraQuesta = inCorso?.funzione === funzione;
     ferma();
     if (eraQuesta) return;
-    pronto ??= caricaPiano(c);
+    pronto ??= caricaPiano(ctx);
     let fermata = false;
     const azioni: (() => void)[] = [];
     const esecuzione: Esecuzione = {
@@ -130,13 +130,13 @@ export function creaLettore(opzioni: Opzioni) {
     void Promise.race([pronto, attesa]).then((conPiano) => {
       if (fermata) return;
       const daSuonare = note();
-      const zero = c.currentTime + ANTICIPO;
-      for (const n of daSuonare) {
-        const durata = Math.min(n.durata, DURATA_MASSIMA);
-        azioni.push(conPiano ? suonaPiano(n.midi, zero + n.inizio, durata) : suonaOscillatore(c, n.midi, zero + n.inizio, durata));
+      const troncate = daSuonare.map((n) => ({ ...n, durata: Math.min(n.durata, DURATA_MASSIMA) }));
+      const zero = ctx.currentTime + ANTICIPO;
+      for (const n of troncate) {
+        azioni.push(conPiano ? suonaPiano(n.midi, zero + n.inizio, n.durata) : suonaOscillatore(ctx, n.midi, zero + n.inizio, n.durata));
       }
-      const fine = Math.max(0, ...daSuonare.map((n) => n.inizio + Math.min(n.durata, DURATA_MASSIMA))) + RILASCIO;
-      azioni.push(segui(c, zero, daSuonare, fine, evidenzia, () => {
+      const fine = Math.max(0, ...troncate.map((n) => n.inizio + n.durata)) + RILASCIO;
+      azioni.push(segui(ctx, zero, daSuonare, fine, evidenzia, () => {
         if (inCorso === esecuzione) ferma();
       }));
     });
@@ -161,20 +161,20 @@ export function creaLettore(opzioni: Opzioni) {
 }
 
 /** L'oscillatore a triangolo, con un inviluppo breve per non fare click. */
-function suonaOscillatore(c: AudioContext, midi: number, quando: number, durata: number): () => void {
-  const osc = c.createOscillator();
-  const volume = c.createGain();
+function suonaOscillatore(ctx: AudioContext, midi: number, quando: number, durata: number): () => void {
+  const osc = ctx.createOscillator();
+  const volume = ctx.createGain();
   osc.type = 'triangle';
   osc.frequency.value = 440 * 2 ** ((midi - 69) / 12);
   volume.gain.setValueAtTime(0, quando);
   volume.gain.linearRampToValueAtTime(0.2, quando + 0.02);
   volume.gain.setValueAtTime(0.2, quando + durata);
   volume.gain.linearRampToValueAtTime(0, quando + durata + 0.15);
-  osc.connect(volume).connect(c.destination);
+  osc.connect(volume).connect(ctx.destination);
   osc.start(quando);
   osc.stop(quando + durata + 0.2);
   return () => {
-    const adesso = c.currentTime;
+    const adesso = ctx.currentTime;
     volume.gain.cancelScheduledValues(adesso);
     volume.gain.setValueAtTime(volume.gain.value, adesso);
     volume.gain.linearRampToValueAtTime(0, adesso + 0.05);
@@ -187,7 +187,7 @@ function suonaOscillatore(c: AudioContext, midi: number, quando: number, durata:
  * quando si ferma) e chiama finito() quando l'ultima nota ha finito di suonare.
  */
 function segui(
-  c: AudioContext,
+  ctx: AudioContext,
   zero: number,
   note: readonly NotaDaSuonare[],
   fine: number,
@@ -199,7 +199,7 @@ function segui(
     if (indice !== attuale) evidenzia?.((attuale = indice));
   };
   const orologio = setInterval(() => {
-    const t = c.currentTime - zero;
+    const t = ctx.currentTime - zero;
     if (t >= fine) return finito();
     let indice = -1;
     for (const [i, n] of note.entries()) if (n.inizio <= t && t < n.inizio + n.durata) indice = i;

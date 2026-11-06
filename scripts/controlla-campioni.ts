@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
 import { audioDellaLettura } from '../src/audio/note';
-import { controllaCampioni } from '../src/audio/controllo';
+import { controllaCampioni } from './limiti-campioni';
 import { catalogo } from '../src/letture/catalogo';
 
 const CARTELLA = process.env.NOTA_BENE_LETTURE ?? 'letture';

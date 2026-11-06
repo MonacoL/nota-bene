@@ -3,7 +3,7 @@
 // formato (Safari m4a, gli altri ogg): conta il più pesante dei due.
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { campioniPer, FORMATI, GAMMA } from './campioni';
+import { campioniPer, FORMATI, ESTENSIONE_CAMPIONI } from '../src/audio/campioni';
 
 export const MASSIMO_LETTURA = 1_000_000;
 export const MASSIMO_TOTALE = 10_000_000;
@@ -13,7 +13,7 @@ const mb = (byte: number) => (byte / 1_000_000).toFixed(2).replace('.', ',');
 export function controllaCampioni(letture: readonly { id: string; note: readonly number[] }[], cartella: string): string[] {
   const errori: string[] = [];
   for (const { id, note } of letture) {
-    const fuori = note.filter((n) => n < GAMMA.da || n > GAMMA.a);
+    const fuori = note.filter((n) => n < ESTENSIONE_CAMPIONI.da || n > ESTENSIONE_CAMPIONI.a);
     for (const n of fuori) errori.push(`${id}: la nota MIDI ${n} è fuori dai campioni C2–C6`);
     const campioni = campioniPer(note.filter((n) => !fuori.includes(n)));
     let peggiore = { formato: '', byte: 0 };

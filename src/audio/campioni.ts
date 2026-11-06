@@ -8,7 +8,7 @@ import { pianoToPreset } from 'smplr';
 export const VELOCITY: [number, number] = [85, 100];
 export const VELOCITY_SUONATA = 95;
 /** Le note che i campioni coprono: da C2 (36) a C6 (84). */
-export const GAMMA = { da: 36, a: 84 } as const;
+export const ESTENSIONE_CAMPIONI = { da: 36, a: 84 } as const;
 export const FORMATI = ['m4a', 'ogg'] as const;
 
 /** "MF C#1" → "mf-cs1": il nome del file, senza estensione. */
