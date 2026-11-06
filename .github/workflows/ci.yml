@@ -31,6 +31,9 @@ jobs:
         run: |
           git fetch --depth=1 origin "$PRECEDENTE"
           npm run valida:letture -- FETCH_HEAD
+      # ADR-0008: al massimo 1 MB di campioni del pianoforte per Lettura e 10 MB in tutto.
+      - name: Campioni audio delle Letture
+        run: npm run controlla:campioni
       - run: npm run test:unit
 
   build:

@@ -1,0 +1,34 @@
+Splendid Grand Piano: Public Domain samples by AKAI
+
+Asset: campioni del pianoforte per il Riferimento tonale e l'Ascolto di verifica (ADR-0008)
+File: i 66 file .m4a e .ogg di questa cartella
+Licenza: pubblico dominio
+Fonte: https://github.com/sfzinstruments/SplendidGrandPiano
+Scaricati da: https://smpldsnds.github.io/sfzinstruments-splendid-grand-piano/samples/
+  (il baseUrl predefinito di SplendidGrandPiano in smplr 1.1.0; repository
+  https://github.com/smpldsnds/sfzinstruments-splendid-grand-piano)
+Data del download: 2026-11-06
+
+Dal README di sfzinstruments/SplendidGrandPiano e di smpldsnds/sfzinstruments-splendid-grand-piano,
+consultati il 2026-11-06:
+
+    Public Domain samples by AKAI
+
+    This samples set was released as public domain in early 2000 by Akai company.
+    It's a Steinway samples with 4 velocity layers.
+    The version we put here is the 256 MB version.
+    All samples has been properly fixed and converted to flac,
+    and mapped to SFZ format with ARIA extensions by kinwie.
+
+smpldsnds li ha convertiti in ogg (Opus) e m4a (AAC): "Sounds are converted to ogg (opus) and m4a (aac)".
+Nessuno dei due repository ha un file LICENSE: la dichiarazione di pubblico dominio è quella del README.
+
+Che cosa c'è qui e che cosa è cambiato:
+- solo lo strato dinamico MF (velocity 85-100 in smplr) e solo i 33 campioni le cui regioni coprono le
+  note da C2 a C6 (MIDI 36-84), da "Mf B0" a "Mf B4" nei nomi di smplr, che chiama C3 il Do centrale;
+- ogni file è tagliato ai primi 5 secondi, senza ricodifica e senza i metadati, per stare entro 1 MB di
+  campioni per Lettura: ffmpeg -i <originale> -t 5 -c copy -map_metadata -1 <copia>.
+  Il sito non suona mai una nota per più di 4,5 secondi, così il rilascio di smplr chiude il suono prima
+  della fine del file;
+- i file sono rinominati per avere URL semplici: minuscole, spazio → "-", "#" → "s"
+  (per esempio "MF C#1.m4a" → "mf-cs1.m4a"). La corrispondenza è fileCampione() in src/audio/campioni.ts.
