@@ -3,11 +3,10 @@
 // facoltativo ?voce=. La pagina è statica con tutte le Letture; il filtro lo applica lo script nel browser,
 // che lo passa anche ai link delle Letture così la Lettura successiva lo mantiene.
 import Base from '../../../layouts/Base.astro';
-import { LINGUE, testi, url, type Lingua } from '../../../i18n';
+import { LINGUE, riempi, testi, url, type Lingua } from '../../../i18n';
 import { letture } from '../../../contenuti/letture';
 import { VOCI } from '../../../letture/catalogo';
 import { elenco } from '../../../letture/elenco';
-import { riempi } from '../../../letture/testi';
 
 export function getStaticPaths() {
   return LINGUE.map((lang) => ({ params: { lang } }));

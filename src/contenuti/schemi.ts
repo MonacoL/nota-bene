@@ -32,6 +32,26 @@ export const schemaCapitoloIt = z.object({ revisione, esercizi: esercizi.optiona
 /** Un Capitolo inglese dice anche da quale revisione italiana è stato tradotto. */
 export const schemaCapitoloEn = z.object({ revisione, tradotto_da: z.coerce.date() }).strict();
 
+/** Una pagina di servizio (ticket #14): la revisione umana e la data dell'ultimo aggiornamento, che la pagina mostra. */
+export const schemaPaginaIt = z.object({ revisione, aggiornata: z.coerce.date() }).strict();
+
+/** Come per i Capitoli, il file inglese dice da quale revisione italiana è tradotto. */
+export const schemaPaginaEn = z.object({ revisione, aggiornata: z.coerce.date(), tradotto_da: z.coerce.date() }).strict();
+
+/**
+ * Chi ha rivisto dei Capitoli oltre al responsabile (ticket #14), in contenuti/revisori.yml. Una persona si aggiunge
+ * solo quando ha dato il consenso scritto, con la data di quel consenso e i soli Capitoli che ha rivisto.
+ */
+export const schemaRevisori = z.array(
+  z
+    .object({
+      nome: z.string().trim().min(1),
+      consenso: z.coerce.date(),
+      capitoli: z.array(z.string().min(1)).nonempty(),
+    })
+    .strict(),
+);
+
 const testiPercorso = z.object({ titolo: z.string().min(1), riga: z.string().min(1) }).strict();
 
 /** Una voce della scaletta: l'id è lo slug dell'URL e non contiene il numero, che può cambiare. */
@@ -50,3 +70,6 @@ export type CapitoloIt = z.infer<typeof schemaCapitoloIt>;
 export type DichiarazioneEsercizio = z.infer<typeof dichiarazioneEsercizio>;
 export type CapitoloEn = z.infer<typeof schemaCapitoloEn>;
 export type VocePercorso = z.infer<typeof schemaVocePercorso>;
+export type Revisore = z.infer<typeof schemaRevisori>[number];
+export type PaginaIt = z.infer<typeof schemaPaginaIt>;
+export type PaginaEn = z.infer<typeof schemaPaginaEn>;
