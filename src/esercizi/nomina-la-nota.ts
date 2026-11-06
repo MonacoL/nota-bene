@@ -36,7 +36,7 @@ type Rigo = {
  * abcjs disegna `clef=treble-8` come la chiave di violino senza spostare le note (ADR-0003):
  * l'ABC del violino ottava bassa si scrive quindi un'ottava sopra la Nota reale.
  */
-const RIGHI: Record<Chiave, Rigo> = {
+export const RIGHI: Record<Chiave, Rigo> = {
   violino: {
     clef: 'treble', da: 28, a: 40, ottavaSopra: 0, primaRiga: 30,
     ancora: {

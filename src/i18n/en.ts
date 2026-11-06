@@ -19,10 +19,10 @@ export const en: Dizionario = {
   eserciziInPreparazione: 'The exercises for this chapter are being prepared.',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
-    domande: { 'nomina-la-nota': 'What is this note called?' },
+    domande: { 'nomina-la-nota': 'What is this note called?', 'nomina-la-sillaba': 'Which syllable is this note?' },
     risposta: 'Answer',
     alterazioni: { bemolle: 'flat', bequadro: 'natural', diesis: 'sharp' },
     note: { C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'B' },
