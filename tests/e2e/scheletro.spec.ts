@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { LINGUE, PAGINE } from './pagine';
+import { telefono, vociDelMenu } from './menu';
 
 async function nessunoScrollOrizzontale(page: Page) {
   const { scrollWidth, innerWidth } = await page.evaluate(() => ({
@@ -23,24 +24,44 @@ for (const percorso of [...PAGINE, 'questa-pagina-non-esiste/']) {
 }
 
 for (const percorso of PAGINE) {
+  // Marchio, menu e lingua stanno su una riga: da 440 px i link, sotto il pulsante con le lineette.
   test(`${percorso}: intestazione su una riga sola`, async ({ page }) => {
     await page.goto(percorso);
     await page.evaluate(() => document.fonts.ready);
     const header = page.locator('header');
-    const scatole = await Promise.all(
-      [header.locator('.marchio'), header.locator('nav').first(), header.locator('.lingua')].map((l) => l.boundingBox()),
-    );
+    const menu = telefono(page) ? header.locator('.menu summary') : header.locator('nav.nav');
+    const scatole = await Promise.all([header.locator('.marchio'), menu, header.locator('.lingua')].map((l) => l.boundingBox()));
     const centri = scatole.map((b) => b!.y + b!.height / 2);
     expect(Math.max(...centri) - Math.min(...centri), "un elemento dell'intestazione è andato a capo").toBeLessThan(4);
   });
 }
+
+test('sul telefono il menu con le lineette si apre e si chiude', async ({ page }) => {
+  test.skip(!telefono(page), 'da 440 px il menu è fatto di link');
+  await page.goto('it/privacy/');
+  const header = page.locator('header');
+  await expect(header.locator('nav.nav')).toBeHidden();
+  const voci = header.locator('.menu nav').getByRole('link');
+  await expect(voci.first()).toBeHidden();
+  await header.locator('.menu summary').click();
+  await expect(voci).toHaveText(['Capitoli', 'Letture']);
+  await page.keyboard.press('Escape');
+  await expect(voci.first()).toBeHidden();
+  await expect(header.locator('.menu summary')).toBeFocused();
+  await header.locator('.menu summary').click();
+  await page.locator('footer .licenze').click();
+  await expect(voci.first()).toBeHidden();
+  await header.locator('.menu summary').click();
+  await voci.filter({ hasText: 'Capitoli' }).click();
+  await expect(page).toHaveURL(/\/it\/capitoli\/$/);
+});
 
 for (const lingua of LINGUE) {
   test(`${lingua}: intestazione e piè di pagina`, async ({ page }) => {
     await page.goto(`${lingua}/privacy/`);
     const intestazione = page.locator('header');
     await expect(intestazione.getByRole('link', { name: 'Nota Bene' })).toHaveAttribute('href', `/nota-bene/${lingua}/`);
-    await expect(intestazione.getByRole('link', { name: lingua === 'it' ? 'Letture' : 'Readings' })).toBeVisible();
+    await expect(await vociDelMenu(page)).toHaveText(lingua === 'it' ? ['Capitoli', 'Letture'] : ['Chapters', 'Readings']);
     await expect(page.locator('html')).toHaveAttribute('lang', lingua);
     const piede = page.locator('footer');
     await expect(piede).toContainText('MIT');

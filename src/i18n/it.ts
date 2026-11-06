@@ -11,7 +11,6 @@ export const it = {
   letture: 'Letture',
   cambiaLingua: 'Lingua',
   inCostruzione: 'Sito in costruzione: i contenuti arriveranno presto.',
-  percorso: 'Percorso',
   capitolo: 'Capitolo',
   capitoloInPreparazione: 'Questo capitolo è in preparazione.',
   esercizi: 'Esercizi',
@@ -41,6 +40,24 @@ export const it = {
   provaLetture: 'Prova le letture',
   provaLettureAvanzate: 'Prova le letture avanzate',
   navCapitoli: 'Capitoli',
+  menu: 'Menu',
+  introCapitoli: 'Il percorso consigliato va in ordine, ma ogni capitolo è sempre aperto.',
+  introHome: {
+    perChi: {
+      titolo: 'Per chi è',
+      testo: 'Per coristi amatoriali che partono da zero e studiano soprattutto dal telefono, nei ritagli di tempo.',
+    },
+    comeSiUsa: {
+      titolo: 'Come si usa',
+      testo: 'Leggi i capitoli in ordine e allenati con i loro esercizi. Quando conosci il DO mobile, passa alle letture.',
+    },
+    cosaNonFa: {
+      titolo: 'Niente account',
+      testo: 'Non ti registri e non si salva niente: entri, studi ed esci.',
+    },
+    comincia: 'Comincia dal capitolo 1',
+    tuttiICapitoli: 'Tutti i capitoli',
+  },
   avvisoNonTradotto: 'Questo capitolo non è ancora tradotto: lo trovi in italiano.',
   ingressoLetture: 'Quando conosci il DO mobile, metti alla prova la lettura a prima vista con estratti di brani corali veri.',
   vaiAlleLetture: 'Vai alle letture',

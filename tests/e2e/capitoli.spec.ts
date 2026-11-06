@@ -1,11 +1,32 @@
 // Percorso e Capitoli (ticket "Capitolo da Markdown e Percorso").
 import { expect, test } from '@playwright/test';
 import { CAPITOLI } from './pagine';
+import { vociDelMenu } from './menu';
 
 const PRIMO = CAPITOLI[0]!;
 
-test('la home elenca i 10 Capitoli in ordine, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
-  await page.goto('it/');
+for (const [lingua, testi] of [
+  ['it', { comincia: 'Comincia dal capitolo 1', tutti: 'Tutti i capitoli', menu: ['Capitoli', 'Letture'] }],
+  ['en', { comincia: 'Start with chapter 1', tutti: 'All chapters', menu: ['Chapters', 'Readings'] }],
+] as const) {
+  test(`${lingua}: la home introduce il sito e porta al Capitolo 1, ai Capitoli e alle Letture`, async ({ page }) => {
+    await page.goto(`${lingua}/`);
+    const main = page.locator('main');
+    await expect(main.locator('ol.percorso')).toHaveCount(0);
+    await expect(main.getByRole('heading', { level: 2 })).toHaveCount(4);
+    await expect(main.getByRole('link', { name: testi.comincia })).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/${PRIMO}/`);
+    await expect(main.getByRole('link', { name: testi.tutti })).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/`);
+    await expect(main.locator(`a[href="/nota-bene/${lingua}/letture/"]`)).toHaveCount(1);
+    const menu = await vociDelMenu(page);
+    await expect(menu).toHaveText([...testi.menu]);
+    await expect(menu.nth(0)).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/`);
+    await expect(menu.nth(1)).toHaveAttribute('href', `/nota-bene/${lingua}/letture/`);
+  });
+}
+
+test('la pagina Capitoli elenca i 10 Capitoli in ordine, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
+  await page.goto('it/capitoli/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Capitoli');
   const voci = page.locator('ol.percorso > li');
   await expect(voci).toHaveCount(10);
   for (const [i, id] of CAPITOLI.entries()) {
@@ -20,7 +41,7 @@ test('la home elenca i 10 Capitoli in ordine, con i loro Esercizi, e porta alle 
 
 test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page }) => {
   await page.goto('it/');
-  await page.getByRole('link', { name: 'Note, toni e semitoni', exact: true }).click();
+  await page.getByRole('link', { name: 'Comincia dal capitolo 1' }).click();
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Note, toni e semitoni');
 

@@ -12,6 +12,7 @@ export const CAPITOLI: string[] = (parse(readFileSync('contenuti/percorso.yml', 
 
 export const PAGINE = LINGUE.flatMap((l) => [
   `${l}/`,
+  `${l}/capitoli/`,
   ...PROVVISORIE.map((p) => `${l}/${p}/`),
   ...CAPITOLI.flatMap((c) => [`${l}/capitoli/${c}/`, `${l}/capitoli/${c}/esercizi/`]),
 ]);

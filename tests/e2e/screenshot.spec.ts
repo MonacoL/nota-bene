@@ -2,12 +2,14 @@
 import { expect, test } from '@playwright/test';
 import { genera } from '../../src/esercizi';
 import { CAPITOLI, LINGUE } from './pagine';
+import { telefono } from './menu';
 
 /** Un seed il cui primo Esercizio è un Sol♭3 in chiave di violino ottava bassa: mostra l'8 e un'alterazione. */
 const SEED_FOGLIO = 13;
 
 const SCHERMATE = [
   { nome: 'home', percorso: '' },
+  { nome: 'capitoli', percorso: 'capitoli/' },
   { nome: 'capitolo-1', percorso: `capitoli/${CAPITOLI[0]}/` },
 ];
 
@@ -52,5 +54,22 @@ for (const esito of ['giusto', 'sbagliato'] as const) {
         await expect(page).toHaveScreenshot(`esercizi-foglio-${esito}-${lingua}-${tema}.png`);
       });
     }
+  }
+}
+
+// Il menu con le lineette aperto, sul telefono: screenshot della finestra, perché il pannello copre la pagina.
+for (const lingua of LINGUE) {
+  for (const tema of ['light', 'dark'] as const) {
+    test(`menu aperto ${lingua}, tema ${tema}`, async ({ page }, info) => {
+      const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
+      test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
+      test.skip(!telefono(page), 'da 440 px il menu è fatto di link');
+      await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+      await page.goto(`${lingua}/`);
+      await page.evaluate(() => document.fonts.ready);
+      await page.locator('header .menu summary').click();
+      await page.mouse.move(-1, -1);
+      await expect(page).toHaveScreenshot(`menu-aperto-${lingua}-${tema}.png`);
+    });
   }
 }
