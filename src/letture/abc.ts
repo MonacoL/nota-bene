@@ -21,6 +21,18 @@ export type AbcLetto = {
   avvisi: string[];
   /** Un solo rigo, una sola Voce e nessun accordo in tutto l'ABC. */
   unaSolaVoce: boolean;
+  /** Le Battute (da 1, come nelle Note) in cui comincia un gruppo irregolare: terzina, duina e simili. */
+  gruppiIrregolari: number[];
+  /** La durata di ogni Battuta scritta, in semibrevi: con M:3/4 una Battuta completa dura 0,75. */
+  durate: number[];
+  /** La durata di una Battuta completa secondo il Tempo, in semibrevi. */
+  durataBattuta: number;
+  /** Un cambio di Tonalità dentro la musica, come [K:C major]: le Mutazioni vanno in edizione.yml (ADR-0004). */
+  cambiaTonalita: boolean;
+  /** Quante alterazioni ha l'Armatura del K:. */
+  armatura: number;
+  /** La pausa più lunga, sommando le pause consecutive anche oltre la stanghetta, in semibrevi. */
+  pausaMassima: number;
 };
 
 /** "F major", "C# minor": la Tonalità con il Modo per esteso, come nel K: e nelle Mutazioni di edizione.yml. */
@@ -48,18 +60,56 @@ export function leggiAbc(abc: string): AbcLetto {
   let nellaBattuta = new Map<number, -2 | -1 | 0 | 1 | 2>();
   // La nota che apre una legatura di valore: quella che la chiude ne prende l'alterazione, anche oltre la stanghetta.
   let aperta: { pitch: number; alterazione: -2 | -1 | 0 | 1 | 2 } | undefined;
-  const elementi = righe.flatMap((l) => l.staff![0]!.voices![0]!) as { el_type: string; pitches?: Altezza[]; lyric?: Sillabato[] }[];
+  const gruppiIrregolari: number[] = [];
+  const elementi = righe.flatMap((l) => l.staff![0]!.voices![0]!) as {
+    el_type: string;
+    pitches?: Altezza[];
+    lyric?: Sillabato[];
+    startTriplet?: number;
+    tripletMultiplier?: number;
+    endTriplet?: boolean;
+    duration?: number;
+    rest?: { type: string; text?: number };
+  }[];
+  const tempo = brano!.getMeterFraction();
+  const durataBattuta = tempo.num / (tempo.den ?? 4);
+  const durate: number[] = [];
+  let cambiaTonalita = false;
+  let pausa = 0;
+  let pausaMassima = 0;
+  let durata = 0;
+  let moltiplicatore = 1;
   for (const el of elementi) {
     if (el.el_type === 'bar') {
-      if (posizione > 0) battuta += 1;
+      if (posizione > 0) {
+        battuta += 1;
+        durate.push(durata);
+      }
       posizione = 0;
+      durata = 0;
       nellaBattuta = new Map();
       continue;
     }
+    if (el.el_type === 'key') cambiaTonalita = true;
     if (el.el_type !== 'note') continue;
     const sillaba = el.lyric?.[0];
     if (sillaba?.syllable) testo += sillaba.syllable + (sillaba.divider === '-' ? '-' : ' ');
     posizione += 1;
+    if (el.startTriplet) {
+      gruppiIrregolari.push(battuta);
+      moltiplicatore = el.tripletMultiplier ?? 1;
+    }
+    // Una pausa multipla (Z3) occupa più Battute complete: le prime si chiudono qui, l'ultima alla stanghetta.
+    const multipla = el.rest?.type === 'multimeasure' ? (el.rest.text ?? 1) : 0;
+    for (let i = 1; i < multipla; i++) {
+      durate.push(durataBattuta);
+      battuta += 1;
+    }
+    const valore = multipla ? durataBattuta : (el.duration ?? 0) * moltiplicatore;
+    durata += valore;
+    pausa = el.rest ? pausa + (multipla ? multipla * durataBattuta : valore) : 0;
+    pausaMassima = Math.max(pausaMassima, pausa);
+    if (el.endTriplet) moltiplicatore = 1;
     const p = el.pitches?.[0];
     if ((el.pitches?.length ?? 0) > 1) unaSolaVoce = false;
     if (!p) {
@@ -76,6 +126,7 @@ export function leggiAbc(abc: string): AbcLetto {
     aperta = p.startTie ? { pitch: p.pitch, alterazione } : undefined;
     note.push({ battuta, posizione, nota: { lettera, alterazione, ottava }, ...(legata && { legata }) });
   }
+  if (posizione > 0) durate.push(durata);
   const avvisi = (brano!.warnings ?? []).map((a) => a.replace(/<[^>]*>/g, ''));
-  return { note, tonalita: leggiTonalita(/^K:(.*)$/m.exec(abc)?.[1] ?? ''), testo: testo.trim(), avvisi, unaSolaVoce };
+  return { note, tonalita: leggiTonalita(/^K:(.*)$/m.exec(abc)?.[1] ?? ''), testo: testo.trim(), avvisi, unaSolaVoce, gruppiIrregolari, durate, durataBattuta, pausaMassima, cambiaTonalita, armatura: [...armatura.values()].filter((v) => v !== 0).length };
 }

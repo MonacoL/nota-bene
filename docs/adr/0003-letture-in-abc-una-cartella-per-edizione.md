@@ -22,7 +22,7 @@ Si sceglie ABC perché abcjs (MIT, circa 148 KB gzip) disegna sia le Letture sia
   - il file sorgente, che deve esserci e avere l'hash dichiarato;
   - il parsing di abcjs, che non deve dare avvisi;
   - la Voce, che deve essere una sola;
-  - il numero di battute, da 4 a 12 (il levare iniziale non conta);
+  - il numero di battute, da 4 a 12 (il levare iniziale non conta), uguale a quello dichiarato in `edizione.yml`. Come in partitura, il levare ha il numero della battuta prima di `inizio`: 0 se l'estratto comincia dall'inizio del Brano;
   - i limiti musicali dell'estratto: niente gruppi irregolari (terzine e simili), nessun salto più ampio di un'ottava, estensione fino a una decima, nessuna pausa più lunga di 2 Battute, Armatura fino a 3 alterazioni (fino a 4 in una Lettura avanzata). Sono gli argomenti che il Percorso non insegna o che un principiante non regge;
   - la durata di ogni Battuta;
   - l'Andamento, che deve esserci come `Q:` (ADR-0008);
