@@ -26,12 +26,12 @@ describe('controllaRevisori', () => {
 });
 
 describe('formulaRevisione', () => {
-  it('dice esattamente quali capitoli ha rivisto', () => {
-    expect(formulaRevisione('it', 'Una Persona', ['Intervalli'])).toBe('Una Persona ha rivisto il capitolo “Intervalli”.');
+  it('usa la formula del ticket #14, "<nome> ha rivisto i capitoli X, Y", con i soli capitoli rivisti', () => {
     expect(formulaRevisione('it', 'Una Persona', ['Chiavi', 'Intervalli', 'Scala minore'])).toBe(
-      'Una Persona ha rivisto i capitoli “Chiavi”, “Intervalli” e “Scala minore”.',
+      'Una Persona ha rivisto i capitoli Chiavi, Intervalli, Scala minore',
     );
-    expect(formulaRevisione('en', 'Una Persona', ['Clefs', 'Intervals'])).toBe('Una Persona reviewed the chapters “Clefs” and “Intervals”.');
-    expect(formulaRevisione('en', 'Una Persona', ['Clefs'])).toBe('Una Persona reviewed the chapter “Clefs”.');
+    expect(formulaRevisione('it', 'Una Persona', ['Intervalli'])).toBe('Una Persona ha rivisto il capitolo Intervalli');
+    expect(formulaRevisione('en', 'Una Persona', ['Clefs', 'Intervals'])).toBe('Una Persona reviewed the chapters Clefs, Intervals');
+    expect(formulaRevisione('en', 'Una Persona', ['Clefs'])).toBe('Una Persona reviewed the chapter Clefs');
   });
 });

@@ -2,14 +2,14 @@
 // Le pagine di servizio (ticket #14): /<lingua>/privacy/, intelligenza-artificiale/, crediti/, contatti/.
 // Il testo è il Markdown di contenuti/pagine/<lingua>/; nei crediti le sezioni "Brani" e "asset di terzi"
 // sono generate da edizione.yml e dai crediti.yml accanto agli asset. Chi ha rivisto i Capitoli compare
-// in Contatti e nei Ringraziamenti solo se è in contenuti/revisori.yml, cioè con il consenso scritto.
+// in Contatti e nei Crediti solo se è in contenuti/revisori.yml, cioè con il consenso scritto: in tutte e due
+// le pagine in una sezione propria, "Revisione dei capitoli", dopo il testo Markdown, qualunque sia il suo ordine.
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { REPOSITORY } from '../../config';
-import { LINGUE, testi, type Lingua } from '../../i18n';
+import { LINGUE, dataEstesa, riempi, testi, type Lingua } from '../../i18n';
 import { PAGINE_SERVIZIO, type PaginaServizio } from '../../contenuti/pagine';
 import { crediti, paginaServizio, revisioni } from '../../contenuti/servizio';
-import { dataEstesa, riempi } from '../../letture/testi';
 
 export function getStaticPaths() {
   return LINGUE.flatMap((lang) => PAGINE_SERVIZIO.map((pagina) => ({ params: { lang, pagina } })));
@@ -65,8 +65,7 @@ const frasiRevisione = id === 'crediti' || id === 'contatti' ? await revisioni(l
 
     <Content />
 
-    {id === 'crediti' && frasiRevisione.map((f) => <p>{f}</p>)}
-    {id === 'contatti' && frasiRevisione.length > 0 && (
+    {frasiRevisione.length > 0 && (
       <section aria-labelledby="revisioni">
         <h2 id="revisioni">{ts.revisioni}</h2>
         {frasiRevisione.map((f) => <p>{f}</p>)}

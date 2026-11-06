@@ -1,5 +1,5 @@
 // Chi ha rivisto i Capitoli oltre al responsabile (ticket #14), in TypeScript puro.
-// Compare in Contatti e nei Ringraziamenti dei Crediti solo se è in contenuti/revisori.yml, cioè con il consenso scritto.
+// Compare in Contatti e nei Crediti, nella sezione "Revisione dei capitoli", solo se è in contenuti/revisori.yml, cioè con il consenso scritto.
 import type { Lingua } from '../i18n';
 import type { Revisore } from './schemi';
 
@@ -12,11 +12,12 @@ export function controllaRevisori(revisori: readonly Revisore[], capitoli: reado
   );
 }
 
-/** La formula esatta, che nomina i Capitoli rivisti e non fa intendere una garanzia sul resto del sito. */
+/**
+ * La formula esatta del ticket #14, "<nome> ha rivisto i capitoli X, Y", che nomina i soli Capitoli rivisti
+ * e non fa intendere una garanzia sul resto del sito. "capitoli" è minuscolo come i termini del glossario nel testo.
+ */
 export function formulaRevisione(lingua: Lingua, nome: string, titoli: readonly string[]): string {
-  const citati = titoli.map((t) => `“${t}”`);
-  const congiunzione = lingua === 'it' ? ' e ' : ' and ';
-  const elenco = citati.length > 1 ? `${citati.slice(0, -1).join(', ')}${congiunzione}${citati.at(-1)}` : citati[0];
-  if (lingua === 'it') return `${nome} ha rivisto ${citati.length > 1 ? 'i capitoli' : 'il capitolo'} ${elenco}.`;
-  return `${nome} reviewed ${citati.length > 1 ? 'the chapters' : 'the chapter'} ${elenco}.`;
+  const elenco = titoli.join(', ');
+  if (lingua === 'it') return `${nome} ha rivisto ${titoli.length > 1 ? 'i capitoli' : 'il capitolo'} ${elenco}`;
+  return `${nome} reviewed ${titoli.length > 1 ? 'the chapters' : 'the chapter'} ${elenco}`;
 }
