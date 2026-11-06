@@ -76,6 +76,6 @@ test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso
 
 test('dagli Esercizi si torna al Capitolo', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/esercizi/`);
-  await page.getByRole('link', { name: '← Torna al capitolo' }).click();
+  await page.getByRole('link', { name: /Torna al capitolo/ }).click();
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
 });

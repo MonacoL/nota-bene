@@ -26,6 +26,8 @@ const titolo = t.eserciziDi.replace('{titolo}', capitolo.titolo);
 const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
 ---
 <Base lingua={lingua} titolo={titolo}>
+  {/* Prima del primo disegno, così col dito la pagina non scatta quando arriva l'isola della Serie. */}
+  {capitolo.esercizi.length > 0 && <script is:inline>document.documentElement.setAttribute('data-serie', '')</script>}
   <p class="indietro"><a href={url(lingua, `capitoli/${capitolo.id}/`)}>{t.tornaAlCapitolo}</a></p>
   <h1>{titolo}</h1>
 
@@ -36,6 +38,7 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
         t={t.serie}
         dichiarazioni={capitolo.esercizi}
         successivo={successivoHref ? { href: successivoHref, etichetta: t.capitoloSuccessivo } : undefined}
+        capitolo={{ href: url(lingua, `capitoli/${capitolo.id}/`), etichetta: t.tornaAlCapitolo.replace(/^←\s*/, '') }}
       />
     : <p class="muted">{t.eserciziInPreparazione}</p>}
 
@@ -46,6 +49,23 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
     </nav>
   )}
 </Base>
+
+<style is:global>
+  /*
+   * Col dito, durante la Serie (Serie.svelte mette data-serie su <html>): la pagina è alta quanto lo schermo
+   * e non scorre. Restano l'intestazione del sito e la Serie; avviso, titolo, link e piè di pagina tornano nel riepilogo.
+   */
+  @media not ((hover: hover) and (pointer: fine)) {
+    html[data-serie] body { height: 100dvh; min-height: 0; overflow: hidden; }
+    html[data-serie] .costruzione,
+    html[data-serie] .piede,
+    html[data-serie] main > h1,
+    html[data-serie] main > .indietro,
+    html[data-serie] main > .seguito { display: none; }
+    /* Su uno schermo troppo basso scorre la Serie, non la pagina: "Avanti →" non va mai perso. */
+    html[data-serie] main { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; padding-top: 4px; padding-bottom: 12px; }
+  }
+</style>
 
 <style>
   .indietro { margin: 8px 0 0; }
