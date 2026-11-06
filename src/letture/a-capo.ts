@@ -77,6 +77,16 @@ export function inRighi({ intestazione, battute }: Divisa, gruppi: readonly Rigo
   return righe.join('\n') + '\n';
 }
 
+/**
+ * L'ABC per misurare un rigo candidato come apparirà nella Lettura, e quale rigo dell'ABC è il candidato (da 0).
+ * abcjs disegna chiave e Armatura su ogni rigo, il Tempo solo sul primo e dove cambia: un candidato che non comincia
+ * dalla prima Battuta si disegna dopo un rigo con la Battuta che lo precede, e si misura solo lui.
+ */
+export function daMisurare(divisa: Divisa, [inizio, fine]: Rigo): { abc: string; riga: number } {
+  if (inizio === 0) return { abc: inRighi(divisa, [[inizio, fine]]), riga: 0 };
+  return { abc: inRighi(divisa, [[inizio - 1, inizio], [inizio, fine]]), riga: 1 };
+}
+
 /** Un rigo: le Battute da `inizio` (compresa) a `fine` (esclusa), contate da 0. */
 export type Rigo = [inizio: number, fine: number];
 

@@ -1,7 +1,8 @@
 // A capo responsive della Lettura (ticket #30): come si dividono le Battute in righi, senza DOM.
 // Il disegno e la misura stanno nel browser; qui si prova la parte che decide.
 import { describe, expect, it } from 'vitest';
-import { dividi, inRighi, righi, siToccano } from '../../src/letture/a-capo';
+import { parseOnly } from 'abcjs';
+import { daMisurare, dividi, inRighi, righi, siToccano } from '../../src/letture/a-capo';
 
 describe('righi', () => {
   it("se l'estratto ci sta resta su un rigo", () => {
@@ -70,6 +71,32 @@ describe('inRighi', () => {
     expect(inRighi(divisa, [[0, 1], [1, 3]])).toBe(
       'X:1\nM:3/4\nL:1/4\nK:C major\n%%stretchlast 1\n|: C "^a|b"D E :|\nF2 G || A3 |]\n',
     );
+  });
+});
+
+describe('daMisurare', () => {
+  // Un rigo candidato si misura come apparirà nella Lettura: chiave e Armatura sempre, il Tempo solo sul primo rigo
+  // o dove cambia. Si guarda il rigo come lo legge abcjs, che è anche chi lo disegna. Nelle Letture il Tempo non
+  // cambia (il catalogo vuole ogni Battuta lunga quanto dice M:), ma la misura reggerebbe lo stesso.
+  const ABC = 'X:1\nM:C\nL:1/4\nK:F major\nF4 | G4 | A4 | [M:3/4] B3 | A3 | G3 |]\nw: Al | le | lu | ia | a | men |\n';
+  const comeDisegnato = (inizio: number, fine: number) => {
+    const { abc, riga } = daMisurare(dividi(ABC), [inizio, fine]);
+    const rigo = parseOnly(abc)[0]!.lines.filter((l) => l.staff)[riga]!.staff![0]!;
+    const note = rigo.voices![0]!.filter((e) => e.el_type === 'note').length;
+    const tempo = !!rigo.meter || rigo.voices![0]!.some((e) => e.el_type === 'meter');
+    return { chiave: !!rigo.clef, armatura: rigo.key?.accidentals?.length ?? 0, tempo, note };
+  };
+
+  it('il primo rigo ha chiave, Armatura e Tempo', () => {
+    expect(comeDisegnato(0, 2)).toEqual({ chiave: true, armatura: 1, tempo: true, note: 2 });
+  });
+
+  it('un rigo dopo il primo ha chiave e Armatura ma non il Tempo', () => {
+    expect(comeDisegnato(1, 3)).toEqual({ chiave: true, armatura: 1, tempo: false, note: 2 });
+  });
+
+  it('un rigo dopo il primo con un cambio di Tempo lo disegna', () => {
+    expect(comeDisegnato(2, 5)).toEqual({ chiave: true, armatura: 1, tempo: true, note: 3 });
   });
 });
 

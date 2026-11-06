@@ -1,5 +1,6 @@
-// A capo responsive della Lettura (ticket #30): il massimo di Battute per rigo senza che le sillabe si tocchino,
-// tutti i righi a larghezza piena, a capo rifatti a ogni cambio di larghezza e fermi quando si mostra la Soluzione.
+// A capo responsive della Lettura (ticket #30): il massimo di Battute per rigo senza che i segni delle righe w:
+// (frammenti di Testo e Sillabe della Soluzione) si tocchino, tutti i righi a larghezza piena, a capo rifatti a ogni
+// cambio di larghezza e fermi quando si mostra la Soluzione.
 import { expect, test, type Page } from '@playwright/test';
 import { LETTURE } from './pagine';
 
@@ -11,8 +12,8 @@ async function apri(page: Page, percorso = LETTURA) {
   await expect(page.locator('.partitura svg')).toHaveCount(1);
 }
 
-/** Le coppie di sillabe vicine, sulla stessa riga, che si toccano o si sovrappongono: "sinistra | destra". */
-function sillabeCheSiToccano(page: Page): Promise<string[]> {
+/** Le coppie di segni vicini, sulla stessa riga, che si toccano o si sovrappongono: "sinistra | destra". */
+function segniCheSiToccano(page: Page): Promise<string[]> {
   return page.locator('.partitura').evaluate((partitura) => {
     const scatole = [...partitura.querySelectorAll('.abcjs-lyric tspan')]
       .filter((t) => t.textContent?.trim())
@@ -28,7 +29,29 @@ function sillabeCheSiToccano(page: Page): Promise<string[]> {
   });
 }
 
-/** Per ogni rigo disegnato, quanto restano dal bordo destro della partitura la sua ultima stanghetta e ogni sillaba. */
+/**
+ * Ciò che esce dal bordo destro della Lettura: note, stanghette e ogni segno di Testo e Soluzione, con il rigo e di
+ * quanti px. Una Battuta che da sola non sta nel rigo resta intera e sborda: qui si vede.
+ */
+function fuoriDalBordo(page: Page): Promise<string[]> {
+  return page.locator('.lettura').evaluate((lettura) => {
+    const destra = lettura.getBoundingClientRect().right + 1;
+    const elementi = [...lettura.querySelectorAll('.partitura .abcjs-note, .partitura .abcjs-bar, .partitura .abcjs-lyric tspan')];
+    return elementi.flatMap((e) => {
+      const fuori = e.getBoundingClientRect().right - destra;
+      if (fuori <= 0) return [];
+      const rigo = /abcjs-l(\d+)/.exec(e.closest('[class*="abcjs-l"]')?.getAttribute('class') ?? '')?.[1];
+      return [`rigo ${Number(rigo) + 1}: "${e.textContent?.trim() || e.getAttribute('class')}" esce di ${Math.ceil(fuori)} px`];
+    });
+  });
+}
+
+/** Se la pagina scorre in orizzontale: la sua larghezza supera quella della finestra. */
+function scorreInOrizzontale(page: Page): Promise<boolean> {
+  return page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+}
+
+/** Per ogni rigo disegnato, quanto resta dal bordo destro della partitura la sua ultima stanghetta. */
 function righi(page: Page) {
   return page.locator('.lettura').evaluate((lettura) => {
     const destra = lettura.getBoundingClientRect().right;
@@ -50,19 +73,20 @@ function rigoDiOgniNota(page: Page) {
 }
 
 for (const id of LETTURE) {
-  test(`${id}: a 360 px nessuna coppia di sillabe vicine si tocca`, async ({ page }, info) => {
+  test(`${id}: a 360 px nessun segno ne tocca un altro, niente esce dal bordo e la pagina non scorre di lato`, async ({ page }, info) => {
     test.skip(!info.project.name.startsWith('phone-360'), 'si controlla a 360 px, su Chromium e Firefox');
     await apri(page, `it/letture/${id}/`);
     await page.getByRole('button', { name: 'Mostra la soluzione' }).click();
-    expect(await sillabeCheSiToccano(page)).toEqual([]);
-    for (const { margine } of await righi(page)) expect(margine, 'il rigo esce dal bordo').toBeGreaterThanOrEqual(-1);
+    expect(await segniCheSiToccano(page)).toEqual([]);
+    expect(await fuoriDalBordo(page)).toEqual([]);
+    expect(await scorreInOrizzontale(page), 'la pagina scorre in orizzontale').toBe(false);
   });
 }
 
 test('tutti i righi, anche l’ultimo, occupano la larghezza intera', async ({ page }) => {
   await apri(page);
   for (const { margine } of await righi(page)) expect(Math.abs(margine), 'il rigo non arriva al bordo').toBeLessThanOrEqual(2);
-  expect(await sillabeCheSiToccano(page)).toEqual([]);
+  expect(await segniCheSiToccano(page)).toEqual([]);
 });
 
 test("l'a capo si rifà quando cambia la larghezza", async ({ page }, info) => {
@@ -72,7 +96,7 @@ test("l'a capo si rifà quando cambia la larghezza", async ({ page }, info) => {
   await page.setViewportSize({ width: 360, height: 740 });
   await expect.poll(async () => (await righi(page)).length).toBeGreaterThan(largo);
   for (const { margine } of await righi(page)) expect(Math.abs(margine)).toBeLessThanOrEqual(2);
-  expect(await sillabeCheSiToccano(page)).toEqual([]);
+  expect(await segniCheSiToccano(page)).toEqual([]);
 });
 
 test('mostrare la soluzione non sposta gli a capo', async ({ page }) => {
@@ -88,9 +112,9 @@ for (const larghezza of [320, 640]) {
     test.skip(info.project.name !== 'desktop-chromium', 'basta un motore: si simula lo zoom con la larghezza');
     await page.setViewportSize({ width: larghezza, height: 800 });
     await apri(page);
-    const { scorre, finestra } = await page.evaluate(() => ({ scorre: document.documentElement.scrollWidth, finestra: window.innerWidth }));
-    expect(scorre, 'la pagina scorre in orizzontale').toBeLessThanOrEqual(finestra);
-    expect(await sillabeCheSiToccano(page)).toEqual([]);
+    expect(await scorreInOrizzontale(page), 'la pagina scorre in orizzontale').toBe(false);
+    expect(await fuoriDalBordo(page)).toEqual([]);
+    expect(await segniCheSiToccano(page)).toEqual([]);
   });
 }
 
