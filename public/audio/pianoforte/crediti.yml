@@ -1,0 +1,20 @@
+# Asset di terzi di questa cartella, per la pagina dei crediti (convenzione nel README, sezione "Licenze").
+# Ogni file di licenza della cartella deve essere citato da una voce, altrimenti la build si ferma.
+- nome: Splendid Grand Piano
+  autori: AKAI, raccolti da sfzinstruments
+  licenza: pubblico dominio
+  url: https://github.com/sfzinstruments/SplendidGrandPiano
+  file_licenza: splendid-grand-piano-LICENSE.txt
+  nota:
+    it: campioni da C2 a C6, uno strato dinamico, tagliati a 5 secondi
+    en: samples from C2 to C6, one dynamic layer, trimmed to 5 seconds
+# smplr è un pacchetto npm, ma il pacchetto non contiene un file di licenza: la sua voce sta qui, accanto al file
+# che riporta la licenza MIT e le sue fonti.
+- nome: smplr 1.1.0
+  autori: danigb
+  licenza: MIT
+  url: https://github.com/danigb/smplr
+  file_licenza: smplr-LICENSE.txt
+  nota:
+    it: suona i campioni del pianoforte
+    en: plays the piano samples

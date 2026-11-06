@@ -1,13 +1,17 @@
 <script lang="ts">
   // La Lettura (ticket "Schermata della Lettura su telefono", #8): i quattro comandi, la partitura con Testo e
   // Soluzione, e sotto la Tonalità con le Mutazioni. Su telefono i comandi sono una barra fissa in basso,
-  // su desktop una fila sopra la partitura. Riferimento tonale e Ascolto di verifica arrivano nei ticket
-  // successivi: per ora i pulsanti ci sono ma sono disattivati. Lettura successiva è un link (ticket #32)
-  // che tiene il filtro ?voce= con cui si è arrivati.
+  // su desktop una fila sopra la partitura. Riferimento tonale e Ascolto di verifica (ticket #31) li suona
+  // src/audio/lettore.ts; qui ci sono solo i pulsanti e le note da illuminare. Lettura successiva è un link
+  // (ticket #32) che tiene il filtro ?voce= con cui si è arrivati.
   // La riga delle Sillabe si disegna sempre e il CSS la nasconde: mostrare la Soluzione non sposta niente.
   // L'a capo (ticket #30) mette in ogni rigo quante più Battute possibile senza che le sillabe si tocchino, e si
   // rifà a ogni cambio di larghezza, anche per lo zoom del browser: src/scripts/a-capo.ts.
+  import type { TuneObject } from 'abcjs';
   import { disegnaACapo } from '../../scripts/a-capo';
+  import { ascoltoIlluminato } from '../../audio/ascolto';
+  import { creaLettore, type Funzione } from '../../audio/lettore';
+  import { noteDelRiferimento, type AudioDellaLettura } from '../../audio/note';
   import type { Dizionario } from '../../i18n/it';
 
   interface Props {
@@ -19,9 +23,11 @@
     spiegazione: string[];
     /** L'indirizzo della Lettura successiva per ogni filtro ?voce=; la chiave vuota è "nessun filtro". */
     successive: Record<string, string>;
+    /** Il Riferimento tonale e le note di cui caricare i campioni, calcolati alla build (src/audio/note.ts). */
+    audio: AudioDellaLettura;
     t: Dizionario['lettura'];
   }
-  let { abc, righeTesto, spiegazione, successive, t }: Props = $props();
+  let { abc, righeTesto, spiegazione, successive, audio, t }: Props = $props();
 
   // Il componente gira solo nel browser (client:only), quindi l'indirizzo si legge subito.
   const voce = new URLSearchParams(window.location.search).get('voce') ?? '';
@@ -34,13 +40,28 @@
   let soluzione = $state(false);
   let partitura: HTMLDivElement;
   let lettura: HTMLDivElement;
+  let disegnata: TuneObject | undefined;
+
+  let suona = $state<Funzione | null>(null);
+  const lettore = creaLettore({
+    campioni: `${import.meta.env.BASE_URL}audio/pianoforte/`,
+    note: audio.note,
+    cambio: (f) => (suona = f),
+  });
+  const riferimento = () => lettore.tocca('riferimento', () => noteDelRiferimento(audio.riferimento));
+  function ascolto() {
+    const a = ascoltoIlluminato(disegnata!, lettura.querySelector('.comandi')!);
+    lettore.tocca('ascolto', a.note, a.evidenzia);
+  }
 
   function disegna() {
     // Si misura il contenitore e non la partitura: abcjs dà al div in cui disegna la larghezza dell'SVG.
     const larghezza = Math.floor(lettura.clientWidth);
     if (!larghezza || partitura.dataset.larghezza === String(larghezza)) return;
     partitura.dataset.larghezza = String(larghezza);
-    disegnaACapo(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), { larghezza, scala: SCALA });
+    // Le note illuminate dell'Ascolto appartengono al disegno di prima.
+    if (lettore.inCorso() === 'ascolto') lettore.ferma();
+    disegnata = disegnaACapo(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), { larghezza, scala: SCALA });
     // abcjs mette le righe w: della stessa nota in un <text>, un <tspan> per riga, anche vuoto: la Sillaba è
     // il tspan dopo quelli del Testo. Le note legate hanno lì solo uno spazio e restano senza marca.
     for (const nota of partitura.querySelectorAll('.abcjs-lyric')) {
@@ -65,14 +86,15 @@
       osservatore.disconnect();
     };
   });
+  $effect(() => () => lettore.chiudi());
 </script>
 
 <div class="lettura" class:soluzione bind:this={lettura}>
   <nav class="comandi" aria-label={t.comandi}>
-    <button type="button" disabled title={t.inArrivo} aria-label={t.riferimento}>
+    <button type="button" aria-pressed={suona === 'riferimento'} onclick={riferimento} aria-label={t.riferimento}>
       <span class="breve">{t.riferimentoBreve}</span><span class="lungo">{t.riferimento}</span>
     </button>
-    <button type="button" disabled title={t.inArrivo} aria-label={t.ascolto}>
+    <button type="button" aria-pressed={suona === 'ascolto'} onclick={ascolto} aria-label={t.ascolto}>
       <span class="breve">{t.ascoltoBreve}</span><span class="lungo">{t.ascolto}</span>
     </button>
     <button type="button" class="mostra" aria-pressed={soluzione} onclick={() => (soluzione = !soluzione)}
@@ -97,6 +119,8 @@
   .partitura :global(svg) { display: block; }
   .partitura :global(.sillaba) { fill: var(--sol); font-weight: 700; }
   .lettura:not(.soluzione) .partitura :global(.sillaba) { visibility: hidden; }
+  /* La nota dell'Ascolto di verifica che suona, con le sue sillabe (ADR-0009): la Soluzione resta nascosta. */
+  .partitura :global(.suona), .partitura :global(.suona .sillaba) { fill: var(--suona); }
 
   .spiegazione { color: var(--sol); }
   .spiegazione p { margin: 0.2em 0; }

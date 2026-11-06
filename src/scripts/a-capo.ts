@@ -1,7 +1,7 @@
 // A capo responsive della Lettura (ticket #30), la parte nel browser: disegna con abcjs e misura.
 // Quali Battute vanno in un rigo lo decide src/letture/a-capo.ts; qui si prova ogni rigo candidato disegnandolo come
 // apparirà (daMisurare), alla larghezza dello schermo, e si guarda se i segni si toccano o se qualcosa esce dal bordo.
-import { renderAbc, type AbcVisualParams } from 'abcjs';
+import { renderAbc, type AbcVisualParams, type TuneObject } from 'abcjs';
 import { daMisurare, dividi, inRighi, righi, siToccano, type Scatola } from '../letture/a-capo';
 
 type Opzioni = { larghezza: number; scala: number };
@@ -10,9 +10,10 @@ type Opzioni = { larghezza: number; scala: number };
  * Disegna l'ABC di una Lettura nel contenitore con il massimo di Battute per rigo: ogni rigo prende Battute finché
  * nessun segno (di Testo o di Soluzione) tocca il vicino e niente esce dal bordo. Una Battuta che da sola non ci sta
  * resta da sola sul suo rigo, intera: non si spezza e non si rimpicciolisce. In sviluppo lo dice la console; i test
- * end-to-end controllano che in nessuna Lettura succeda a 360 px.
+ * end-to-end controllano che in nessuna Lettura succeda a 360 px. Restituisce il disegno finale, che serve all'Ascolto
+ * di verifica (ticket #31) per i tempi e le note da illuminare.
  */
-export function disegnaACapo(contenitore: HTMLElement, abc: string, { larghezza, scala }: Opzioni): void {
+export function disegnaACapo(contenitore: HTMLElement, abc: string, { larghezza, scala }: Opzioni): TuneObject {
   const divisa = dividi(abc);
   const opzioni: AbcVisualParams = {
     add_classes: true,
@@ -30,13 +31,14 @@ export function disegnaACapo(contenitore: HTMLElement, abc: string, { larghezza,
     return !problema(contenitore, riga, larghezza);
   };
   const gruppi = righi(divisa.quante, ciSta);
-  renderAbc(contenitore, inRighi(divisa, gruppi), opzioni);
+  const [disegnata] = renderAbc(contenitore, inRighi(divisa, gruppi), opzioni);
   if (import.meta.env.DEV) {
     gruppi.forEach(([inizio, fine], riga) => {
       const quale = problema(contenitore, riga, larghezza);
       if (quale) console.warn(`a capo: il rigo ${riga + 1} (Battute ${inizio + 1}–${fine} dell'ABC) ${quale} a ${larghezza} px`);
     });
   }
+  return disegnata;
 }
 
 /** Che cosa non va nel rigo disegnato numero `riga` (da 0): qualcosa esce dal bordo o due segni si toccano. */

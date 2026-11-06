@@ -1,0 +1,35 @@
+smplr 1.1.0, di danigb (https://github.com/danigb/smplr)
+
+Asset: libreria che suona i campioni del pianoforte di questa cartella, inclusa nel JavaScript del sito
+dal pacchetto npm smplr, versione fissata in package.json (ADR-0008)
+Licenza: MIT
+
+Fonti della licenza, nel pacchetto installato (node_modules/smplr/, versione 1.1.0):
+- package.json: "license": "MIT" e "author": "danigb";
+- README.md, ultima sezione: "## License" seguito da "MIT License", senza riga di copyright.
+Il repository https://github.com/danigb/smplr non ha un file LICENSE e GitHub non vi riconosce una licenza
+(verificato il 2026-11-06); nemmeno il pacchetto npm contiene un file di licenza. La riga di copyright qui
+sotto riporta quindi l'autore come lo indica package.json, senza anno, e il testo è quello standard della
+licenza MIT. Il file sta in public/ perché si pubblichi con il sito insieme al codice di smplr.
+
+MIT License
+
+Copyright (c) danigb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

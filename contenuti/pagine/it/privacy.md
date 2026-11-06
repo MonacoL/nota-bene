@@ -10,7 +10,7 @@ Nota Bene non raccoglie dati personali. Non ci sono account, moduli, analytics n
 
 ## Cookie e memoria del browser
 
-Il sito non usa cookie e non salva niente nel browser: niente `localStorage` e nessun altro archivio. Per questo non c'è un banner da accettare. La lingua sta nell'indirizzo della pagina, in `/it/` o `/en/`.
+Il sito non usa cookie e non usa `localStorage`. L'unica cosa che salva nel browser sono i campioni del pianoforte che servono al riferimento tonale e all'ascolto di verifica: li tiene nella cache del browser (`CacheStorage`) per non scaricarli ogni volta. Sono file audio del sito, uguali per tutti, e non dicono niente di chi li ascolta. Si cancellano svuotando i dati del sito nelle impostazioni del browser. Per questo non c'è un banner da accettare. La lingua sta nell'indirizzo della pagina, in `/it/` o `/en/`.
 
 ## Che cosa registra GitHub
 

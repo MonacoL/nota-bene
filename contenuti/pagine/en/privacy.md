@@ -11,7 +11,7 @@ Nota Bene does not collect personal data. There are no accounts, forms, analytic
 
 ## Cookies and browser storage
 
-The site uses no cookies and saves nothing in your browser: no `localStorage` and no other storage. That is why there is no banner to accept. The language is part of the page address, in `/it/` or `/en/`.
+The site uses no cookies and no `localStorage`. The only thing it saves in your browser is the piano samples used by the starting pitch and the playback check: it keeps them in the browser cache (`CacheStorage`) so they don't download every time. They are the site's own audio files, the same for everyone, and say nothing about who listens to them. You can delete them by clearing the site's data in your browser settings. That is why there is no banner to accept. The language is part of the page address, in `/it/` or `/en/`.
 
 ## What GitHub logs
 

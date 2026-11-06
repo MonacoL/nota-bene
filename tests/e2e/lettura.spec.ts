@@ -45,7 +45,7 @@ test('i quattro comandi: in basso sul telefono, sopra la partitura su desktop', 
   const comandi = page.getByRole('navigation', { name: 'Comandi della lettura' });
   await expect(comandi.getByRole('button')).toHaveCount(3);
   for (const nome of ['Riferimento tonale', 'Ascolto di verifica']) {
-    await expect(comandi.getByRole('button', { name: nome })).toBeDisabled();
+    await expect(comandi.getByRole('button', { name: nome })).toHaveAttribute('aria-pressed', 'false');
   }
   await expect(comandi.getByRole('link', { name: 'Lettura successiva' })).toBeVisible();
   const barra = (await comandi.boundingBox())!;

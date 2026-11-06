@@ -14,7 +14,7 @@ Chi apre una pull request accetta che il suo contributo si pubblichi così. La s
 
 ## Privacy
 
-Oggi il sito non raccoglie dati, non usa cookie né storage nel browser e non carica niente da altri siti, e la pagina Privacy lo dice. Chi aggiunge analytics, un form o una risorsa da una CDN di terzi deve prima aggiornare la pagina Privacy (`contenuti/pagine/it/privacy.md` e la sua traduzione), nella stessa pull request e prima del deploy. Il test Playwright "niente cookie, storage o risorse di terzi" fallisce con una risorsa di terzi: si aggiorna insieme alla pagina Privacy.
+Oggi il sito non raccoglie dati, non usa cookie né `localStorage`, tiene nella cache del browser solo i campioni del pianoforte e non carica niente da altri siti, e la pagina Privacy lo dice. Chi aggiunge analytics, un form o una risorsa da una CDN di terzi deve prima aggiornare la pagina Privacy (`contenuti/pagine/it/privacy.md` e la sua traduzione), nella stessa pull request e prima del deploy. Il test Playwright "niente cookie, storage o risorse di terzi" fallisce con una risorsa di terzi: si aggiorna insieme alla pagina Privacy.
 
 ## Testi, AI e revisione umana
 

@@ -92,7 +92,6 @@ export const it = {
     soluzioneBreve: 'Soluzione',
     successiva: 'Lettura successiva',
     successivaBreve: 'Successiva',
-    inArrivo: 'In arrivo',
     tonalita: 'Tonalità: {tonalita}.',
     mutazione: 'Mutazione alla battuta {battuta}: da qui la tonalità è {tonalita}.',
     modi: { maggiore: 'maggiore', minore: 'minore' },
