@@ -95,7 +95,6 @@ export const en: Dizionario = {
     soluzioneBreve: 'Solution',
     successiva: 'Next reading',
     successivaBreve: 'Next',
-    inArrivo: 'Coming soon',
     tonalita: 'Key: {tonalita}.',
     mutazione: 'Do shift at measure {battuta}: from here the key is {tonalita}.',
     modi: { maggiore: 'major', minore: 'minor' },

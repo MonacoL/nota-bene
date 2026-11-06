@@ -102,7 +102,7 @@ for (const soluzione of [false, true]) {
         await page.goto(`${lingua}/letture/${LETTURE[0]}/`);
         await page.evaluate(() => document.fonts.ready);
         await expect(page.locator('.partitura svg')).toHaveCount(1);
-        if (soluzione) await page.locator('.comandi button[aria-pressed]').click();
+        if (soluzione) await page.locator('.comandi button.mostra').click();
         await page.mouse.move(-1, -1);
         await expect(page).toHaveScreenshot(`${nome}.png`, { fullPage: true });
       });

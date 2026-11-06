@@ -12,6 +12,7 @@ import { conSoluzione } from '../../../../letture/soluzione';
 import { VOCI, type Lettura as DatiLettura } from '../../../../letture/catalogo';
 import { successiva } from '../../../../letture/elenco';
 import { nomeTonalita, notaDelleModifiche, riempi } from '../../../../letture/testi';
+import { audioDellaLettura } from '../../../../audio/note';
 
 export async function getStaticPaths() {
   const tutte = await letture();
@@ -39,6 +40,8 @@ const spiegazione = [
 
 const voce = tl.voci[lettura.voce];
 const sottotitolo = maiuscola(riempi(tl.sottotitolo, { voce, inizio: lettura.battute.inizio, fine: lettura.battute.fine }));
+// Riferimento tonale e note dei campioni da caricare (ADR-0008), nella Tonalità in vigore all'inizio dell'estratto.
+const audio = audioDellaLettura(lettura.abc, lettura.tonalita);
 const righeTesto = lettura.abc.split('\n').filter((r) => r.startsWith('w:')).length;
 const { attribuzione: a } = lettura;
 // La riga di attribuzione con l'Edizione come link alla pagina della Fonte.
@@ -67,7 +70,7 @@ const successive = Object.fromEntries(
     </>
   ) : (
     <>
-      <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} successive={successive} t={tl} />
+      <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} successive={successive} audio={audio} t={tl} />
 
       <footer class="attribuzione">
         <p>
