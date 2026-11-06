@@ -1,8 +1,10 @@
 // Esercizi di teoria: genera(tipo, parametri, seed) → Esercizio e valuta(Esercizio, risposta) → Riscontro.
 // TypeScript puro, senza Astro né DOM: gira nel browser e nei test. Ogni tipo sta nel suo file.
+import * as completaLaBattuta from './completa-la-battuta';
 import * as costruisciLaScala from './costruisci-la-scala';
 import * as nominaLaNota from './nomina-la-nota';
 import * as nominaLaSillaba from './nomina-la-sillaba';
+import * as riconosciIlTempo from './riconosci-il-tempo';
 import * as riconosciIntervallo from './riconosci-intervallo';
 import * as rivoltaIntervallo from './rivolta-intervallo';
 import * as trovaLaTonalita from './trova-la-tonalita';
@@ -13,6 +15,9 @@ export type { Testi } from './testi';
 export { CHIAVI, type Chiave } from './nomina-la-nota';
 export type EsercizioNominaLaNota = nominaLaNota.Esercizio;
 export type EsercizioCostruisciLaScala = costruisciLaScala.Esercizio;
+export type EsercizioCompletaLaBattuta = completaLaBattuta.Esercizio;
+export type EsercizioRiconosciIlTempo = riconosciIlTempo.Esercizio;
+export { TEMPI, FIGURE, abcBattute, durata, type Figura, type NomeTempo } from './ritmo';
 export type EsercizioTrovaLaTonalita = trovaLaTonalita.Esercizio;
 export type { Modo } from './trova-la-tonalita';
 export { abcScala, inScala } from './costruisci-la-scala';
@@ -31,6 +36,8 @@ type Tipi = {
   'riconosci-intervallo': { parametri: riconosciIntervallo.Parametri; esercizio: riconosciIntervallo.Esercizio; risposta: riconosciIntervallo.Risposta };
   'rivolta-intervallo': { parametri: rivoltaIntervallo.Parametri; esercizio: rivoltaIntervallo.Esercizio; risposta: rivoltaIntervallo.Risposta };
   'trova-la-tonalita': { parametri: trovaLaTonalita.Parametri; esercizio: trovaLaTonalita.Esercizio; risposta: trovaLaTonalita.Risposta };
+  'completa-la-battuta': { parametri: completaLaBattuta.Parametri; esercizio: completaLaBattuta.Esercizio; risposta: completaLaBattuta.Risposta };
+  'riconosci-il-tempo': { parametri: riconosciIlTempo.Parametri; esercizio: riconosciIlTempo.Esercizio; risposta: riconosciIlTempo.Risposta };
 };
 export type Tipo = keyof Tipi;
 export type Parametri<T extends Tipo = Tipo> = Tipi[T]['parametri'];
@@ -56,6 +63,10 @@ export function genera<T extends Tipo>(tipo: T, parametri: Parametri<T>, seed: n
       return costruisciLaScala.genera(parametri as Parametri<'costruisci-la-scala'>, seed) as Esercizio<T>;
     case 'trova-la-tonalita':
       return trovaLaTonalita.genera(parametri as Parametri<'trova-la-tonalita'>, seed) as Esercizio<T>;
+    case 'completa-la-battuta':
+      return completaLaBattuta.genera(parametri as Parametri<'completa-la-battuta'>, seed) as Esercizio<T>;
+    case 'riconosci-il-tempo':
+      return riconosciIlTempo.genera(parametri as Parametri<'riconosci-il-tempo'>, seed) as Esercizio<T>;
     case 'riconosci-intervallo':
       return riconosciIntervallo.genera(parametri as Parametri<'riconosci-intervallo'>, seed) as Esercizio<T>;
     case 'rivolta-intervallo':
@@ -73,6 +84,10 @@ export function valuta<T extends Tipo>(esercizio: Esercizio<T>, risposta: Rispos
       return costruisciLaScala.valuta(esercizio, risposta as Risposta<'costruisci-la-scala'>);
     case 'trova-la-tonalita':
       return trovaLaTonalita.valuta(esercizio, risposta as Risposta<'trova-la-tonalita'>);
+    case 'completa-la-battuta':
+      return completaLaBattuta.valuta(esercizio, risposta as Risposta<'completa-la-battuta'>);
+    case 'riconosci-il-tempo':
+      return riconosciIlTempo.valuta(esercizio, risposta as Risposta<'riconosci-il-tempo'>);
     case 'riconosci-intervallo':
       return riconosciIntervallo.valuta(esercizio, risposta as Risposta<'riconosci-intervallo'>);
     case 'rivolta-intervallo':
