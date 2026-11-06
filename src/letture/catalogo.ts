@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
 import { sillabe as calcolaSillabe, type Mutazione, type NotaScritta, type Sillaba, type Tonalita } from '../sillabe';
+import { semitoni, type Nota } from '../esercizi/note';
 import { leggiAbc, leggiTonalita } from './abc';
 
 export const VOCI = ['soprano', 'contralto', 'tenore', 'basso'] as const;
@@ -28,7 +29,8 @@ const schemaLettura = z
       .array(
         z
           .object({
-            battuta: z.number().int().positive(),
+            // 0 è il levare di un estratto che comincia dall'inizio del Brano.
+            battuta: z.number().int().nonnegative(),
             posizione: z.number().int().positive(),
             tonalita: z.string().transform((t, ctx) => {
               const tonalita = leggiTonalita(t);
@@ -41,6 +43,10 @@ const schemaLettura = z
       .default([]),
     modificata: z.coerce.date(),
     stato: z.enum(['pubblicata', 'ritirata']).default('pubblicata'),
+    /** ADR-0003: il motivo per cui va sentito il maestro; non si vede sul sito. */
+    da_verificare: z.string().min(1).optional(),
+    /** Il campo libero della nota delle modifiche, per le eccezioni: si aggiunge al testo generato. */
+    modifiche: z.object({ it: z.string().min(1), en: z.string().min(1) }).strict().optional(),
   })
   .strict();
 
@@ -62,6 +68,8 @@ const schemaEdizione = z
       })
       .strict(),
     trascrizioni: z.literal('CC0').optional(),
+    /** ADR-0003: un'Edizione PD che non dichiara la sua fonte. */
+    fonte_dichiarata: z.literal('no').optional(),
     sorgente: z.object({ file: z.string().min(1), sha256: z.string().regex(/^[0-9a-f]{64}$/) }).strict(),
     letture: z.array(schemaLettura).nonempty(),
   })
@@ -95,6 +103,12 @@ export type Lettura = {
     trascrizione?: { nome: string; url: string };
   };
   stato: 'pubblicata' | 'ritirata';
+  /** La data dell'ultima modifica della Lettura, per la nota delle modifiche. */
+  modificata: Date;
+  /** Il campo libero della nota delle modifiche, per le eccezioni. */
+  modifiche?: { it: string; en: string };
+  /** Il motivo per cui la Lettura va confermata dal maestro. Non si mostra sul sito. */
+  daVerificare?: string;
 };
 
 export type Errore = { lettura: string; regola: string; messaggio: string };
@@ -124,6 +138,8 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
   const dichiaratiOvunque: string[] = [];
   // Le Edizioni con edizione.yml fuori schema: il registro non si confronta con le loro Letture.
   const illeggibili: string[] = [];
+  // Fonte e numero di Edizione già visti, con la cartella che li ha.
+  const edizioni = new Map<string, string>();
   const brani = readdirSync(cartella, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
   for (const brano of brani) {
     const erroriEdizione = (regola: string, messaggio: string) => errori.push({ lettura: brano, regola, messaggio });
@@ -134,12 +150,26 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       continue;
     }
     const edizione = letta.data;
+    const chiave = `${edizione.fonte} ${edizione.edizione}`;
+    const gia = edizioni.get(chiave);
+    if (gia) {
+      erroriEdizione('edizione', `${FONTI[edizione.fonte]} ${edizione.edizione} è già in letture/${gia}/: una cartella per Edizione`);
+    } else edizioni.set(chiave, brano);
     if (!(LICENZE as readonly string[]).includes(edizione.licenza.tipo)) {
       erroriEdizione('licenza', `licenza "${edizione.licenza.tipo}" non accettata: valgono ${LICENZE.join(', ')}`);
     } else if (edizione.licenza.tipo === 'PD' && edizione.trascrizioni !== 'CC0') {
       erroriEdizione('licenza', "le trascrizioni di un'Edizione PD si rilasciano in CC0 (ADR-0005): manca \"trascrizioni: CC0\"");
     } else if (edizione.licenza.tipo !== 'PD' && edizione.trascrizioni) {
       erroriEdizione('licenza', `le trascrizioni seguono la licenza dell'Edizione (${edizione.licenza.tipo}): CC0 vale solo per le Edizioni PD`);
+    }
+    const { prova } = edizione.licenza;
+    if (prova === 'licenza.pdf') {
+      if (!existsSync(join(cartella, brano, prova))) erroriEdizione('licenza', 'manca licenza.pdf, indicato come prova della licenza');
+    } else if (!/^https:\/\/web\.archive\.org\/web\/\d+\//.test(prova)) {
+      erroriEdizione('licenza', 'la prova della licenza è uno snapshot su archive.org (https://web.archive.org/web/…) oppure licenza.pdf');
+    }
+    if (edizione.fonte_dichiarata && edizione.licenza.tipo !== 'PD') {
+      erroriEdizione('licenza', '"fonte_dichiarata: no" vale solo per le Edizioni PD');
     }
     const sorgente = join(cartella, brano, edizione.sorgente.file);
     if (!existsSync(sorgente)) erroriEdizione('sorgente', `manca il sorgente ${edizione.sorgente.file}`);
@@ -172,18 +202,57 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       const letto = leggiAbc(abc);
       for (const a of letto.avvisi) erroreLettura('abc', `abcjs: ${a}`);
       if (!letto.unaSolaVoce) erroreLettura('voce', "l'ABC di una Lettura ha una sola Voce, su un rigo, senza accordi");
+      if (!/^Q:/m.test(abc)) erroreLettura('andamento', "manca l'Andamento: l'ABC lo scrive nel Q:, per esempio \"Q:1/4=70\" (ADR-0008)");
+      const { sbagliate, numero, levare } = battute(letto.durate, letto.durataBattuta);
+      // Le Battute dell'ABC contano da 1; quelle di origine nel Brano partono da inizio, e il levare è la Battuta prima.
+      const scarto = l.battute[0] - 1 - (levare ? 1 : 0);
+      const origine = (battuta: number) => battuta + scarto;
+      for (const b of letto.gruppiIrregolari) {
+        erroreLettura('gruppi-irregolari', `battuta ${origine(b)}: niente gruppi irregolari (terzine e simili), il Percorso non li insegna`);
+      }
+      for (const b of sbagliate) erroreLettura('durata', `battuta ${origine(b)}: la durata non corrisponde al Tempo`);
+      const dueBattute = 2 * letto.durataBattuta;
+      if (letto.pausaMassima > dueBattute && !uguali(letto.pausaMassima, dueBattute)) erroreLettura('pause', 'una pausa più lunga di 2 Battute');
+      const dichiarate = l.battute[1] - l.battute[0] + 1;
+      if (numero < 4 || numero > 12) erroreLettura('battute', `${numero} Battute: una Lettura ne ha da 4 a 12, levare escluso`);
+      else if (numero !== dichiarate) {
+        erroreLettura('battute', `l'ABC ha ${numero} Battute, levare escluso, ma edizione.yml ne dichiara ${dichiarate} (${l.battute[0]}–${l.battute[1]})`);
+      }
+      const avanzata = l.prerequisiti.includes('do-mobile-avanzato');
+      const massimo = avanzata ? 4 : 3;
+      if (letto.armatura > massimo) {
+        erroreLettura('armatura', `${letto.armatura} alterazioni in Armatura: al massimo ${massimo} ${avanzata ? 'in una Lettura avanzata' : 'in una Lettura'}`);
+      }
+      const attaccate = letto.note.flatMap((n) => (n.pausa || n.legata ? [] : [{ ...n, altezza: semitoni(n.nota as Nota) }]));
+      attaccate.slice(1).forEach((n, i) => {
+        if (Math.abs(n.altezza - attaccate[i]!.altezza) > 12) {
+          erroreLettura('salti', `battuta ${origine(n.battuta)}, nota ${n.posizione}: un salto più ampio di un'ottava`);
+        }
+      });
+      const altezze = attaccate.map((n) => n.altezza);
+      // Una decima maggiore sono 16 semitoni.
+      if (altezze.length && Math.max(...altezze) - Math.min(...altezze) > 16) {
+        erroreLettura('estensione', "l'estensione supera la decima tra la nota più grave e la più acuta");
+      }
+      if (letto.cambiaTonalita) {
+        erroreLettura('mutazioni', "niente cambi [K:] nell'ABC: una Mutazione si annota in edizione.yml, con Battuta, posizione e nuova Tonalità");
+      }
+      for (const m of l.mutazioni) {
+        if (!letto.note.some((n) => !n.pausa && origine(n.battuta) === m.battuta && n.posizione === m.posizione)) {
+          erroreLettura('mutazioni', `la Mutazione in battuta ${m.battuta}, nota ${m.posizione}, non cade su una nota dell'estratto`);
+        }
+      }
       const tonalita = letto.tonalita;
       if (!tonalita) {
         erroreLettura('tonalita', 'il K: deve dire il Modo per esteso, per esempio "K:F major" o "K:D minor"');
         continue;
       }
-      // Le Note dell'ABC contano le Battute da 1; le Mutazioni usano le Battute di origine nel Brano.
-      const nellEstratto = l.mutazioni.map((m) => ({ ...m, battuta: m.battuta - l.battute[0] + 1 }));
+      const nellEstratto = l.mutazioni.map((m) => ({ ...m, battuta: m.battuta - scarto }));
       const esiti = calcolaSillabe(letto.note, tonalita, nellEstratto);
       esiti.forEach((e, i) => {
         if (e.tipo !== 'errore') return;
         const { battuta, posizione } = letto.note[i]!;
-        erroreLettura('sillabe', `battuta ${l.battute[0] + battuta - 1}, nota ${posizione}: ${e.motivo}; si riscrive la nota in modo enarmonico o si annota una Mutazione`);
+        erroreLettura('sillabe', `battuta ${origine(battuta)}, nota ${posizione}: ${e.motivo}; si riscrive la nota in modo enarmonico o si annota una Mutazione`);
       });
       const sillabe = esiti.flatMap((e) => (e.tipo === 'sillaba' ? [e.sillaba] : []));
       letture.push({
@@ -198,7 +267,7 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
         tonalita: tonalitaIniziale(letto.note, tonalita, nellEstratto),
         mutazioni: l.mutazioni,
         prerequisiti: l.prerequisiti,
-        blocco: l.prerequisiti.includes('do-mobile-avanzato') ? 'avanzata' : 'normale',
+        blocco: avanzata ? 'avanzata' : 'normale',
         attribuzione: {
           fonte: FONTI[edizione.fonte],
           edizione: edizione.edizione,
@@ -208,6 +277,9 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
           ...(edizione.trascrizioni === 'CC0' && { trascrizione: CC0 }),
         },
         stato: l.stato,
+        modificata: l.modificata,
+        ...(l.modifiche && { modifiche: l.modifiche }),
+        ...(l.da_verificare && { daVerificare: l.da_verificare }),
       });
     }
   }
@@ -217,6 +289,22 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
     ),
   );
   return errori.length ? { ok: false, errori } : { ok: true, letture };
+}
+
+const uguali = (a: number, b: number) => Math.abs(a - b) < 1e-9;
+
+/**
+ * Le Battute dell'estratto secondo il Tempo: quelle (da 1) che non durano quanto devono e quante sono. La prima può
+ * essere più corta, se è un levare, e allora l'ultima può essere più corta per completarlo. Il levare non si conta.
+ */
+function battute(durate: readonly number[], completa: number): { sbagliate: number[]; numero: number; levare: boolean } {
+  const levare = durate.length > 1 && durate[0]! < completa && !uguali(durate[0]!, completa) ? durate[0]! : 0;
+  const sbagliate = durate.flatMap((d, i) => {
+    if (i === 0 && levare) return [];
+    if (i === durate.length - 1 && levare && uguali(d + levare, completa)) return [];
+    return uguali(d, completa) ? [] : [i + 1];
+  });
+  return { sbagliate, numero: durate.length - (levare ? 1 : 0), levare: levare > 0 };
 }
 
 /** ADR-0004: la Tonalità in vigore alla prima nota, che è quella di una Mutazione se l'estratto comincia già modulato. */

@@ -66,13 +66,21 @@ test("l'attribuzione è sempre visibile e i dettagli portano ai capitoli", async
   );
   await attribuzione.getByText('Dettagli sulla fonte').click();
   await expect(attribuzione).toContainText('Stan Sanderson');
+  // La nota delle modifiche richiesta dalla CPDL License (ADR-0003): generata dai dati, più il campo libero.
+  await expect(attribuzione).toContainText(
+    'Estratto della voce di soprano, battute 1–7, trascritto in notazione ABC con le sillabe del DO mobile. ' +
+      'Le legature di portamento su note uguali (battute 2–3 e 6–7) sono scritte come legature di valore. ' +
+      'Ultima modifica: 6 novembre 2026.',
+  );
   await attribuzione.getByRole('link', { name: 'DO mobile' }).click();
   await expect(page).toHaveURL(/\/it\/capitoli\/do-mobile\/$/);
 });
 
 test('in inglese la pagina usa i nomi del glossario', async ({ page }) => {
   await apri(page, 'en/letture/if-ye-love-me/soprano-1-7/');
-  await expect(page.getByText('Soprano part, measures 1–7')).toBeVisible();
+  await expect(page.getByText('Soprano voice part, measures 1–7', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Show the solution' }).click();
   await expect(page.getByText('Key: F major.')).toBeVisible();
+  await page.getByText('About the source').click();
+  await expect(page.locator('.attribuzione')).toContainText('Excerpt of the soprano voice part, measures 1–7, transcribed into ABC notation');
 });

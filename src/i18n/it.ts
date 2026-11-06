@@ -104,6 +104,10 @@ export const it = {
     editore: "Editore dell'edizione",
     prerequisiti: 'Prerequisiti',
     licenza: 'Licenza',
+    modifiche: 'Modifiche',
+    notaEstratto: 'Estratto della voce di {voce}, battute {inizio}–{fine}, trascritto in notazione ABC con le sillabe del DO mobile.',
+    notaMutazione: 'Mutazione annotata alla battuta {battuta}: {tonalita}.',
+    notaData: 'Ultima modifica: {data}.',
   },
   pagine: {
     letture: 'Letture',

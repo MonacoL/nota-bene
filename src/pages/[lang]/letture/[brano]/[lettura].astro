@@ -8,7 +8,7 @@ import { capitoli } from '../../../../contenuti/capitoli';
 import { letture } from '../../../../contenuti/letture';
 import { conSoluzione } from '../../../../letture/soluzione';
 import type { Lettura as DatiLettura } from '../../../../letture/catalogo';
-import type { Tonalita } from '../../../../sillabe';
+import { nomeTonalita, notaDelleModifiche, riempi } from '../../../../letture/testi';
 
 export async function getStaticPaths() {
   const pubblicate = (await letture()).filter((l) => l.stato === 'pubblicata');
@@ -27,16 +27,11 @@ const { lettura } = Astro.props;
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
 const tl = t.lettura;
-const riempi = (modello: string, valori: Record<string, string | number>) =>
-  modello.replace(/\{(\w+)\}/g, (_, k: string) => String(valori[k]));
 const maiuscola = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const ALTERAZIONI = { '-1': '♭', '0': '', '1': '♯' } as const;
-const nomeTonalita = ({ tonica, modo }: Tonalita) =>
-  `${t.serie.note[tonica.lettera]}${ALTERAZIONI[tonica.alterazione]} ${tl.modi[modo]}`;
 const spiegazione = [
-  riempi(tl.tonalita, { tonalita: nomeTonalita(lettura.tonalita) }),
-  ...lettura.mutazioni.map((m) => riempi(tl.mutazione, { battuta: m.battuta, tonalita: nomeTonalita(m.tonalita) })),
+  riempi(tl.tonalita, { tonalita: nomeTonalita(lettura.tonalita, t, lingua) }),
+  ...lettura.mutazioni.map((m) => riempi(tl.mutazione, { battuta: m.battuta, tonalita: nomeTonalita(m.tonalita, t, lingua) })),
 ];
 
 const voce = tl.voci[lettura.voce];
@@ -71,6 +66,8 @@ const titoliCapitoli = new Map((await capitoli(lingua)).map((c) => [c.id, c.tito
             <>{i > 0 && ', '}<a href={url(lingua, `capitoli/${id}/`)}>{titoliCapitoli.get(id)}</a></>
           ))}
         </dd>
+        <dt>{tl.modifiche}</dt>
+        <dd>{notaDelleModifiche(lettura, t, lingua)}</dd>
         <dt>{tl.licenza}</dt>
         <dd><a href={a.licenza.url} rel="external license">{a.licenza.nome}</a>{a.trascrizione && <>; <a href={a.trascrizione.url} rel="external license">{a.trascrizione.nome}</a></>}</dd>
       </dl>

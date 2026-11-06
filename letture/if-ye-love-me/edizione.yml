@@ -17,10 +17,12 @@ sorgente:
   file: tallis-love.ly
   sha256: 97b09684c79737fee5c84e4b59b872f9f5871873aa73dba0449bd5a7bf422eee
 letture:
-  # Trascritta a mano dal .ly (sopMusic). Le legature di portamento su note uguali del sorgente
-  # (battute 2–3 e 6–7) sono scritte come legature di valore: si tiene la nota, senza riattaccarla.
+  # Trascritta a mano dal .ly (sopMusic).
   - id: soprano-1-7
     voce: soprano
     battute: [1, 7]
     prerequisiti: [do-mobile]
+    modifiche:
+      it: Le legature di portamento su note uguali (battute 2–3 e 6–7) sono scritte come legature di valore.
+      en: Slurs between equal notes (measures 2–3 and 6–7) are written as ties.
     modificata: 2026-11-06

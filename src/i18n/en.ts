@@ -83,7 +83,7 @@ export const en: Dizionario = {
   },
   lettura: {
     voci: { soprano: 'soprano', contralto: 'alto', tenore: 'tenor', basso: 'bass' },
-    sottotitolo: '{voce} part, measures {inizio}–{fine}',
+    sottotitolo: '{voce} voice part, measures {inizio}–{fine}',
     partitura: 'Score',
     comandi: 'Reading controls',
     riferimento: 'Starting pitch',
@@ -105,6 +105,10 @@ export const en: Dizionario = {
     editore: 'Edition editor',
     prerequisiti: 'Prerequisites',
     licenza: 'License',
+    modifiche: 'Changes',
+    notaEstratto: 'Excerpt of the {voce} voice part, measures {inizio}–{fine}, transcribed into ABC notation with movable-do syllables.',
+    notaMutazione: 'Do shift marked at measure {battuta}: {tonalita}.',
+    notaData: 'Last modified: {data}.',
   },
   pagine: {
     letture: 'Readings',
