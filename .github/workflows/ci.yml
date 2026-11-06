@@ -45,6 +45,10 @@ jobs:
       - run: npm run build
       - uses: actions/upload-artifact@v7
         with: { name: sito, path: dist/, if-no-files-found: error, retention-days: 7 }
+      # Il sito con il catalogo d'esempio delle Letture, solo per gli e2e (ticket #32): non si pubblica mai.
+      - run: npm run build:esempio
+      - uses: actions/upload-artifact@v7
+        with: { name: sito-esempio, path: dist-esempio/, if-no-files-found: error, retention-days: 7 }
 
   e2e:
     name: Playwright (${{ matrix.motore }})
@@ -63,6 +67,8 @@ jobs:
       - run: npm ci
       - uses: actions/download-artifact@v8
         with: { name: sito, path: dist/ }
+      - uses: actions/download-artifact@v8
+        with: { name: sito-esempio, path: dist-esempio/ }
       - run: npx playwright test --project="*-${{ matrix.motore }}"
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}

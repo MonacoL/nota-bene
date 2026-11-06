@@ -1,0 +1,26 @@
+brano: Brano beta
+autore: Autore di prova
+fonte: cpdl
+edizione: "#1"
+url: https://www.cpdl.org/
+editore: Editore di prova
+licenza:
+  tipo: CPDL License
+  come_appare: CPDL
+  url: https://www.cpdl.org/wiki/index.php/ChoralWiki:CPDL
+  consultata: 2026-11-06
+  prova: https://web.archive.org/web/2026/https://www.cpdl.org/
+sorgente:
+  file: sorgente.mxl
+  sha256: 9eac045f376154b78fcef15c35140c7c433138487f653e000cbd5e62e11a5465
+letture:
+  - id: soprano-1-4
+    voce: soprano
+    battute: [1, 4]
+    prerequisiti: [do-mobile]
+    modificata: 2026-11-06
+  - id: contralto-1-4
+    voce: contralto
+    battute: [1, 4]
+    prerequisiti: [do-mobile-avanzato]
+    modificata: 2026-11-06

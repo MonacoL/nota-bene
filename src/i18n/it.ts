@@ -108,9 +108,16 @@ export const it = {
     notaEstratto: 'Estratto della voce di {voce}, battute {inizio}–{fine}, trascritto in notazione ABC con le sillabe del DO mobile.',
     notaMutazione: 'Mutazione annotata alla battuta {battuta}: {tonalita}.',
     notaData: 'Ultima modifica: {data}.',
+    ritirata: 'Questa lettura non è più disponibile.',
+  },
+  elencoLetture: {
+    avanzate: 'Letture avanzate',
+    filtro: 'Filtra per voce',
+    tutte: 'Tutte le voci',
+    riga: '{autore}, {voce}, {battute} battute',
+    nessuna: 'Nessuna lettura per questa voce.',
   },
   pagine: {
-    letture: 'Letture',
     privacy: 'Privacy',
     'intelligenza-artificiale': "Uso dell'intelligenza artificiale",
     crediti: 'Crediti',

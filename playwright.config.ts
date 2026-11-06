@@ -6,6 +6,8 @@ import { defineConfig, devices } from '@playwright/test';
 type Screenshot = { screenshot?: 'it' | 'it+en' };
 
 const PORTA = 4321;
+// Il sito con il catalogo d'esempio delle Letture (npm run build:esempio), per i test che lo chiedono con test.use.
+const PORTA_ESEMPIO = 4322;
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -24,11 +26,18 @@ export default defineConfig({
     trace: 'retain-on-failure',
     contextOptions: { reducedMotion: 'reduce' },
   },
-  webServer: {
-    command: `npx astro preview --ignore-lock --host 127.0.0.1 --port ${PORTA}`,
-    url: `http://127.0.0.1:${PORTA}/nota-bene/it/`,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command: `npx astro preview --ignore-lock --host 127.0.0.1 --port ${PORTA}`,
+      url: `http://127.0.0.1:${PORTA}/nota-bene/it/`,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: `NOTA_BENE_LETTURE=tests/e2e/letture-esempio npx astro preview --ignore-lock --host 127.0.0.1 --port ${PORTA_ESEMPIO}`,
+      url: `http://127.0.0.1:${PORTA_ESEMPIO}/nota-bene/it/`,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
   projects: [
     { name: 'phone-320-webkit', use: { ...devices['iPhone SE'] } },
     { name: 'phone-360-chromium', use: { ...devices['Galaxy S8'] }, metadata: { screenshot: 'it+en' } satisfies Screenshot },

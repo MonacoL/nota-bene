@@ -1,19 +1,22 @@
 ---
 // La pagina di una Lettura, una per lingua: /<lingua>/letture/<brano>/<voce>-<inizio>-<fine>/ (ADR-0003).
 // Le Sillabe sono già calcolate dal catalogo alla build (ADR-0004); qui si aggiungono alla partitura come riga w:.
+// Una Lettura ritirata ha ancora la sua pagina, con un avviso e il link all'elenco (ADR-0003).
+// La Lettura successiva (ticket #32) si calcola qui per ogni filtro ?voce=; il browser sceglie quella del filtro.
 import Base from '../../../../layouts/Base.astro';
 import Lettura from '../../../../components/lettura/Lettura.svelte';
 import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli } from '../../../../contenuti/capitoli';
 import { letture } from '../../../../contenuti/letture';
 import { conSoluzione } from '../../../../letture/soluzione';
-import type { Lettura as DatiLettura } from '../../../../letture/catalogo';
+import { VOCI, type Lettura as DatiLettura } from '../../../../letture/catalogo';
+import { successiva } from '../../../../letture/elenco';
 import { nomeTonalita, notaDelleModifiche, riempi } from '../../../../letture/testi';
 
 export async function getStaticPaths() {
-  const pubblicate = (await letture()).filter((l) => l.stato === 'pubblicata');
+  const tutte = await letture();
   return LINGUE.flatMap((lang) =>
-    pubblicate.map((lettura) => {
+    tutte.map((lettura) => {
       const [brano, id] = lettura.id.split('/');
       return { params: { lang, brano, lettura: id }, props: { lettura } };
     }),
@@ -43,41 +46,60 @@ const [primaDellEdizione, dopoLEdizione] = riempi(tl.attribuzione, {
   brano: lettura.brano, autore: lettura.autore, fonte: a.fonte, edizione: '\u0000', licenza: a.licenza.nome,
 }).split('\u0000');
 const titoliCapitoli = new Map((await capitoli(lingua)).map((c) => [c.id, c.titolo]));
+// Per ogni filtro (la chiave vuota è "nessun filtro") l'indirizzo della Lettura successiva. Se il blocco non ha
+// Letture di quella Voce si torna all'elenco filtrato.
+const tutte = await letture();
+const successive = Object.fromEntries(
+  (['', ...VOCI] as const).map((v) => {
+    const prossima = successiva(tutte, lettura.id, v || undefined);
+    return [v, prossima ? url(lingua, `letture/${prossima.id}/`) : url(lingua, 'letture/')];
+  }),
+);
 ---
 <Base lingua={lingua} titolo={`${lettura.brano}, ${voce}`}>
   <h1>{lettura.brano}</h1>
   <p class="sottotitolo">{sottotitolo}</p>
 
-  <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} t={tl} />
+  {lettura.stato === 'ritirata' ? (
+    <>
+      <p class="ritirata">{tl.ritirata}</p>
+      <p><a class="pulsante secondario" href={url(lingua, 'letture/')}>{t.vaiAlleLetture}</a></p>
+    </>
+  ) : (
+    <>
+      <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} successive={successive} t={tl} />
 
-  <footer class="attribuzione">
-    <p>
-      {primaDellEdizione}<a href={a.url} rel="external">{a.edizione}</a>{dopoLEdizione}
-      {a.trascrizione && <> {riempi(tl.trascrizione, { licenza: a.trascrizione.nome })}</>}
-    </p>
-    <details>
-      <summary>{tl.dettagli}</summary>
-      <dl>
-        <dt>{tl.editore}</dt>
-        <dd>{a.editore}</dd>
-        <dt>{tl.prerequisiti}</dt>
-        <dd>
-          {lettura.prerequisiti.map((id, i) => (
-            <>{i > 0 && ', '}<a href={url(lingua, `capitoli/${id}/`)}>{titoliCapitoli.get(id)}</a></>
-          ))}
-        </dd>
-        <dt>{tl.modifiche}</dt>
-        <dd>{notaDelleModifiche(lettura, t, lingua)}</dd>
-        <dt>{tl.licenza}</dt>
-        <dd><a href={a.licenza.url} rel="external license">{a.licenza.nome}</a>{a.trascrizione && <>; <a href={a.trascrizione.url} rel="external license">{a.trascrizione.nome}</a></>}</dd>
-      </dl>
-    </details>
-  </footer>
+      <footer class="attribuzione">
+        <p>
+          {primaDellEdizione}<a href={a.url} rel="external">{a.edizione}</a>{dopoLEdizione}
+          {a.trascrizione && <> {riempi(tl.trascrizione, { licenza: a.trascrizione.nome })}</>}
+        </p>
+        <details>
+          <summary>{tl.dettagli}</summary>
+          <dl>
+            <dt>{tl.editore}</dt>
+            <dd>{a.editore}</dd>
+            <dt>{tl.prerequisiti}</dt>
+            <dd>
+              {lettura.prerequisiti.map((id, i) => (
+                <>{i > 0 && ', '}<a href={url(lingua, `capitoli/${id}/`)}>{titoliCapitoli.get(id)}</a></>
+              ))}
+            </dd>
+            <dt>{tl.modifiche}</dt>
+            <dd>{notaDelleModifiche(lettura, t, lingua)}</dd>
+            <dt>{tl.licenza}</dt>
+            <dd><a href={a.licenza.url} rel="external license">{a.licenza.nome}</a>{a.trascrizione && <>; <a href={a.trascrizione.url} rel="external license">{a.trascrizione.nome}</a></>}</dd>
+          </dl>
+        </details>
+      </footer>
+    </>
+  )}
 </Base>
 
 <style>
   h1 { margin-bottom: 0.1em; }
   .sottotitolo { margin-top: 0; color: var(--muted); font-weight: 700; }
+  .ritirata { font-weight: 700; }
   .attribuzione { margin-top: 1.5em; padding-top: 1em; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.94rem; }
   .attribuzione a { color: inherit; }
   details summary { min-height: 48px; display: flex; align-items: center; cursor: pointer; color: var(--ink); }

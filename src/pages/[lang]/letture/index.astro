@@ -1,0 +1,84 @@
+---
+// L'elenco delle Letture (ticket #32, decisioni nel #16): due blocchi, Letture e Letture avanzate, con il filtro
+// facoltativo ?voce=. La pagina è statica con tutte le Letture; il filtro lo applica lo script nel browser,
+// che lo passa anche ai link delle Letture così la Lettura successiva lo mantiene.
+import Base from '../../../layouts/Base.astro';
+import { LINGUE, testi, url, type Lingua } from '../../../i18n';
+import { letture } from '../../../contenuti/letture';
+import { VOCI } from '../../../letture/catalogo';
+import { elenco } from '../../../letture/elenco';
+import { riempi } from '../../../letture/testi';
+
+export function getStaticPaths() {
+  return LINGUE.map((lang) => ({ params: { lang } }));
+}
+
+const lingua = Astro.params.lang as Lingua;
+const t = testi(lingua);
+const te = t.elencoLetture;
+const maiuscola = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const blocchi = elenco(await letture());
+const sezioni = [
+  { id: 'letture', titolo: t.letture, letture: blocchi.normale },
+  { id: 'avanzate', titolo: te.avanzate, letture: blocchi.avanzata },
+];
+---
+<Base lingua={lingua} titolo={t.letture}>
+  <h1>{t.letture}</h1>
+
+  <nav class="filtro" aria-label={te.filtro}>
+    <a href={url(lingua, 'letture/')} data-voce="" aria-current="page">{te.tutte}</a>
+    {VOCI.map((v) => <a href={url(lingua, `letture/?voce=${v}`)} data-voce={v}>{maiuscola(t.lettura.voci[v])}</a>)}
+  </nav>
+
+  {sezioni.map((s) => (
+    <section id={s.id} aria-labelledby={`titolo-${s.id}`}>
+      <h2 id={`titolo-${s.id}`}>{s.titolo}</h2>
+      <ul class="righe">
+        {s.letture.map((l) => (
+          <li data-voce={l.voce}>
+            <a href={url(lingua, `letture/${l.id}/`)}>{l.brano}</a>{' '}
+            <span class="dati">{riempi(te.riga, { autore: l.autore, voce: t.lettura.voci[l.voce], battute: l.battute.fine - l.battute.inizio + 1 })}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="nessuna" hidden={s.letture.length > 0}>{te.nessuna}</p>
+    </section>
+  ))}
+</Base>
+
+<script>
+  import { VOCI } from '../../../letture/voci';
+
+  const voce = new URLSearchParams(window.location.search).get('voce');
+  if (voce && (VOCI as readonly string[]).includes(voce)) {
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('.filtro a')) {
+      if (a.dataset.voce === voce) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    }
+    for (const sezione of document.querySelectorAll('section')) {
+      let visibili = 0;
+      for (const riga of sezione.querySelectorAll<HTMLLIElement>('li[data-voce]')) {
+        riga.hidden = riga.dataset.voce !== voce;
+        if (!riga.hidden) visibili++;
+        const link = riga.querySelector('a')!;
+        link.search = `?voce=${voce}`;
+      }
+      sezione.querySelector<HTMLElement>('.nessuna')!.hidden = visibili > 0;
+    }
+  }
+</script>
+
+<style>
+  .filtro { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.5em 0 1em; }
+  .filtro a {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px; border-radius: var(--radius);
+    border: 2px solid var(--accent); color: var(--accent); font-weight: 700; text-decoration: none;
+  }
+  .filtro a[aria-current='page'] { background: var(--accent); color: var(--accent-ink); }
+  .righe { list-style: none; padding: 0; margin: 0; }
+  .righe li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .righe a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; }
+  .dati { display: block; color: var(--muted); }
+  .nessuna { color: var(--muted); }
+</style>

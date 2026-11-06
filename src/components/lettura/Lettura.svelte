@@ -1,8 +1,9 @@
 <script lang="ts">
   // La Lettura (ticket "Schermata della Lettura su telefono", #8): i quattro comandi, la partitura con Testo e
   // Soluzione, e sotto la Tonalità con le Mutazioni. Su telefono i comandi sono una barra fissa in basso,
-  // su desktop una fila sopra la partitura. Riferimento tonale, Ascolto di verifica e Lettura successiva
-  // arrivano nei ticket successivi: per ora i pulsanti ci sono ma sono disattivati.
+  // su desktop una fila sopra la partitura. Riferimento tonale e Ascolto di verifica arrivano nei ticket
+  // successivi: per ora i pulsanti ci sono ma sono disattivati. Lettura successiva è un link (ticket #32)
+  // che tiene il filtro ?voce= con cui si è arrivati.
   // La riga delle Sillabe si disegna sempre e il CSS la nasconde: mostrare la Soluzione non sposta niente.
   import { renderAbc } from 'abcjs';
   import type { Dizionario } from '../../i18n/it';
@@ -14,9 +15,15 @@
     righeTesto: number;
     /** Le frasi su Tonalità e Mutazioni, già nella lingua della pagina. */
     spiegazione: string[];
+    /** L'indirizzo della Lettura successiva per ogni filtro ?voce=; la chiave vuota è "nessun filtro". */
+    successive: Record<string, string>;
     t: Dizionario['lettura'];
   }
-  let { abc, righeTesto, spiegazione, t }: Props = $props();
+  let { abc, righeTesto, spiegazione, successive, t }: Props = $props();
+
+  // Il componente gira solo nel browser (client:only), quindi l'indirizzo si legge subito.
+  const voce = new URLSearchParams(window.location.search).get('voce') ?? '';
+  const successiva = voce && voce in successive ? `${successive[voce]}?voce=${voce}` : successive['']!;
 
   // Testo e Sillabe a circa 16 px (ADR-0009): 15 pt in abcjs sono 20 px, per la scala 0,8.
   const SCALA = 0.8;
@@ -70,9 +77,9 @@
       aria-label={soluzione ? t.nascondiSoluzione : t.mostraSoluzione}>
       <span class="breve">{t.soluzioneBreve}</span><span class="lungo">{soluzione ? t.nascondiSoluzione : t.mostraSoluzione}</span>
     </button>
-    <button type="button" disabled title={t.inArrivo} aria-label={t.successiva}>
+    <a class="comando" href={successiva} aria-label={t.successiva}>
       <span class="breve">{t.successivaBreve}</span><span class="lungo">{t.successiva}</span>
-    </button>
+    </a>
   </nav>
 
   <div class="partitura" role="img" aria-label={t.partitura} bind:this={partitura}></div>
@@ -94,7 +101,8 @@
   .lettura:not(.soluzione) .spiegazione { visibility: hidden; }
 
   .comandi { display: flex; gap: 8px; flex-wrap: wrap; }
-  .comandi button {
+  .comandi button, .comandi .comando {
+    display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
     min-height: 48px; padding: 0 16px; border-radius: var(--radius);
     font: inherit; font-weight: 700; cursor: pointer;
     background: transparent; color: var(--accent); border: 2px solid var(--accent);
@@ -111,7 +119,7 @@
       padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
       background: var(--surface); border-top: 1px solid var(--line);
     }
-    .comandi button { min-height: 52px; padding: 0 4px; font-size: 0.82rem; border-width: 1px; }
+    .comandi button, .comandi .comando { min-height: 52px; padding: 0 4px; font-size: 0.82rem; border-width: 1px; }
     .breve { display: inline; }
     .lungo { display: none; }
     :global(body) { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }

@@ -5,6 +5,9 @@ import { PROVVISORIE } from '../../src/pagine-provvisorie';
 
 export const LINGUE = ['it', 'en'] as const;
 
+/** Il sito costruito con il catalogo d'esempio delle Letture (tests/e2e/letture-esempio/, porta in playwright.config.ts). */
+export const BASE_ESEMPIO = 'http://127.0.0.1:4322/nota-bene/';
+
 /** Gli id dei Capitoli, nell'ordine del Percorso. */
 export const CAPITOLI: string[] = (parse(readFileSync('contenuti/percorso.yml', 'utf8')) as { id: string; numero: number }[])
   .sort((a, b) => a.numero - b.numero)
@@ -19,6 +22,7 @@ export const LETTURE: string[] = readFileSync('letture/pubblicate.txt', 'utf8')
 export const PAGINE = LINGUE.flatMap((l) => [
   `${l}/`,
   `${l}/capitoli/`,
+  `${l}/letture/`,
   ...PROVVISORIE.map((p) => `${l}/${p}/`),
   ...CAPITOLI.flatMap((c) => [`${l}/capitoli/${c}/`, `${l}/capitoli/${c}/esercizi/`]),
   ...LETTURE.map((id) => `${l}/letture/${id}/`),

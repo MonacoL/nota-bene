@@ -1,0 +1,6 @@
+# Registro del catalogo d esempio (ADR-0003).
+brano-alfa/soprano-1-4
+brano-alfa/tenore-1-4
+brano-alfa/basso-1-4
+brano-beta/soprano-1-4
+brano-beta/contralto-1-4
