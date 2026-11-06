@@ -71,6 +71,8 @@ test('il 404 è bilingue, con i link alle due home', async ({ page }) => {
 test.describe('controlli una volta sola', () => {
   test.beforeEach(({}, info) => {
     test.skip(info.project.name !== 'desktop-chromium', 'basta una configurazione');
+    // Questi test visitano tutte le pagine: il tempo cresce con il sito.
+    test.setTimeout(30_000 + PAGINE.length * 2_000);
   });
 
   test('nessun link interno è rotto', async ({ page, request, baseURL }) => {
