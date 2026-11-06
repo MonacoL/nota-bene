@@ -6,6 +6,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
+import { noteCoperte, righeW, tratti } from './righe-w';
 import { sillabe as calcolaSillabe, type Mutazione, type NotaScritta, type Sillaba, type Tonalita } from '../sillabe';
 import { semitoni, type Nota } from '../esercizi/note';
 import { leggiAbc, leggiTonalita } from './abc';
@@ -250,6 +251,7 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       if (altezze.length && Math.max(...altezze) - Math.min(...altezze) > 16) {
         erroreLettura('estensione', "l'estensione supera la decima tra la nota più grave e la più acuta");
       }
+      for (const problema of testoNonAllineato(abc, letto.note)) erroreLettura('testo', problema);
       if (letto.cambiaTonalita) {
         erroreLettura('mutazioni', "niente cambi [K:] nell'ABC: una Mutazione si annota in edizione.yml, con Battuta, posizione e nuova Tonalità");
       }
@@ -321,6 +323,34 @@ function segnaposto(valore: unknown, percorso = ''): string[] {
 }
 
 const uguali = (a: number, b: number) => Math.abs(a - b) < 1e-9;
+
+/**
+ * Ticket #30: l'a capo divide note, Testo e Sillabe per Battuta, quindi ogni riga w: ha un tratto per Battuta
+ * dell'ABC e ogni tratto copre le note della sua Battuta, pause escluse (src/letture/righe-w.ts). Le Battute qui
+ * contano da 1, come nell'ABC.
+ */
+function testoNonAllineato(abc: string, note: readonly NotaScritta[]): string[] {
+  // Le Battute dell'ABC, cioè i tratti tra due stanghette: una pausa multipla (Z2) ne è una sola anche se dura di più.
+  const battute = [...new Set(note.map((n) => n.battuta))];
+  const perBattuta = battute.map((b) => note.filter((n) => n.battuta === b && !n.pausa).length);
+  const problemi: string[] = [];
+  const righe = righeW(abc);
+  righe.forEach((riga, r) => {
+    const quale = righe.length > 1 ? ` n. ${r + 1}` : '';
+    const diRiga = tratti(riga);
+    if (diRiga.length !== battute.length) {
+      problemi.push(`la riga w:${quale} ha ${diRiga.length} Battute e la musica ${battute.length}: serve un "|" per Battuta, allineato alle note`);
+      return;
+    }
+    diRiga.forEach((tratto, b) => {
+      const coperte = noteCoperte(tratto);
+      if (coperte !== perBattuta[b]) {
+        problemi.push(`riga w:${quale}, Battuta ${b + 1} dell'ABC: il tratto copre ${coperte} note e la Battuta ne ha ${perBattuta[b]}`);
+      }
+    });
+  });
+  return problemi;
+}
 
 /**
  * Le Battute dell'estratto secondo il Tempo: quelle (da 1) che non durano quanto devono e quante sono. La prima può

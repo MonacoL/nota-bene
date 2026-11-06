@@ -5,13 +5,14 @@
 // La Lettura successiva (ticket #32) si calcola qui per ogni filtro ?voce=; il browser sceglie quella del filtro.
 import Base from '../../../../layouts/Base.astro';
 import Lettura from '../../../../components/lettura/Lettura.svelte';
-import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
+import { LINGUE, riempi, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli } from '../../../../contenuti/capitoli';
 import { letture } from '../../../../contenuti/letture';
 import { conSoluzione } from '../../../../letture/soluzione';
+import { righeW } from '../../../../letture/righe-w';
 import { VOCI, type Lettura as DatiLettura } from '../../../../letture/catalogo';
 import { successiva } from '../../../../letture/elenco';
-import { nomeTonalita, notaDelleModifiche, riempi } from '../../../../letture/testi';
+import { nomeTonalita, notaDelleModifiche } from '../../../../letture/testi';
 import { audioDellaLettura } from '../../../../audio/note';
 
 export async function getStaticPaths() {
@@ -42,7 +43,7 @@ const voce = tl.voci[lettura.voce];
 const sottotitolo = maiuscola(riempi(tl.sottotitolo, { voce, inizio: lettura.battute.inizio, fine: lettura.battute.fine }));
 // Riferimento tonale e note dei campioni da caricare (ADR-0008), nella Tonalità in vigore all'inizio dell'estratto.
 const audio = audioDellaLettura(lettura.abc, lettura.tonalita);
-const righeTesto = lettura.abc.split('\n').filter((r) => r.startsWith('w:')).length;
+const righeTesto = righeW(lettura.abc).length;
 const { attribuzione: a } = lettura;
 // La riga di attribuzione con l'Edizione come link alla pagina della Fonte.
 const [primaDellEdizione, dopoLEdizione] = riempi(tl.attribuzione, {

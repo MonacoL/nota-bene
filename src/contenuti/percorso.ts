@@ -43,22 +43,28 @@ export function controllaFile(percorso: readonly VocePercorso[], it: readonly st
   return errori;
 }
 
+export type AvvisoTraduzione = { file: string; messaggio: string };
+
 /**
- * Avvisi che non bloccano il deploy (ADR-0006): un Capitolo italiano senza traduzione,
- * o una traduzione fatta da una revisione italiana più vecchia di quella attuale.
+ * Avvisi che non bloccano il deploy (ADR-0006), per i Capitoli e per le pagine di servizio: una traduzione fatta
+ * da una revisione italiana più vecchia di quella attuale, e un Capitolo italiano senza traduzione. Una pagina di
+ * servizio senza traduzione non è un avviso ma un errore che blocca la build (controllaPagine, in pagine.ts).
  */
 export function avvisiTraduzione(
-  it: ReadonlyMap<string, CapitoloIt>,
-  en: ReadonlyMap<string, CapitoloEn>,
-): { file: string; messaggio: string }[] {
-  const avvisi: { file: string; messaggio: string }[] = [];
+  it: ReadonlyMap<string, Pick<CapitoloIt, 'revisione'>>,
+  en: ReadonlyMap<string, Pick<CapitoloEn, 'tradotto_da'>>,
+  cartella: 'capitoli' | 'pagine' = 'capitoli',
+): AvvisoTraduzione[] {
+  const avvisi: AvvisoTraduzione[] = [];
   for (const [id, originale] of it) {
     const traduzione = en.get(id);
     if (!traduzione) {
-      avvisi.push({ file: `contenuti/capitoli/it/${id}.md`, messaggio: `il Capitolo "${id}" manca in inglese: /en/ mostra l'italiano` });
+      if (cartella === 'capitoli') {
+        avvisi.push({ file: `contenuti/capitoli/it/${id}.md`, messaggio: `il Capitolo "${id}" manca in inglese: /en/ mostra l'italiano` });
+      }
     } else if (traduzione.tradotto_da < originale.revisione.data) {
       avvisi.push({
-        file: `contenuti/capitoli/en/${id}.md`,
+        file: `contenuti/${cartella}/en/${id}.md`,
         messaggio: `traduzione indietro: tradotta dalla revisione del ${giorno(traduzione.tradotto_da)}, l'italiano è stato rivisto il ${giorno(originale.revisione.data)}`,
       });
     }

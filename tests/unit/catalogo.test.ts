@@ -53,6 +53,14 @@ const sostituisci = (da: string, a: string) => (testo: string) => {
   return testo.replace(da, a);
 };
 
+const TESTO = 'w: If ye | love me, | _ keep my com- | mand- ments. |';
+
+/**
+ * Per le varianti che cambiano le Battute: la musica nuova al posto di MUSICA e il Testo con un "|" per Battuta, così
+ * la variante prova anche la regola "testo".
+ */
+const conMusica = (musica: string, testo: string) => (abc: string) => sostituisci(TESTO, testo)(sostituisci(MUSICA, musica)(abc));
+
 describe('catalogo', () => {
   it('dalla cartella valida produce la Lettura attesa', () => {
     const esito = catalogo(VALIDA, { capitoli: CAPITOLI });
@@ -127,19 +135,32 @@ describe('catalogo', () => {
     ['gruppi-irregolari', 'una terzina', ABC, sostituisci('A A G F', '(3AAG F2'), 'if-ye-love-me/soprano-1-4'],
     // Fa4 → Sol5 è una nona; l'estensione Fa4–Sol5 resta entro la decima.
     ['salti', "un salto più ampio di un'ottava", ABC, sostituisci('F3 F', 'F3 g'), 'if-ye-love-me/soprano-1-4'],
-    ['battute', 'meno di 4 Battute', ABC, sostituisci(' B2 A2 |]', ']'), 'if-ye-love-me/soprano-1-4'],
-    ['battute', 'più di 12 Battute', ABC, sostituisci('B2 A2 |]', 'B2 A2 |' + ' F4 |'.repeat(9) + ']'), 'if-ye-love-me/soprano-1-4'],
-    ['battute', "5 Battute nell'ABC, 4 in edizione.yml", ABC, sostituisci('B2 A2 |]', 'B2 A2 | F4 |]'), 'if-ye-love-me/soprano-1-4'],
-    ['battute', '3 Battute più il levare', ABC, sostituisci(MUSICA, 'F | F2 G A- | A A G F | B2 A |]'), 'if-ye-love-me/soprano-1-4'],
+    ['battute', 'meno di 4 Battute', ABC, conMusica('F3 F | G2 A2- | A A G F |]', 'w: If ye | love me, | _ keep my com- |'), 'if-ye-love-me/soprano-1-4'],
+    ['battute', 'più di 12 Battute', ABC, conMusica(MUSICA.replace(' |]', ' |' + ' F4 |'.repeat(9) + ']'), TESTO + ' * |'.repeat(9)), 'if-ye-love-me/soprano-1-4'],
+    ['battute', "5 Battute nell'ABC, 4 in edizione.yml", ABC, conMusica('F3 F | G2 A2- | A A G F | B2 A2 | F4 |]', TESTO + ' * |'), 'if-ye-love-me/soprano-1-4'],
+    ['battute', '3 Battute più il levare', ABC, conMusica('F | F2 G A- | A A G F | B2 A |]', 'w: If | ye love me, | _ keep my com- | mand- ments. |'), 'if-ye-love-me/soprano-1-4'],
     ['durata', "l'ultima Battuta incompleta senza levare", ABC, sostituisci('B2 A2', 'B2 A'), 'if-ye-love-me/soprano-1-4'],
     ['durata', 'una Battuta in mezzo troppo lunga', ABC, sostituisci('G2 A2-', 'G2 A3-'), 'if-ye-love-me/soprano-1-4'],
-    ['pause', 'una pausa di 3 Battute', ABC, sostituisci(MUSICA, 'F4 | z4 | z4 | z4 |]'), 'if-ye-love-me/soprano-1-4'],
-    ['pause', 'una pausa multipla di 3 Battute', ABC, sostituisci(MUSICA, 'F4 | Z3 |]'), 'if-ye-love-me/soprano-1-4'],
+    ['pause', 'una pausa di 3 Battute', ABC, conMusica('F4 | z4 | z4 | z4 |]', 'w: Love | | | |'), 'if-ye-love-me/soprano-1-4'],
+    ['pause', 'una pausa multipla di 3 Battute', ABC, conMusica('F4 | Z3 |]', 'w: Love | |'), 'if-ye-love-me/soprano-1-4'],
     ['armatura', '4 diesis in una Lettura', ABC, sostituisci('K:F major', 'K:E major'), 'if-ye-love-me/soprano-1-4'],
     // Fa4–Si♭5 è un'undicesima, raggiunta senza salti oltre l'ottava; Fa4–La5, la decima, è ancora ammessa.
     ['estensione', "un'estensione oltre la decima", ABC, sostituisci('B2 A2', 'f2 b2'), 'if-ye-love-me/soprano-1-4'],
+    // Ticket #30: l'a capo divide note, Testo e Sillabe per Battuta, quindi ogni riga w: ha un tratto per Battuta (src/letture/righe-w.ts).
+    ['testo', 'una riga w: senza un "|" per Battuta', ABC, sostituisci('w: If ye | love me,', 'w: If ye love me,'), 'if-ye-love-me/soprano-1-4'],
+    ['testo', 'una Battuta con un segno in più delle note', ABC, sostituisci('If ye |', 'If ye ye |'), 'if-ye-love-me/soprano-1-4'],
+    ['testo', 'una Battuta con un segno in meno delle note', ABC, sostituisci('| _ keep my com- |', '| keep my com- |'), 'if-ye-love-me/soprano-1-4'],
   ] as const)('controllo "%s": %s', (regola, _, file, cambia, lettura) => {
     expect(errori(variante(file, cambia))).toEqual([{ lettura, regola }]);
+  });
+
+  it('nelle righe w: ogni nota prende un segno, un "_" o un "*"; "~" unisce due frammenti di Testo e un "-" dopo uno spazio è una nota', () => {
+    const cartella = variante(ABC, sostituisci('w: If ye | love me, | _ keep my com- | mand- ments. |', 'w: If~ye ye | love me, | * keep com-mand- | - ments. |'));
+    expect(errori(cartella)).toEqual([]);
+  });
+
+  it('una Lettura senza Testo non ha righe w:', () => {
+    expect(errori(variante(ABC, (t) => t.replace(/^w:.*\n/m, '')))).toEqual([]);
   });
 
   it('la prova della licenza può essere licenza.pdf nella cartella', () => {
@@ -153,7 +174,7 @@ describe('catalogo', () => {
   });
 
   it("un levare con l'ultima Battuta che lo completa è ammesso, e non conta tra le 4 Battute", () => {
-    expect(errori(variante(ABC, sostituisci(MUSICA, 'F | F2 G A- | A A G F | B2 A2 | G A G |]')))).toEqual([]);
+    expect(errori(variante(ABC, conMusica('F | F2 G A- | A A G F | B2 A2 | G A G |]', 'w: If | ye love me, | _ keep my com- | mand- ments. | If ye love |')))).toEqual([]);
   });
 
   describe('Armatura nelle Letture avanzate', () => {
@@ -172,8 +193,12 @@ describe('catalogo', () => {
     });
   });
 
+  it('una pausa multipla di 2 Battute è ammessa: è una Battuta sola dell\'ABC, e nella riga w: ha un "|" solo', () => {
+    expect(errori(variante(ABC, conMusica('F4 | Z2 | B2 A2 |]', 'w: Love | | mand- ments. |')))).toEqual([]);
+  });
+
   it('una pausa di 2 Battute è ammessa', () => {
-    expect(errori(variante(ABC, sostituisci(MUSICA, 'F3 z | z4 | z3 A | B2 A2 |]')))).toEqual([]);
+    expect(errori(variante(ABC, conMusica('F3 z | z4 | z3 A | B2 A2 |]', 'w: If | | ye | love me. |')))).toEqual([]);
   });
 
   it("un'estensione di una decima esatta è ammessa", () => {
@@ -240,7 +265,7 @@ describe('catalogo', () => {
         sostituisci('    modificata:', '    mutazioni:\n      - { battuta: 0, posizione: 1, tonalita: C major }\n    modificata:'),
       );
       const abc = join(cartella, ABC);
-      writeFileSync(abc, readFileSync(abc, 'utf8').replace(MUSICA, 'F | F2 G A- | A A G F | B2 A2 | G A G |]'));
+      writeFileSync(abc, conMusica('F | F2 G A- | A A G F | B2 A2 | G A G |]', 'w: If | ye love me, | _ keep my com- | mand- ments. | If ye love |')(readFileSync(abc, 'utf8')));
       // Il Fa del levare è già in Do maggiore: FA.
       expect(lettura(cartella).sillabe[0]).toBe('FA');
     });

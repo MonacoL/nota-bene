@@ -2,25 +2,25 @@
 // con la Sillaba di ogni nota attaccata. Si disegna sempre, così il suo spazio è riservato; la nasconde il CSS.
 import type { Sillaba } from '../sillabe';
 import { leggiAbc } from './abc';
+import { eRigaW, rigaW } from './righe-w';
 
 /**
- * L'ABC della Lettura con la riga w: delle Sillabe dopo l'ultima riga di Testo. Le pause non prendono sillabe
- * nelle righe w:; le note legate alla precedente prendono "*" (nessuna sillaba). Un "|" per Battuta.
+ * L'ABC della Lettura con la riga w: delle Sillabe dopo l'ultima riga di Testo, nel formato di src/letture/righe-w.ts:
+ * un tratto per Battuta. Le pause non prendono segni; le note legate alla precedente prendono "*" (nessun segno).
  */
 export function conSoluzione(abc: string, sillabe: readonly Sillaba[]): string {
   const { note } = leggiAbc(abc);
-  const parti: string[] = [];
-  let battuta = note[0]?.battuta;
+  const perBattuta = new Map<number, string[]>();
   let i = 0;
   for (const n of note) {
-    if (n.battuta !== battuta) parti.push('|');
-    battuta = n.battuta;
+    const tratto = perBattuta.get(n.battuta) ?? [];
+    perBattuta.set(n.battuta, tratto);
     if (n.pausa) continue;
-    parti.push(n.legata ? '*' : (sillabe[i++] ?? '*'));
+    tratto.push(n.legata ? '*' : (sillabe[i++] ?? '*'));
   }
-  const riga = `w: ${parti.join(' ')} |`;
+  const riga = rigaW([...perBattuta.values()].map((tratto) => tratto.join(' ')));
   const righe = abc.trimEnd().split('\n');
-  const ultimaW = righe.findLastIndex((r) => r.startsWith('w:'));
+  const ultimaW = righe.findLastIndex(eRigaW);
   righe.splice(ultimaW < 0 ? righe.length : ultimaW + 1, 0, riga);
   return righe.join('\n') + '\n';
 }

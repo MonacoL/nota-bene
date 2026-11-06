@@ -6,6 +6,7 @@ import { basename, join } from 'node:path';
 import { stringify } from 'yaml';
 import { leggiAbc } from './abc';
 import { SEGNAPOSTO, type Lettura } from './catalogo';
+import { rigaW } from './righe-w';
 
 /** Lo scaricamento di un file, l'unica via verso la rete: lo script passa fetch, i test un finto. */
 export type Scarica = (url: string) => Promise<Uint8Array>;
@@ -121,15 +122,18 @@ export function estraiLettura(abc: string, taglio: Taglio): string {
   const levare = battute.length > 1 && intera.durate[0]! < intera.durataBattuta - 1e-9;
   const da = taglio.inizio - (levare ? 0 : 1);
   const scelte = battute.slice(da, taglio.fine + (levare ? 1 : 0));
-  // Ogni nota prende una sillaba del Testo, anche quella legata (con * o _); le pause no.
-  const sillabe = testo.join(' ').split(/\s+|(?<=[^\\]-)/).filter((t) => t && t !== '|');
+  // Ogni nota prende un segno del Testo, anche quella legata (con * o _); le pause no (src/letture/righe-w.ts).
+  const segni = testo.join(' ').split(/\s+|(?<=[^\\]-)/).filter((t) => t && t !== '|');
   const prima = battute.slice(0, da).reduce((n, b) => n + note(b), 0);
-  const scelto = sillabe.slice(prima, prima + scelte.reduce((n, b) => n + note(b), 0));
+  const scelto = segni.slice(prima, prima + scelte.reduce((n, b) => n + note(b), 0));
+  // Un tratto per Battuta, allineato alle note (ticket #30): l'a capo della Lettura divide il Testo per Battuta.
+  let usate = 0;
+  const perBattuta = scelte.map((b) => scelto.slice(usate, (usate += note(b))).join(' '));
   return [
     ...testata,
     `K:${k}${clef} % ${SEGNAPOSTO}: major o minor`,
     `${scelte.join(' | ')} |]`,
-    ...(scelto.some((t) => t !== '*' && t !== '_') ? [`w: ${scelto.join(' ')}`] : []),
+    ...(scelto.some((t) => t !== '*' && t !== '_') ? [rigaW(perBattuta)] : []),
     '',
   ].join('\n');
 }

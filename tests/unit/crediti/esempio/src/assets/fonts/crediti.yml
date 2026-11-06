@@ -1,0 +1,9 @@
+# Cartella d'esempio per i test dei crediti: un font con la sua licenza accanto.
+- nome: Font Finto
+  autori: Gli autori di Font Finto
+  licenza: SIL Open Font License 1.1
+  url: https://example.org/font-finto
+  file_licenza: font-finto-LICENSE.txt
+  nota:
+    it: ridotto a tre glifi
+    en: reduced to three glyphs

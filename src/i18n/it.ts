@@ -73,8 +73,6 @@ export const it = {
   avvisoNonTradotto: 'Questo capitolo non è ancora tradotto: lo trovi in italiano.',
   ingressoLetture: 'Quando conosci il DO mobile, metti alla prova la lettura a prima vista con estratti di brani corali veri.',
   vaiAlleLetture: 'Vai alle letture',
-  paginaInPreparazione: 'Pagina in preparazione.',
-  tornaAllaHome: 'Torna alla home',
   piePagina: {
     licenze:
       'Codice con licenza MIT. Testi con licenza CC BY-SA 4.0. Ogni lettura ha la licenza della sua edizione.',
@@ -115,6 +113,18 @@ export const it = {
     tutte: 'Tutte le voci',
     riga: '{autore}, {voce}, {battute} battute',
     nessuna: 'Nessuna lettura per questa voce.',
+  },
+  servizio: {
+    aggiornata: 'Ultimo aggiornamento: {data}.',
+    brani: 'Brani',
+    introBrani: 'I brani da cui vengono le letture, con la fonte e la licenza della loro edizione.',
+    nessunBrano: 'Ancora nessun brano.',
+    fonte: 'Fonte',
+    trascrizione: 'Trascrizioni in ABC',
+    asset: 'Asset di terzi',
+    introAsset: 'Font, librerie e strumenti di altri che Nota Bene usa, con la loro licenza.',
+    testoLicenza: 'testo della licenza',
+    revisioni: 'Revisione dei capitoli',
   },
   pagine: {
     privacy: 'Privacy',

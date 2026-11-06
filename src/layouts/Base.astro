@@ -4,6 +4,7 @@ import Segno from '../components/Segno.astro';
 import Scritta from '../components/Scritta.astro';
 import CambioLingua from '../components/CambioLingua.svelte';
 import { IN_COSTRUZIONE } from '../config';
+import { PAGINE_SERVIZIO } from '../contenuti/pagine';
 import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
 
 interface Props {
@@ -20,7 +21,6 @@ const voci = [
   { href: url(lingua, 'capitoli/'), testo: t.navCapitoli },
   { href: url(lingua, 'letture/'), testo: t.letture },
 ];
-const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'] as const;
 ---
 <!doctype html>
 <html lang={lingua}>
@@ -67,7 +67,7 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
       <div class="wrap">
         <nav aria-label={t.piePagina.paginaServizio}>
           <ul>
-            {pagineServizio.map((p) => <li><a href={url(lingua, `${p}/`)}>{t.pagine[p]}</a></li>)}
+            {PAGINE_SERVIZIO.map((p) => <li><a href={url(lingua, `${p}/`)}>{t.pagine[p]}</a></li>)}
           </ul>
         </nav>
         <p class="licenze">{t.piePagina.licenze}</p>

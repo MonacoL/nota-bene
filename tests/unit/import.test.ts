@@ -125,7 +125,7 @@ describe('estraiLettura', () => {
 
   it('conta il levare come Battuta 0, taglia il Testo con le note e senza Andamento nella Fonte non scrive il Q:', () => {
     expect(estraiLettura(CON_TESTO, { voce: 1, inizio: 2, fine: 4 })).toBe(
-      ['X:1', 'M:3/4', 'L:1/4', `K:F % ${SEGNAPOSTO}: major o minor`, 'B2 A- | A z F | E2 C |]', 'w: Al- le- * lu- ia and', ''].join('\n'),
+      ['X:1', 'M:3/4', 'L:1/4', `K:F % ${SEGNAPOSTO}: major o minor`, 'B2 A- | A z F | E2 C |]', 'w: Al- le- | * lu- | ia and |', ''].join('\n'),
     );
   });
 

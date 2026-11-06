@@ -74,8 +74,6 @@ export const en: Dizionario = {
   avvisoNonTradotto: 'This chapter has not been translated yet, so it is shown in Italian.',
   ingressoLetture: 'Once you know movable do, put your sight-singing to the test with excerpts from real choral pieces.',
   vaiAlleLetture: 'Go to the readings',
-  paginaInPreparazione: 'This page is being prepared.',
-  tornaAllaHome: 'Back to home',
   piePagina: {
     licenze:
       'Code under the MIT license. Text under CC BY-SA 4.0. Each reading carries the license of its edition.',
@@ -116,6 +114,18 @@ export const en: Dizionario = {
     tutte: 'All voice parts',
     riga: '{autore}, {voce}, {battute} measures',
     nessuna: 'No readings for this voice part.',
+  },
+  servizio: {
+    aggiornata: 'Last updated: {data}.',
+    brani: 'Pieces',
+    introBrani: 'The pieces the readings come from, with the source and license of their edition.',
+    nessunBrano: 'No pieces yet.',
+    fonte: 'Source',
+    trascrizione: 'ABC transcriptions',
+    asset: 'Third-party assets',
+    introAsset: 'Fonts, libraries and tools by others that Nota Bene uses, with their license.',
+    testoLicenza: 'license text',
+    revisioni: 'Chapter review',
   },
   pagine: {
     privacy: 'Privacy',
