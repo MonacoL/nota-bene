@@ -28,6 +28,16 @@ export function urlInAltraLingua(pathname: string, lingua: Lingua): string {
   return url(altraLingua(lingua), resto);
 }
 
+const LOCALI: Record<Lingua, string> = { it: 'it-IT', en: 'en-US' };
+
+/** Sostituisce i segnaposto {nome} di un modello dei dizionari. */
+export const riempi = (modello: string, valori: Record<string, string | number>) =>
+  modello.replace(/\{(\w+)\}/g, (_, k: string) => String(valori[k]));
+
+/** "6 novembre 2026" / "November 6, 2026". */
+export const dataEstesa = (data: Date, lingua: Lingua) =>
+  new Intl.DateTimeFormat(LOCALI[lingua], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(data);
+
 export function isLingua(valore: string | undefined): valore is Lingua {
   return (LINGUE as readonly string[]).includes(valore ?? '');
 }

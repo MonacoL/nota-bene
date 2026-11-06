@@ -107,6 +107,7 @@ export function assetDiTerzi(radice: string, opzioni: OpzioniAsset = {}): EsitoA
         continue;
       }
       for (const voce of letta.data) {
+        let dati: Pick<Asset, 'nome' | 'licenza' | 'fileLicenza'>;
         if ('pacchetto' in voce) {
           const cartellaPacchetto = join(pacchetti, voce.pacchetto);
           const manifesto = join(cartellaPacchetto, 'package.json');
@@ -119,29 +120,16 @@ export function assetDiTerzi(radice: string, opzioni: OpzioniAsset = {}): EsitoA
             errori.push(`${percorsoScheda}: il pacchetto "${voce.pacchetto}" non ha un file di licenza`);
           }
           if (!license) errori.push(`${percorsoScheda}: il pacchetto "${voce.pacchetto}" non dichiara la licenza nel package.json`);
-          asset.push({
-            nome: `${voce.pacchetto} ${version ?? ''}`.trim(),
-            autori: voce.autori,
-            licenza: license ?? '',
-            url: voce.url,
-            fileLicenza: [],
-            ...(voce.nota && { nota: voce.nota }),
-          });
+          dati = { nome: `${voce.pacchetto} ${version ?? ''}`.trim(), licenza: license ?? '', fileLicenza: [] };
         } else {
           const nomi = typeof voce.file_licenza === 'string' ? [voce.file_licenza] : voce.file_licenza;
           for (const n of nomi) {
             citati.add(n);
             if (!file.includes(n)) errori.push(`${percorsoScheda}: "${voce.nome}" cita ${n}, che non c'è nella cartella`);
           }
-          asset.push({
-            nome: voce.nome,
-            autori: voce.autori,
-            licenza: voce.licenza,
-            url: voce.url,
-            fileLicenza: nomi.map((n) => posix.join(cartella, n)),
-            ...(voce.nota && { nota: voce.nota }),
-          });
+          dati = { nome: voce.nome, licenza: voce.licenza, fileLicenza: nomi.map((n) => posix.join(cartella, n)) };
         }
+        asset.push({ ...dati, autori: voce.autori, url: voce.url, ...(voce.nota && { nota: voce.nota }) });
       }
     }
     for (const l of licenze) {
