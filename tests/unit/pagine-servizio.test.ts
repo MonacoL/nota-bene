@@ -1,6 +1,7 @@
 // Pagine di servizio (ADR-0006, ticket #14): quattro pagine in Markdown per lingua, senza ripiego sull'italiano.
 import { describe, expect, it } from 'vitest';
 import { controllaPagine } from '../../src/contenuti/pagine';
+import { avvisiTraduzione } from '../../src/contenuti/percorso';
 import { schemaPaginaEn, schemaPaginaIt } from '../../src/contenuti/schemi';
 
 describe('frontmatter delle pagine di servizio', () => {
@@ -23,7 +24,21 @@ describe('frontmatter delle pagine di servizio', () => {
   });
 });
 
-const TUTTE = ['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'];
+describe('avvisi di traduzione delle pagine di servizio', () => {
+  const it_ = (giorno: string) => ({ revisione: { da: 'L', data: new Date(giorno) } });
+  const en = (giorno: string) => ({ revisione: { da: 'L', data: new Date(giorno) }, tradotto_da: new Date(giorno) });
+
+  it("avvisa, come per i Capitoli, se l'italiano è stato rivisto dopo la traduzione", () => {
+    const avvisi = avvisiTraduzione(new Map([['privacy', it_('2026-11-10')]]), new Map([['privacy', en('2026-11-06')]]), 'pagine');
+    expect(avvisi).toEqual([{ file: 'contenuti/pagine/en/privacy.md', messaggio: expect.stringContaining('traduzione indietro') }]);
+  });
+
+  it("non avvisa di una pagina che manca in inglese: quella è un errore che blocca la build", () => {
+    expect(avvisiTraduzione(new Map([['privacy', it_('2026-11-06')]]), new Map(), 'pagine')).toEqual([]);
+  });
+});
+
+const TUTTE =['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'];
 
 describe('controllaPagine', () => {
   it('accetta le quattro pagine in tutte e due le lingue', () => {

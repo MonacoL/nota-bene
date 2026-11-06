@@ -5,20 +5,32 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { parse } from 'yaml';
 import { assetDiTerzi, braniDeiCrediti, type Asset, type BranoDeiCrediti } from '../crediti';
 import type { Lingua } from '../i18n';
-import { capitoli } from './capitoli';
+import { capitoli, stampaAvvisiTraduzione } from './capitoli';
 import { letture } from './letture';
 import { controllaPagine, type PaginaServizio } from './pagine';
+import { avvisiTraduzione } from './percorso';
 import { controllaRevisori, formulaRevisione } from './revisori';
 import { schemaRevisori } from './schemi';
 
 export type Pagina = CollectionEntry<'pagineIt'> | CollectionEntry<'pagineEn'>;
 
-/** Il file Markdown di una pagina di servizio in una lingua. La build si ferma se ne manca uno, in qualunque lingua. */
+let avvisiStampati = false;
+
+/**
+ * Il file Markdown di una pagina di servizio in una lingua. La build si ferma se ne manca uno, in qualunque lingua;
+ * una traduzione indietro rispetto alla revisione italiana dà solo un avviso, una volta per build (ADR-0006).
+ */
 export async function paginaServizio(lingua: Lingua, id: PaginaServizio): Promise<Pagina> {
   const it = await getCollection('pagineIt');
   const en = await getCollection('pagineEn');
   const errori = controllaPagine(it.map((p) => p.id), en.map((p) => p.id));
   if (errori.length) throw new Error(`Pagine di servizio non valide:\n${errori.join('\n')}`);
+  if (!avvisiStampati) {
+    avvisiStampati = true;
+    stampaAvvisiTraduzione(
+      avvisiTraduzione(new Map(it.map((p) => [p.id, p.data])), new Map(en.map((p) => [p.id, p.data])), 'pagine'),
+    );
+  }
   return (lingua === 'it' ? it : en).find((p) => p.id === id)!;
 }
 
