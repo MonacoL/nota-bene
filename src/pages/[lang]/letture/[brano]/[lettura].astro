@@ -9,6 +9,7 @@ import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli } from '../../../../contenuti/capitoli';
 import { letture } from '../../../../contenuti/letture';
 import { conSoluzione } from '../../../../letture/soluzione';
+import { righeW } from '../../../../letture/righe-w';
 import { VOCI, type Lettura as DatiLettura } from '../../../../letture/catalogo';
 import { successiva } from '../../../../letture/elenco';
 import { nomeTonalita, notaDelleModifiche, riempi } from '../../../../letture/testi';
@@ -39,7 +40,7 @@ const spiegazione = [
 
 const voce = tl.voci[lettura.voce];
 const sottotitolo = maiuscola(riempi(tl.sottotitolo, { voce, inizio: lettura.battute.inizio, fine: lettura.battute.fine }));
-const righeTesto = lettura.abc.split('\n').filter((r) => r.startsWith('w:')).length;
+const righeTesto = righeW(lettura.abc).length;
 const { attribuzione: a } = lettura;
 // La riga di attribuzione con l'Edizione come link alla pagina della Fonte.
 const [primaDellEdizione, dopoLEdizione] = riempi(tl.attribuzione, {

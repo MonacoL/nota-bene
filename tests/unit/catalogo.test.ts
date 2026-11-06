@@ -146,15 +146,15 @@ describe('catalogo', () => {
     ['armatura', '4 diesis in una Lettura', ABC, sostituisci('K:F major', 'K:E major'), 'if-ye-love-me/soprano-1-4'],
     // Fa4–Si♭5 è un'undicesima, raggiunta senza salti oltre l'ottava; Fa4–La5, la decima, è ancora ammessa.
     ['estensione', "un'estensione oltre la decima", ABC, sostituisci('B2 A2', 'f2 b2'), 'if-ye-love-me/soprano-1-4'],
-    // Ticket #30: l'a capo divide note, Testo e Sillabe per Battuta, quindi ogni riga w: ha un "|" per Battuta.
+    // Ticket #30: l'a capo divide note, Testo e Sillabe per Battuta, quindi ogni riga w: ha un tratto per Battuta (src/letture/righe-w.ts).
     ['testo', 'una riga w: senza un "|" per Battuta', ABC, sostituisci('w: If ye | love me,', 'w: If ye love me,'), 'if-ye-love-me/soprano-1-4'],
-    ['testo', 'una Battuta con una sillaba in più delle note', ABC, sostituisci('If ye |', 'If ye ye |'), 'if-ye-love-me/soprano-1-4'],
-    ['testo', 'una Battuta con una sillaba in meno delle note', ABC, sostituisci('| _ keep my com- |', '| keep my com- |'), 'if-ye-love-me/soprano-1-4'],
+    ['testo', 'una Battuta con un segno in più delle note', ABC, sostituisci('If ye |', 'If ye ye |'), 'if-ye-love-me/soprano-1-4'],
+    ['testo', 'una Battuta con un segno in meno delle note', ABC, sostituisci('| _ keep my com- |', '| keep my com- |'), 'if-ye-love-me/soprano-1-4'],
   ] as const)('controllo "%s": %s', (regola, _, file, cambia, lettura) => {
     expect(errori(variante(file, cambia))).toEqual([{ lettura, regola }]);
   });
 
-  it('nelle righe w: ogni nota prende una sillaba, un "_" o un "*"; "~" unisce due parole e un "-" dopo uno spazio è una nota', () => {
+  it('nelle righe w: ogni nota prende un segno, un "_" o un "*"; "~" unisce due frammenti di Testo e un "-" dopo uno spazio è una nota', () => {
     const cartella = variante(ABC, sostituisci('w: If ye | love me, | _ keep my com- | mand- ments. |', 'w: If~ye ye | love me, | * keep com-mand- | - ments. |'));
     expect(errori(cartella)).toEqual([]);
   });

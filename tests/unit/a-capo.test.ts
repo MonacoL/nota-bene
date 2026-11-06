@@ -74,18 +74,18 @@ describe('inRighi', () => {
 });
 
 describe('siToccano', () => {
-  // Le scatole delle sillabe disegnate, in px: due sillabe della stessa riga si toccano se tra loro restano meno di 4 px.
-  const sillaba = (sinistra: number, destra: number, alto = 100) => ({ sinistra, destra, alto });
+  // Le scatole dei segni disegnati, in px: due segni della stessa riga si toccano se tra loro restano meno di 4 px.
+  const segno = (sinistra: number, destra: number, alto = 100) => ({ sinistra, destra, alto });
 
-  it('due sillabe vicine con lo spazio giusto non si toccano', () => {
-    expect(siToccano([sillaba(0, 20), sillaba(24, 40), sillaba(50, 60)])).toBe(false);
+  it('due segni vicini con lo spazio giusto non si toccano', () => {
+    expect(siToccano([segno(0, 20), segno(24, 40), segno(50, 60)])).toBe(false);
   });
 
-  it('due sillabe vicine troppo strette si toccano, anche in disordine', () => {
-    expect(siToccano([sillaba(50, 60), sillaba(0, 20), sillaba(22, 40)])).toBe(true);
+  it('due segni vicini troppo stretti si toccano, anche in disordine', () => {
+    expect(siToccano([segno(50, 60), segno(0, 20), segno(22, 40)])).toBe(true);
   });
 
-  it('Testo e Soluzione sono righe diverse: una sillaba sotto l’altra non la tocca', () => {
-    expect(siToccano([sillaba(0, 20, 100), sillaba(0, 20, 120)])).toBe(false);
+  it('Testo e Soluzione sono righe diverse: un segno sotto l’altro non lo tocca', () => {
+    expect(siToccano([segno(0, 20, 100), segno(0, 20, 120)])).toBe(false);
   });
 });
