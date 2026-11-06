@@ -5,7 +5,9 @@
   // successivi: per ora i pulsanti ci sono ma sono disattivati. Lettura successiva è un link (ticket #32)
   // che tiene il filtro ?voce= con cui si è arrivati.
   // La riga delle Sillabe si disegna sempre e il CSS la nasconde: mostrare la Soluzione non sposta niente.
-  import { renderAbc } from 'abcjs';
+  // L'a capo (ticket #30) mette in ogni rigo quante più Battute possibile senza che le sillabe si tocchino, e si
+  // rifà a ogni cambio di larghezza, anche per lo zoom del browser: src/scripts/a-capo.ts.
+  import { disegnaACapo } from '../../scripts/a-capo';
   import type { Dizionario } from '../../i18n/it';
 
   interface Props {
@@ -38,17 +40,7 @@
     const larghezza = Math.floor(lettura.clientWidth);
     if (!larghezza || partitura.dataset.larghezza === String(larghezza)) return;
     partitura.dataset.larghezza = String(larghezza);
-    renderAbc(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), {
-      add_classes: true,
-      scale: SCALA,
-      // In abcjs 6.7.2 staffwidth è già in px di uscita: scale rimpicciolisce solo i simboli (prototipo #8).
-      staffwidth: larghezza,
-      paddingleft: 0,
-      paddingright: 0,
-      paddingtop: 0,
-      paddingbottom: 0,
-      wrap: { minSpacing: 1.8, maxSpacing: 2.7, preferredMeasuresPerLine: 4 },
-    });
+    disegnaACapo(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), { larghezza, scala: SCALA });
     // abcjs mette le righe w: della stessa nota in un <text>, un <tspan> per riga, anche vuoto: la Sillaba è
     // il tspan dopo quelli del Testo. Le note legate hanno lì solo uno spazio e restano senza marca.
     for (const nota of partitura.querySelectorAll('.abcjs-lyric')) {
@@ -59,9 +51,19 @@
 
   $effect(() => {
     disegna();
+    // Le sillabe si misurano con il font del sito: quando arriva si rifà l'a capo.
+    let attivo = true;
+    document.fonts.ready.then(() => {
+      if (!attivo) return;
+      delete partitura.dataset.larghezza;
+      disegna();
+    });
     const osservatore = new ResizeObserver(disegna);
     osservatore.observe(lettura);
-    return () => osservatore.disconnect();
+    return () => {
+      attivo = false;
+      osservatore.disconnect();
+    };
   });
 </script>
 
