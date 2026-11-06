@@ -33,7 +33,7 @@
       <button type="button" aria-pressed={lettera === l} onclick={() => (lettera = l)}>{t.note[l]}</button>
     {/each}
   </div>
-  <div class="riga fondo">
+  <div class="riga invio">
     <button type="button" class="verifica" disabled={!lettera} onclick={() => lettera && onrisposta({ lettera, alterazione })}>
       {t.verifica}
     </button>
@@ -45,7 +45,7 @@
   .riga { display: grid; gap: 6px; }
   .alterazioni { grid-template-columns: repeat(3, 1fr); }
   .nomi { grid-template-columns: repeat(7, 1fr); }
-  .fondo { display: flex; justify-content: flex-end; }
+  .invio { display: flex; justify-content: flex-end; }
   button {
     min-height: 48px; min-width: 0; padding: 0 2px; border-radius: var(--radius);
     border: 1px solid var(--line); background: var(--surface); color: var(--ink);

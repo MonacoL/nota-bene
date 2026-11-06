@@ -28,16 +28,29 @@
   let n = $state(0);
   let giuste = $state(0);
   let riscontro = $state<Riscontro | undefined>();
+  /**
+   * Col dito tastierino e foglio stanno fissi in basso, nella zona del pollice; col mouse stanno nella pagina,
+   * sotto il pentagramma. La stessa media query è nello stile di .fondo.
+   */
+  const MOUSE = '(hover: hover) and (pointer: fine)';
+  let conMouse = $state(window.matchMedia(MOUSE).matches);
+  $effect(() => {
+    const query = window.matchMedia(MOUSE);
+    const aggiorna = () => (conMouse = query.matches);
+    query.addEventListener('change', aggiorna);
+    return () => query.removeEventListener('change', aggiorna);
+  });
+
   /** Altezza del fondo fisso (tastierino o foglio): il body la riserva in fondo, così non copre la fine della pagina. */
   let altezzaFondo = $state(0);
   $effect(() => {
-    document.body.style.paddingBottom = esercizio ? `${altezzaFondo}px` : '';
+    document.body.style.paddingBottom = esercizio && !conMouse ? `${altezzaFondo}px` : '';
   });
   let cartaEsercizio = $state<HTMLDivElement>();
 
   // Il fondo fisso non deve coprire il pentagramma, neanche a 320 px: se lo copre, si scorre quanto basta.
   $effect(() => {
-    if (!cartaEsercizio || !altezzaFondo) return;
+    if (!cartaEsercizio || !altezzaFondo || conMouse) return;
     void riscontro;
     const sotto = cartaEsercizio.getBoundingClientRect().bottom - (window.innerHeight - altezzaFondo - 8);
     if (sotto > 0) window.scrollBy(0, sotto);
@@ -99,7 +112,7 @@
     </div>
 
     <div class="fondo" bind:clientHeight={altezzaFondo}>
-      <div class="wrap">
+      <div class="wrap contenuto">
         {#if riscontro}
           <Foglio {t} {lingua} {riscontro} onavanti={avanti} />
         {:else}
@@ -138,6 +151,10 @@
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
     padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
     background: var(--bg); border-top: 1px solid var(--line); box-shadow: 0 -6px 16px rgb(0 0 0 / 0.08);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .fondo { position: static; margin-top: 16px; padding: 0; background: none; border: none; box-shadow: none; }
+    .contenuto { padding: 0; }
   }
   .riepilogo { padding: 16px 0; }
   .punteggio { font-size: 1.3rem; font-weight: 700; }

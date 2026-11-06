@@ -99,3 +99,23 @@ test('dagli Esercizi si va al Capitolo successivo', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/esercizi/`);
   await expect(page.getByRole('link', { name: 'Capitolo successivo →' }).first()).toHaveAttribute('href', `/nota-bene/it/capitoli/${SECONDO}/`);
 });
+
+test('col dito il tastierino è fisso in basso; col mouse sta nella pagina, sotto il pentagramma', async ({ page }, info) => {
+  await page.goto(`it/capitoli/${PRIMO}/esercizi/?seed=1`);
+  const pentagramma = page.locator('.esercizio');
+  const tastierino = page.getByRole('group', { name: 'Risposta' });
+  await expect(tastierino).toBeVisible();
+  const tocco = await page.evaluate(() => !matchMedia('(hover: hover) and (pointer: fine)').matches);
+  const posizione = await page.locator('.fondo').evaluate((e) => getComputedStyle(e).position);
+  if (tocco) {
+    expect(posizione, info.project.name).toBe('fixed');
+  } else {
+    expect(posizione, info.project.name).not.toBe('fixed');
+    const [sotto, sopra] = await Promise.all([pentagramma.boundingBox(), tastierino.boundingBox()]);
+    expect(sopra!.y).toBeGreaterThan(sotto!.y + sotto!.height);
+    // Il foglio di riscontro prende il posto del tastierino, sempre nella pagina.
+    await rispondi(page, { lettera: 'C', alterazione: 0 });
+    expect(await page.locator('.fondo').evaluate((e) => getComputedStyle(e).position)).not.toBe('fixed');
+    expect(await page.evaluate(() => document.body.style.paddingBottom)).toBe('');
+  }
+});
