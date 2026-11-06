@@ -1,0 +1,25 @@
+# Edizione CPDL (ADR-0003), creata da nuova-edizione. Il sorgente Hornsey_Wesley_SS.mxl è copiato così com'era il giorno dell'import.
+# Il file è dell'Edizione #42027 di James Gibb (CPDL License), non della #15417 di Fowler sulla stessa pagina.
+brano: On the Resurrection Morning
+autore: Samuel Sebastian Wesley
+fonte: cpdl
+edizione: "#42027"
+url: https://www.cpdl.org/wiki/index.php/On_the_resurrection_morning_(Samuel_Sebastian_Wesley)
+editore: James Gibb
+licenza:
+  tipo: CPDL License
+  come_appare: CPDL
+  url: https://www.cpdl.org/wiki/index.php/ChoralWiki:CPDL
+  consultata: 2026-11-06
+  prova: https://web.archive.org/web/20230922175703/http://cpdl.org/wiki/index.php/On_the_resurrection_morning_(Samuel_Sebastian_Wesley)
+sorgente:
+  file: Hornsey_Wesley_SS.mxl
+  sha256: 81db620cb0971c73fa48a1d66c1648a575da44c35c6e91d4b2ac3bb64ec6ea97
+letture:
+  # Da Hornsey_Wesley_SS.mxl con nuova-lettura (V:1). Il Testo nel MusicXML non è legato alle note: la Lettura è senza Testo.
+  - id: soprano-1-8
+    voce: soprano
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-06

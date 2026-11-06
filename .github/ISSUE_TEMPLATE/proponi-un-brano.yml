@@ -1,0 +1,41 @@
+# Per chi non usa git (ticket #34, #15): propone un brano, e l'import lo fa chi ha la repo seguendo docs/letture.md.
+name: Proponi un brano
+description: Suggerisci un brano corale da cui ricavare una o più letture.
+title: "Brano: "
+labels: [needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie! Basta il link all'edizione: gli altri campi sono facoltativi.
+        Le letture vengono solo da brani pubblicati su [CPDL](https://www.cpdl.org) o [Mutopia](https://www.mutopiaproject.org), con una licenza libera. La licenza la controlliamo noi durante l'import.
+  - type: input
+    id: edizione
+    attributes:
+      label: Link all'edizione
+      description: La pagina del brano su CPDL o Mutopia.
+      placeholder: https://www.cpdl.org/wiki/index.php/...
+    validations:
+      required: true
+  - type: dropdown
+    id: voce
+    attributes:
+      label: Voce
+      options: [Soprano, Contralto, Tenore, Basso, Non so]
+    validations:
+      required: false
+  - type: input
+    id: battute
+    attributes:
+      label: Battute
+      description: Da quale a quale battuta, se hai in mente un passaggio preciso (da 4 a 12 battute).
+      placeholder: 5–12
+    validations:
+      required: false
+  - type: textarea
+    id: motivo
+    attributes:
+      label: Perché questo brano
+      description: Che cosa lo rende adatto per esercitarsi, ed eventualmente la tua esperienza nel cantarlo con il coro.
+    validations:
+      required: false

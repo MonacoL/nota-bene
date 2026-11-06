@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { testi } from '../../src/i18n';
-import { catalogo, type Lettura, type Opzioni } from '../../src/letture/catalogo';
+import { catalogo, SEGNAPOSTO, type Lettura, type Opzioni } from '../../src/letture/catalogo';
 import { notaDelleModifiche } from '../../src/letture/testi';
 
 const VALIDA = 'tests/unit/letture/valida';
@@ -259,6 +259,30 @@ describe('catalogo', () => {
     it('senza motivo è un errore di schema', () => {
       const cartella = variante(EDIZIONE, sostituisci('    modificata:', "    da_verificare: ''\n    modificata:"));
       expect(errori(cartella)).toEqual([{ lettura: 'if-ye-love-me', regola: 'schema' }]);
+    });
+  });
+
+  // Ticket "Flusso di import" (#34): nuova-lettura lascia da compilare Modo, Mutazioni e Prerequisiti, e la CI
+  // fallisce con la regola segnaposto finché qualcuno non li decide. Nessun altro errore copre il segnaposto.
+  describe('segnaposto lasciati da nuova-edizione e nuova-lettura', () => {
+    const LETTURA = 'if-ye-love-me/soprano-1-4';
+
+    it.each([
+      ['il Modo nel K:', ABC, sostituisci('K:F major', `K:F % ${SEGNAPOSTO}: major o minor`)],
+      ['i Prerequisiti', EDIZIONE, sostituisci('prerequisiti: [do-mobile]', `prerequisiti: [${SEGNAPOSTO}]`)],
+      ['le Mutazioni', EDIZIONE, sostituisci('    modificata:', `    mutazioni: ${SEGNAPOSTO}\n    modificata:`)],
+    ])('%s', (_, file, cambia) => {
+      expect(errori(variante(file, cambia))).toEqual([{ lettura: LETTURA, regola: 'segnaposto' }]);
+    });
+
+    it("nei campi dell'Edizione lasciati da nuova-edizione: uno per campo, senza errori di schema", () => {
+      const cartella = variante(EDIZIONE, (t) =>
+        t.replace(/  url: https:\/\/creativecommons.*/, `  url: ${SEGNAPOSTO}`).replace(/prova: .*/, `prova: ${SEGNAPOSTO}`),
+      );
+      expect(errori(cartella)).toEqual([
+        { lettura: 'if-ye-love-me', regola: 'segnaposto' },
+        { lettura: 'if-ye-love-me', regola: 'segnaposto' },
+      ]);
     });
   });
 

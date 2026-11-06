@@ -71,6 +71,48 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+  # Ticket #34: per ogni Lettura nuova o modificata nella PR uno screenshot a 360 px con la Soluzione visibile.
+  # Qui il token è in sola lettura (anche per le PR da fork): il commento sulla PR lo scrive commenta-anteprime.yml.
+  anteprime:
+    name: Anteprime delle Letture
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --user 1001
+    steps:
+      # Il checkout di una PR è il merge con la base: HEAD^1 è la base, e il confronto mostra solo la PR.
+      - uses: actions/checkout@v7
+        with: { fetch-depth: 2 }
+      - run: npm ci
+      - id: toccate
+        run: |
+          {
+            echo 'letture<<FINE'
+            npm run -s letture-toccate -- HEAD^1
+            echo FINE
+          } >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v8
+        if: steps.toccate.outputs.letture != ''
+        with: { name: sito, path: dist/ }
+      - if: steps.toccate.outputs.letture != ''
+        env:
+          ANTEPRIMA_LETTURE: ${{ steps.toccate.outputs.letture }}
+        run: npx playwright test --config playwright.anteprima.config.ts
+      - if: steps.toccate.outputs.letture != ''
+        uses: actions/upload-artifact@v7
+        with: { name: anteprime, path: anteprime/, if-no-files-found: error, retention-days: 30 }
+      # Il numero della PR e l'elenco, per commenta-anteprime.yml: sulle PR da fork workflow_run non li dà.
+      - if: steps.toccate.outputs.letture != ''
+        env:
+          LETTURE: ${{ steps.toccate.outputs.letture }}
+          PR: ${{ github.event.pull_request.number }}
+        run: mkdir -p pr && echo "$PR" > pr/numero && printf '%s\n' "$LETTURE" > pr/letture
+      - if: steps.toccate.outputs.letture != ''
+        uses: actions/upload-artifact@v7
+        with: { name: anteprime-pr, path: pr/, if-no-files-found: error, retention-days: 30 }
+
   deploy:
     name: Deploy su Pages
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

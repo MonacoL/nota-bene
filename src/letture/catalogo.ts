@@ -17,15 +17,17 @@ const FONTI = { mutopia: 'Mutopia', cpdl: 'CPDL' } as const;
 /** Le licenze accettate (ricerca "Formati e licenze di CPDL e Mutopia", #3): niente NC, ND né "Personal". */
 export const LICENZE = ['PD', 'CC BY', 'CC BY-SA', 'CPDL License'] as const;
 const CC0 = { nome: 'CC0 1.0', url: 'https://creativecommons.org/publicdomain/zero/1.0/' };
+/** Ciò che nuova-lettura lascia da decidere (Modo, Mutazioni, Prerequisiti): la CI fallisce finché c'è. */
+export const SEGNAPOSTO = 'DA COMPILARE';
 
 const schemaLettura = z
   .object({
     id: z.string(),
     voce: z.enum(VOCI),
     battute: z.tuple([z.number().int().positive(), z.number().int().positive()]),
-    prerequisiti: z.array(z.string()).nonempty(),
+    prerequisiti: z.union([z.tuple([z.literal(SEGNAPOSTO)]), z.array(z.string()).nonempty()]),
     /** ADR-0004: battuta di origine, posizione della nota nella Battuta e nuova Tonalità, per esempio "C major". */
-    mutazioni: z
+    mutazioni: z.literal(SEGNAPOSTO).or(z
       .array(
         z
           .object({
@@ -39,7 +41,7 @@ const schemaLettura = z
             }),
           })
           .strict(),
-      )
+      ))
       .default([]),
     modificata: z.coerce.date(),
     stato: z.enum(['pubblicata', 'ritirata']).default('pubblicata'),
@@ -143,7 +145,16 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
   const brani = readdirSync(cartella, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
   for (const brano of brani) {
     const erroriEdizione = (regola: string, messaggio: string) => errori.push({ lettura: brano, regola, messaggio });
-    const letta = schemaEdizione.safeParse(parse(readFileSync(join(cartella, brano, 'edizione.yml'), 'utf8')));
+    const grezza: unknown = parse(readFileSync(join(cartella, brano, 'edizione.yml'), 'utf8'));
+    // I campi dell'Edizione che nuova-edizione lascia da compilare: si dicono tutti, prima dello schema.
+    const { letture: _, ...campi } = (grezza ?? {}) as Record<string, unknown>;
+    const daCompilare = segnaposto(campi);
+    if (daCompilare.length) {
+      for (const campo of daCompilare) erroriEdizione('segnaposto', `edizione.yml, ${campo} è ancora da compilare (${SEGNAPOSTO})`);
+      illeggibili.push(brano);
+      continue;
+    }
+    const letta = schemaEdizione.safeParse(grezza);
     if (!letta.success) {
       for (const p of letta.error.issues) erroriEdizione('schema', `edizione.yml, ${p.path.join('.') || 'radice'}: ${p.message}`);
       illeggibili.push(brano);
@@ -190,7 +201,12 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       }
       const atteso = `${l.voce}-${l.battute[0]}-${l.battute[1]}`;
       if (l.id !== atteso) erroreLettura('id', `l'id deve essere <voce>-<inizio>-<fine>, cioè "${atteso}"`);
-      for (const p of l.prerequisiti) {
+      const daCompilare = (cosa: string) => erroreLettura('segnaposto', `${cosa} è ancora da compilare (${SEGNAPOSTO})`);
+      if (l.prerequisiti[0] === SEGNAPOSTO) daCompilare('prerequisiti in edizione.yml');
+      if (l.mutazioni === SEGNAPOSTO) daCompilare('mutazioni in edizione.yml');
+      const mutazioni = l.mutazioni === SEGNAPOSTO ? [] : l.mutazioni;
+      const prerequisiti = l.prerequisiti[0] === SEGNAPOSTO ? [] : l.prerequisiti;
+      for (const p of prerequisiti) {
         if (!opzioni.capitoli.includes(p)) erroreLettura('prerequisiti', `il Prerequisito "${p}" non è un Capitolo del Percorso`);
       }
       const file = join(cartella, brano, `${l.id}.abc`);
@@ -218,7 +234,7 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       else if (numero !== dichiarate) {
         erroreLettura('battute', `l'ABC ha ${numero} Battute, levare escluso, ma edizione.yml ne dichiara ${dichiarate} (${l.battute[0]}–${l.battute[1]})`);
       }
-      const avanzata = l.prerequisiti.includes('do-mobile-avanzato');
+      const avanzata = prerequisiti.includes('do-mobile-avanzato');
       const massimo = avanzata ? 4 : 3;
       if (letto.armatura > massimo) {
         erroreLettura('armatura', `${letto.armatura} alterazioni in Armatura: al massimo ${massimo} ${avanzata ? 'in una Lettura avanzata' : 'in una Lettura'}`);
@@ -237,17 +253,21 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       if (letto.cambiaTonalita) {
         erroreLettura('mutazioni', "niente cambi [K:] nell'ABC: una Mutazione si annota in edizione.yml, con Battuta, posizione e nuova Tonalità");
       }
-      for (const m of l.mutazioni) {
+      for (const m of mutazioni) {
         if (!letto.note.some((n) => !n.pausa && origine(n.battuta) === m.battuta && n.posizione === m.posizione)) {
           erroreLettura('mutazioni', `la Mutazione in battuta ${m.battuta}, nota ${m.posizione}, non cade su una nota dell'estratto`);
         }
       }
       const tonalita = letto.tonalita;
+      if (new RegExp(`^K:.*${SEGNAPOSTO}`, 'm').test(abc)) {
+        daCompilare('il Modo nel K:');
+        continue;
+      }
       if (!tonalita) {
         erroreLettura('tonalita', 'il K: deve dire il Modo per esteso, per esempio "K:F major" o "K:D minor"');
         continue;
       }
-      const nellEstratto = l.mutazioni.map((m) => ({ ...m, battuta: m.battuta - scarto }));
+      const nellEstratto = mutazioni.map((m) => ({ ...m, battuta: m.battuta - scarto }));
       const esiti = calcolaSillabe(letto.note, tonalita, nellEstratto);
       esiti.forEach((e, i) => {
         if (e.tipo !== 'errore') return;
@@ -265,8 +285,8 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
         testo: letto.testo,
         sillabe,
         tonalita: tonalitaIniziale(letto.note, tonalita, nellEstratto),
-        mutazioni: l.mutazioni,
-        prerequisiti: l.prerequisiti,
+        mutazioni: mutazioni,
+        prerequisiti: prerequisiti,
         blocco: avanzata ? 'avanzata' : 'normale',
         attribuzione: {
           fonte: FONTI[edizione.fonte],
@@ -289,6 +309,15 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
     ),
   );
   return errori.length ? { ok: false, errori } : { ok: true, letture };
+}
+
+/** I percorsi dei campi che valgono SEGNAPOSTO, come "licenza.url". */
+function segnaposto(valore: unknown, percorso = ''): string[] {
+  if (valore === SEGNAPOSTO) return [percorso];
+  if (valore && typeof valore === 'object') {
+    return Object.entries(valore).flatMap(([k, v]) => segnaposto(v, percorso ? `${percorso}.${k}` : k));
+  }
+  return [];
 }
 
 const uguali = (a: number, b: number) => Math.abs(a - b) < 1e-9;
