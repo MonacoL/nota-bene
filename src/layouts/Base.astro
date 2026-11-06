@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Segno from '../components/Segno.astro';
+import Scritta from '../components/Scritta.astro';
 import CambioLingua from '../components/CambioLingua.svelte';
 import { IN_COSTRUZIONE } from '../config';
 import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
@@ -32,7 +33,7 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
     {IN_COSTRUZIONE && <p class="costruzione" role="note">{t.inCostruzione}</p>}
     <header class="top">
       <div class="wrap">
-        <a class="marchio" href={url(lingua)}><Segno /><span class="nome">{t.nomeSito}</span></a>
+        <a class="marchio" href={url(lingua)}><Segno /><Scritta /></a>
         <nav class="nav" aria-label={t.navPrincipale}>
           <a href={url(lingua, 'letture/')}>{t.letture}</a>
         </nav>
@@ -72,8 +73,8 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
     display: flex; align-items: center; gap: 8px; min-height: 48px;
     color: var(--ink); text-decoration: none;
   }
-  .nome { font-weight: 700; font-size: 1.2rem; letter-spacing: 0.01em; white-space: nowrap; }
   .nav { margin-left: auto; }
+  @media (max-width: 359px) { .top .wrap { column-gap: 2px; } .marchio { gap: 6px; } }
   .nav a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font-weight: 700; }
   .piede { border-top: 1px solid var(--line); font-size: 0.9rem; color: var(--muted); padding: 16px 0 24px; }
   .piede ul { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 0 16px; }

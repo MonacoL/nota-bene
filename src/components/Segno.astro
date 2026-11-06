@@ -1,10 +1,16 @@
 ---
-// Il segno di Nota Bene (ADR-0009): testa di nota inclinata con gambo, nel colore d'accento.
+// Il segno di Nota Bene (ADR-0009): due crome legate, una per parola.
+// La prima ha il colore di "Nota" (inchiostro), la seconda quello di "Bene" (accento).
 ---
-<svg class="segno" width="22" height="28" viewBox="0 0 22 28" aria-hidden="true" focusable="false">
-  <ellipse cx="9" cy="21" rx="7.2" ry="5" transform="rotate(-22 9 21)" fill="var(--accent)"></ellipse>
-  <rect x="14.6" y="2" width="2.6" height="19" rx="1.3" fill="var(--accent)"></rect>
+<svg class="segno" width="34" height="30" viewBox="0 0 34 30" aria-hidden="true" focusable="false">
+  <path d="M10.2 4.5 L29.6 1.2 L29.6 6.4 L10.2 9.7 Z" fill="var(--ink)"></path>
+  <rect x="8.4" y="5" width="2.4" height="18" rx="1.2" fill="var(--ink)"></rect>
+  <ellipse cx="5.6" cy="23.2" rx="5.6" ry="4" transform="rotate(-22 5.6 23.2)" fill="var(--ink)"></ellipse>
+  <rect x="27.8" y="2" width="2.4" height="17.5" rx="1.2" fill="var(--accent)"></rect>
+  <ellipse cx="25" cy="19.8" rx="5.6" ry="4" transform="rotate(-22 25 19.8)" fill="var(--accent)"></ellipse>
 </svg>
 <style>
   .segno { display: block; flex: none; }
+  /* Sui telefoni più stretti l'intestazione deve restare su una riga. */
+  @media (max-width: 359px) { .segno { width: 28px; height: 25px; } }
 </style>

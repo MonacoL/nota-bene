@@ -1,0 +1,10 @@
+---
+// "Nota Bene" in due colori: Nota in inchiostro, Bene nel colore d'accento, come le due crome del segno.
+---
+<span class="scritta"><span class="nota">Nota</span> <span class="bene">Bene</span></span>
+<style>
+  .scritta { font-weight: 700; font-size: 1.2rem; letter-spacing: 0.01em; white-space: nowrap; }
+  @media (max-width: 359px) { .scritta { font-size: 1.05rem; } }
+  .nota { color: var(--ink); }
+  .bene { color: var(--accent); }
+</style>
