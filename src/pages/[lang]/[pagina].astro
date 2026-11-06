@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import { LINGUE, testi, url, type Lingua } from '../../i18n';
+import { PROVVISORIE, type Provvisoria } from '../../pagine-provvisorie';
+
+export function getStaticPaths() {
+  return LINGUE.flatMap((lang) => PROVVISORIE.map((pagina) => ({ params: { lang, pagina } })));
+}
+
+const lingua = Astro.params.lang as Lingua;
+const pagina = Astro.params.pagina as Provvisoria;
+const t = testi(lingua);
+---
+<Base lingua={lingua} titolo={t.pagine[pagina]}>
+  <h1>{t.pagine[pagina]}</h1>
+  <p class="muted">{t.paginaInPreparazione}</p>
+  <p><a href={url(lingua)}>{t.tornaAllaHome}</a></p>
+</Base>

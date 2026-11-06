@@ -1,0 +1,18 @@
+---
+// La radice porta sempre a /it/, senza leggere né salvare la lingua del browser (ADR-0006).
+const destinazione = `${import.meta.env.BASE_URL}it/`;
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Nota Bene</title>
+    <meta http-equiv="refresh" content={`0; url=${destinazione}`} />
+    <link rel="canonical" href={destinazione} />
+  </head>
+  <body>
+    <p><a href={destinazione}>Nota Bene</a></p>
+  </body>
+</html>
