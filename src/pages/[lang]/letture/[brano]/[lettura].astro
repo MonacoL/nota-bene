@@ -1,0 +1,90 @@
+---
+// La pagina di una Lettura, una per lingua: /<lingua>/letture/<brano>/<voce>-<inizio>-<fine>/ (ADR-0003).
+// Le Sillabe sono già calcolate dal catalogo alla build (ADR-0004); qui si aggiungono alla partitura come riga w:.
+import Base from '../../../../layouts/Base.astro';
+import Lettura from '../../../../components/lettura/Lettura.svelte';
+import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
+import { capitoli } from '../../../../contenuti/capitoli';
+import { letture } from '../../../../contenuti/letture';
+import { conSoluzione } from '../../../../letture/soluzione';
+import type { Lettura as DatiLettura } from '../../../../letture/catalogo';
+import type { Tonalita } from '../../../../sillabe';
+
+export async function getStaticPaths() {
+  const pubblicate = (await letture()).filter((l) => l.stato === 'pubblicata');
+  return LINGUE.flatMap((lang) =>
+    pubblicate.map((lettura) => {
+      const [brano, id] = lettura.id.split('/');
+      return { params: { lang, brano, lettura: id }, props: { lettura } };
+    }),
+  );
+}
+
+interface Props {
+  lettura: DatiLettura;
+}
+const { lettura } = Astro.props;
+const lingua = Astro.params.lang as Lingua;
+const t = testi(lingua);
+const tl = t.lettura;
+const riempi = (modello: string, valori: Record<string, string | number>) =>
+  modello.replace(/\{(\w+)\}/g, (_, k: string) => String(valori[k]));
+const maiuscola = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const ALTERAZIONI = { '-1': '♭', '0': '', '1': '♯' } as const;
+const nomeTonalita = ({ tonica, modo }: Tonalita) =>
+  `${t.serie.note[tonica.lettera]}${ALTERAZIONI[tonica.alterazione]} ${tl.modi[modo]}`;
+const spiegazione = [
+  riempi(tl.tonalita, { tonalita: nomeTonalita(lettura.tonalita) }),
+  ...lettura.mutazioni.map((m) => riempi(tl.mutazione, { battuta: m.battuta, tonalita: nomeTonalita(m.tonalita) })),
+];
+
+const voce = tl.voci[lettura.voce];
+const sottotitolo = maiuscola(riempi(tl.sottotitolo, { voce, inizio: lettura.battute.inizio, fine: lettura.battute.fine }));
+const righeTesto = lettura.abc.split('\n').filter((r) => r.startsWith('w:')).length;
+const { attribuzione: a } = lettura;
+// La riga di attribuzione con l'Edizione come link alla pagina della Fonte.
+const [primaDellEdizione, dopoLEdizione] = riempi(tl.attribuzione, {
+  brano: lettura.brano, autore: lettura.autore, fonte: a.fonte, edizione: '\u0000', licenza: a.licenza.nome,
+}).split('\u0000');
+const titoliCapitoli = new Map((await capitoli(lingua)).map((c) => [c.id, c.titolo]));
+---
+<Base lingua={lingua} titolo={`${lettura.brano}, ${voce}`}>
+  <h1>{lettura.brano}</h1>
+  <p class="sottotitolo">{sottotitolo}</p>
+
+  <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} t={tl} />
+
+  <footer class="attribuzione">
+    <p>
+      {primaDellEdizione}<a href={a.url} rel="external">{a.edizione}</a>{dopoLEdizione}
+      {a.trascrizione && <> {riempi(tl.trascrizione, { licenza: a.trascrizione.nome })}</>}
+    </p>
+    <details>
+      <summary>{tl.dettagli}</summary>
+      <dl>
+        <dt>{tl.editore}</dt>
+        <dd>{a.editore}</dd>
+        <dt>{tl.prerequisiti}</dt>
+        <dd>
+          {lettura.prerequisiti.map((id, i) => (
+            <>{i > 0 && ', '}<a href={url(lingua, `capitoli/${id}/`)}>{titoliCapitoli.get(id)}</a></>
+          ))}
+        </dd>
+        <dt>{tl.licenza}</dt>
+        <dd><a href={a.licenza.url} rel="external license">{a.licenza.nome}</a>{a.trascrizione && <>; <a href={a.trascrizione.url} rel="external license">{a.trascrizione.nome}</a></>}</dd>
+      </dl>
+    </details>
+  </footer>
+</Base>
+
+<style>
+  h1 { margin-bottom: 0.1em; }
+  .sottotitolo { margin-top: 0; color: var(--muted); font-weight: 700; }
+  .attribuzione { margin-top: 1.5em; padding-top: 1em; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.94rem; }
+  .attribuzione a { color: inherit; }
+  details summary { min-height: 48px; display: flex; align-items: center; cursor: pointer; color: var(--ink); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 1em; }
+  dt { font-weight: 700; }
+  dd { margin: 0; }
+</style>

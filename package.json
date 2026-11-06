@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "valida:letture": "tsx scripts/valida-letture.ts",
     "test:unit": "vitest run",
     "test:e2e": "npm run build && scripts/playwright-docker.sh",
     "test:update": "npm run build && scripts/playwright-docker.sh --update-snapshots=changed"
@@ -23,6 +24,7 @@
     "@astrojs/check": "0.9.12",
     "@playwright/test": "1.65.0",
     "@types/node": "24.19.2",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
     "vitest": "5.1.0",
     "yaml": "2.9.1"

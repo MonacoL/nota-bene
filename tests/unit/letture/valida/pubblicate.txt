@@ -1,0 +1,2 @@
+# Registro delle Letture pubblicate (ADR-0003): gli id si aggiungono e non si tolgono mai.
+if-ye-love-me/soprano-1-4

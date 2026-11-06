@@ -1,7 +1,7 @@
 // Screenshot di confronto nei due temi (ADR-0009), sulle configurazioni scelte in playwright.config.ts.
 import { expect, test } from '@playwright/test';
 import { genera } from '../../src/esercizi';
-import { CAPITOLI, LINGUE } from './pagine';
+import { CAPITOLI, LETTURE, LINGUE } from './pagine';
 import { telefono } from './menu';
 
 /** Un seed il cui primo Esercizio è un Sol♭3 in chiave di violino ottava bassa: mostra l'8 e un'alterazione. */
@@ -88,4 +88,24 @@ for (const tema of ['light', 'dark'] as const) {
     await page.mouse.move(-1, -1);
     await expect(page).toHaveScreenshot(`esercizi-intervalli-it-${tema}.png`);
   });
+}
+
+// La prima Lettura vera, con e senza Soluzione, a pagina intera: la barra dei comandi sul telefono resta in basso.
+for (const soluzione of [false, true]) {
+  for (const lingua of LINGUE) {
+    for (const tema of ['light', 'dark'] as const) {
+      const nome = `lettura${soluzione ? '-soluzione' : ''}-${lingua}-${tema}`;
+      test(`${nome}`, async ({ page }, info) => {
+        const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
+        test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
+        await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+        await page.goto(`${lingua}/letture/${LETTURE[0]}/`);
+        await page.evaluate(() => document.fonts.ready);
+        await expect(page.locator('.partitura svg')).toHaveCount(1);
+        if (soluzione) await page.locator('.comandi button[aria-pressed]').click();
+        await page.mouse.move(-1, -1);
+        await expect(page).toHaveScreenshot(`${nome}.png`, { fullPage: true });
+      });
+    }
+  }
 }
