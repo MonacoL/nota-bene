@@ -1,0 +1,3 @@
+# Registro delle Letture pubblicate (ADR-0003): un id per riga.
+# Gli id si aggiungono e non si tolgono mai, nemmeno quando una Lettura viene ritirata.
+if-ye-love-me/soprano-1-7

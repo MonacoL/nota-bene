@@ -1,0 +1,22 @@
+brano: If Ye Love Me
+autore: Thomas Tallis
+fonte: mutopia
+edizione: Mutopia-2014/08/05-412
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=412
+editore: Stan Sanderson
+licenza:
+  tipo: PD
+  come_appare: Public Domain
+  url: https://creativecommons.org/licenses/publicdomain/
+  consultata: 2026-11-06
+  prova: https://web.archive.org/web/2026/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=412
+trascrizioni: CC0
+sorgente:
+  file: sorgente.ly
+  sha256: a9f72522c6ed00abfde6b906af73975f2e75045fb3f9d8f0e13491c90510b574
+letture:
+  - id: soprano-1-4
+    voce: soprano
+    battute: [1, 4]
+    prerequisiti: [do-mobile]
+    modificata: 2026-11-06

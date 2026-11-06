@@ -1,4 +1,4 @@
-# Controllo dei tipi → build → Playwright nell'immagine ufficiale → deploy su Pages (ADR-0006).
+# Controllo dei tipi → validazione del catalogo delle Letture → build → test → deploy su Pages (ADR-0006, ADR-0003).
 # Il deploy parte solo da un push su main, e solo se tutti i job prima sono passati.
 name: CI
 
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   check:
-    name: Tipi e test unitari
+    name: Tipi, catalogo e test unitari
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -24,6 +24,13 @@ jobs:
         with: { node-version-file: .node-version, cache: npm }
       - run: npm ci
       - run: npm run check
+      # Il registro delle Letture si confronta con quello di prima: la base della PR, o il commit prima del push.
+      - name: Validazione del catalogo delle Letture
+        env:
+          PRECEDENTE: ${{ github.event_name == 'pull_request' && github.base_ref || github.event.before }}
+        run: |
+          git fetch --depth=1 origin "$PRECEDENTE"
+          npm run valida:letture -- FETCH_HEAD
       - run: npm run test:unit
 
   build:

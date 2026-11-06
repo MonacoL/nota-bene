@@ -1,0 +1,26 @@
+# Edizione Mutopia di "If Ye Love Me" (ADR-0003). Il sorgente tallis-love.ly è copiato così com'era il giorno dell'import.
+brano: If Ye Love Me
+autore: Thomas Tallis
+fonte: mutopia
+edizione: Mutopia-2014/08/05-412
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=412
+editore: Stan Sanderson
+licenza:
+  tipo: PD
+  come_appare: Public Domain
+  url: https://creativecommons.org/licenses/publicdomain/
+  consultata: 2026-11-06
+  prova: https://web.archive.org/web/20250927063652/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=412
+# ADR-0005: le nostre trascrizioni ABC di un'Edizione di pubblico dominio sono CC0.
+trascrizioni: CC0
+sorgente:
+  file: tallis-love.ly
+  sha256: 97b09684c79737fee5c84e4b59b872f9f5871873aa73dba0449bd5a7bf422eee
+letture:
+  # Trascritta a mano dal .ly (sopMusic). Le legature di portamento su note uguali del sorgente
+  # (battute 2–3 e 6–7) sono scritte come legature di valore: si tiene la nota, senza riattaccarla.
+  - id: soprano-1-7
+    voce: soprano
+    battute: [1, 7]
+    prerequisiti: [do-mobile]
+    modificata: 2026-11-06

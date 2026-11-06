@@ -10,9 +10,16 @@ export const CAPITOLI: string[] = (parse(readFileSync('contenuti/percorso.yml', 
   .sort((a, b) => a.numero - b.numero)
   .map((v) => v.id);
 
+/** Gli id delle Letture del registro (ADR-0003), cioè `<brano>/<voce>-<inizio>-<fine>`. */
+export const LETTURE: string[] = readFileSync('letture/pubblicate.txt', 'utf8')
+  .split('\n')
+  .map((r) => r.trim())
+  .filter((r) => r && !r.startsWith('#'));
+
 export const PAGINE = LINGUE.flatMap((l) => [
   `${l}/`,
   `${l}/capitoli/`,
   ...PROVVISORIE.map((p) => `${l}/${p}/`),
   ...CAPITOLI.flatMap((c) => [`${l}/capitoli/${c}/`, `${l}/capitoli/${c}/esercizi/`]),
+  ...LETTURE.map((id) => `${l}/letture/${id}/`),
 ]);
