@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { LINGUE, testi, type Lingua } from '../../i18n';
+import { LINGUE, testi, url, type Lingua } from '../../i18n';
+import { capitoli } from '../../contenuti/capitoli';
 
 export function getStaticPaths() {
   return LINGUE.map((lang) => ({ params: { lang } }));
@@ -8,8 +9,47 @@ export function getStaticPaths() {
 
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
+const percorso = await capitoli(lingua);
 ---
 <Base lingua={lingua}>
+  <p class="intro">{t.descrizioneSito}</p>
+
   <h1>{t.percorso}</h1>
-  <p class="muted">{t.percorsoInPreparazione}</p>
+  <ol class="percorso">
+    {percorso.map((c) => (
+      <li>
+        <span class="numero" aria-hidden="true">{c.numero}</span>
+        <div>
+          <h2><a href={url(lingua, `capitoli/${c.id}/`)}>{c.titolo}</a></h2>
+          <p class="riga">{c.riga}</p>
+          <a class="esercizi" href={url(lingua, `capitoli/${c.id}/esercizi/`)} aria-label={t.eserciziDi.replace('{titolo}', c.titolo)}>{t.esercizi}</a>
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <section class="letture" aria-labelledby="titolo-letture">
+    <h2 id="titolo-letture">{t.letture}</h2>
+    <p>{t.ingressoLetture}</p>
+    <p><a class="pulsante" href={url(lingua, 'letture/')}>{t.vaiAlleLetture}</a></p>
+  </section>
 </Base>
+
+<style>
+  .intro { margin: 1.2em 0 0; color: var(--muted); }
+  .percorso { list-style: none; margin: 0; padding: 0; }
+  .percorso li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .percorso li:last-child { border-bottom: 0; }
+  .numero {
+    flex: none; width: 2em; height: 2em; margin-top: 0.1em; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 1px solid var(--line); font-weight: 700; color: var(--muted);
+  }
+  .percorso h2 { margin: 0.15em 0 0.2em; font-size: 1.1rem; }
+  .percorso h2 a { color: var(--ink); text-decoration: none; }
+  .percorso h2 a:hover { text-decoration: underline; }
+  .riga { margin: 0; color: var(--muted); }
+  .esercizi { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; }
+  .letture { margin-top: 1.5em; padding: 4px 16px 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .letture h2 { margin-top: 0.8em; }
+</style>

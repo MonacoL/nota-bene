@@ -1,0 +1,71 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../../layouts/Base.astro';
+import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
+import { capitoli, vicini, type Capitolo } from '../../../../contenuti/capitoli';
+
+export async function getStaticPaths() {
+  const pagine = [];
+  for (const lang of LINGUE) {
+    const percorso = await capitoli(lang);
+    for (const capitolo of percorso) {
+      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, ...vicini(percorso, capitolo.id) } });
+    }
+  }
+  return pagine;
+}
+
+interface Props {
+  capitolo: Capitolo;
+  precedente?: Capitolo;
+  successivo?: Capitolo;
+}
+const { capitolo, precedente, successivo } = Astro.props;
+const lingua = Astro.params.lang as Lingua;
+const t = testi(lingua);
+const testo = capitolo.testo;
+const Contenuto = testo ? (await render(testo.voce)).Content : undefined;
+const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
+---
+<Base lingua={lingua} titolo={capitolo.titolo}>
+  <p class="numero">{t.capitolo} {capitolo.numero}</p>
+  <h1>{capitolo.titolo}</h1>
+
+  {testo?.ripiego && <p class="avviso" role="note">{t.avvisoNonTradotto}</p>}
+
+  {Contenuto
+    ? <article class="testo" lang={testo!.ripiego ? testo!.lingua : undefined}><Contenuto /></article>
+    : <p class="muted">{t.capitoloInPreparazione}</p>}
+
+  <nav class="seguito" aria-label={t.navCapitoli}>
+    <p class="azioni">
+      <a class="pulsante" href={url(lingua, `capitoli/${capitolo.id}/esercizi/`)}>{t.esercizi}</a>
+      {capitolo.provaLetture === 'letture' && <a class="pulsante secondario" href={url(lingua, 'letture/')}>{t.provaLetture}</a>}
+      {capitolo.provaLetture === 'avanzate' && <a class="pulsante secondario" href={url(lingua, 'letture/#avanzate')}>{t.provaLettureAvanzate}</a>}
+    </p>
+    <p class="vicini">
+      {precedente && <a rel="prev" href={capitoloUrl(precedente.id)}>{t.capitoloPrecedente}</a>}
+      {successivo && <a rel="next" href={capitoloUrl(successivo.id)}>{t.capitoloSuccessivo}</a>}
+    </p>
+  </nav>
+</Base>
+
+<script>
+  import '../../../../scripts/pentagrammi';
+</script>
+
+<style>
+  .numero { margin: 1.4em 0 0; color: var(--muted); font-weight: 700; }
+  h1 { margin-top: 0.15em; }
+  .avviso {
+    padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .testo :global(.pentagramma) { margin: 0.5em 0 1.2em; color: var(--ink); }
+  .testo :global(.pentagramma svg) { display: block; max-width: 100%; height: auto; }
+  .seguito { margin-top: 2em; padding-top: 1em; border-top: 1px solid var(--line); }
+  .azioni { display: flex; flex-wrap: wrap; gap: 12px; }
+  .vicini { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; }
+  .vicini a { display: inline-flex; align-items: center; min-height: 48px; }
+  .vicini a[rel='next'] { margin-left: auto; }
+</style>
