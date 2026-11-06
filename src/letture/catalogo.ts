@@ -328,8 +328,10 @@ const uguali = (a: number, b: number) => Math.abs(a - b) < 1e-9;
  * Battuta una sillaba (o un "_" o un "*") per nota, pause escluse. Le Battute qui contano da 1, come nell'ABC.
  */
 function testoNonAllineato(abc: string, note: readonly NotaScritta[]): string[] {
-  const quante = note.at(-1)?.battuta ?? 0;
-  const perBattuta = Array.from({ length: quante }, (_, i) => note.filter((n) => n.battuta === i + 1 && !n.pausa).length);
+  // Le Battute dell'ABC, cioè i tratti tra due stanghette: una pausa multipla (Z2) ne è una sola anche se dura di più.
+  const battute = [...new Set(note.map((n) => n.battuta))];
+  const quante = battute.length;
+  const perBattuta = battute.map((b) => note.filter((n) => n.battuta === b && !n.pausa).length);
   const problemi: string[] = [];
   const righe = abc.split('\n').filter((r) => r.startsWith('w:'));
   righe.forEach((riga, r) => {
