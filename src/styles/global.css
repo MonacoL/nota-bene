@@ -13,7 +13,9 @@
   font-display: swap;
   src: url('../assets/fonts/atkinson-hyperlegible-next-latin-700-normal.woff2') format('woff2');
 }
-/* ♭ ♮ ♯: Atkinson non li ha. Noto Music ridotto a tre glifi, ingrandito perché non vengano minuscoli. */
+/* ♭ ♮ ♯: Atkinson non li ha. Noto Music ridotto a tre glifi, ingrandito perché non vengano minuscoli.
+   In --font va dopo Atkinson: Safari su iOS prende le misure della riga dal primo font della lista, e con
+   questo in testa il testo scende di qualche pixel (tests/unit/font.test.ts). */
 @font-face {
   font-family: 'Alterazioni';
   font-display: swap;
@@ -24,7 +26,7 @@
 
 :root {
   color-scheme: light dark;
-  --font: 'Alterazioni', 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --font: 'Atkinson Hyperlegible Next', 'Alterazioni', system-ui, sans-serif;
   --radius: 12px;
 
   --bg: #faf7f0;

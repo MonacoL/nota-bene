@@ -22,7 +22,7 @@ const sbagliata = (n: Nota) => ({ lettera: n.lettera === 'C' ? 'D' : 'C', altera
 
 test('una Serie completa di "Nomina la nota", fino al riepilogo e a una nuova Serie', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/esercizi/?seed=100`);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Esercizi: Note, toni e semitoni');
+  await expect(page).toHaveTitle(/^Esercizi: Note, toni e semitoni \//);
   await expect(page.getByRole('tablist')).toHaveCount(0);
   const foglio = page.getByRole('region', { name: 'Riscontro' });
 
@@ -47,6 +47,9 @@ test('una Serie completa di "Nomina la nota", fino al riepilogo e a una nuova Se
   }
 
   await expect(page.getByText('5 su 10 giuste al primo colpo')).toBeVisible();
+  // Nel riepilogo la pagina torna normale, anche col dito.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Esercizi: Note, toni e semitoni');
+  await expect(page.locator('footer.piede')).toBeVisible();
   const riepilogo = page.getByRole('region', { name: '5 su 10 giuste al primo colpo' });
   await expect(riepilogo.getByRole('link', { name: 'Capitolo successivo →' })).toHaveAttribute('href', `/nota-bene/it/capitoli/${SECONDO}/`);
   await page.getByRole('button', { name: 'Altri 10 esercizi' }).click();
@@ -95,7 +98,56 @@ test('in inglese i pulsanti hanno i nomi C D E F G A B', async ({ page }) => {
   await expect(tastierino.getByRole('button', { name: 'Check' })).toBeVisible();
 });
 
-test('dagli Esercizi si va al Capitolo successivo', async ({ page }) => {
+test('dagli Esercizi si va al capitolo successivo e si torna al capitolo', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/esercizi/`);
-  await expect(page.getByRole('link', { name: 'Capitolo successivo →' }).first()).toHaveAttribute('href', `/nota-bene/it/capitoli/${SECONDO}/`);
+  // Col dito, durante la Serie, il link al successivo è nascosto e torna nel riepilogo.
+  await expect(page.locator('nav.seguito a[rel="next"]')).toHaveAttribute('href', `/nota-bene/it/capitoli/${SECONDO}/`);
+  // Col mouse il link per tornare sta sopra il titolo; col dito nella riga dell'avanzamento.
+  await page.getByRole('link', { name: /Torna al capitolo/ }).click();
+  await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
+});
+
+test('col dito la Serie sta in una schermata, senza scorrere; col mouse tastierino e foglio stanno sotto il pentagramma', async ({ page }, info) => {
+  await page.goto(`it/capitoli/${PRIMO}/esercizi/?seed=1`);
+  const pentagramma = page.locator('.esercizio .pentagramma svg');
+  const tastierino = page.getByRole('group', { name: 'Risposta' });
+  await expect(pentagramma).toBeVisible();
+  const tocco = await page.evaluate(() => !matchMedia('(hover: hover) and (pointer: fine)').matches);
+
+  if (tocco) {
+    const nellaSchermata = async (cosa: string) => {
+      const { scorre, scorreSerie, altezza } = await page.evaluate(() => {
+        const main = document.querySelector('main')!;
+        return {
+          scorre: document.documentElement.scrollHeight - window.innerHeight,
+          scorreSerie: main.scrollHeight - main.clientHeight,
+          altezza: window.innerHeight,
+        };
+      });
+      expect(scorre, `${info.project.name}: la pagina scorre (${cosa})`).toBeLessThanOrEqual(0);
+      expect(scorreSerie, `${info.project.name}: la Serie scorre (${cosa})`).toBeLessThanOrEqual(0);
+      for (const elemento of [pentagramma, page.locator('.avanzamento'), page.locator('header.top')]) {
+        const box = (await elemento.boundingBox())!;
+        expect(box.y, cosa).toBeGreaterThanOrEqual(0);
+        expect(box.y + box.height, cosa).toBeLessThanOrEqual(altezza);
+      }
+    };
+    await expect(page.locator('footer.piede')).toBeHidden();
+    await expect(page.getByRole('heading', { level: 1 })).toBeHidden();
+    const box = (await tastierino.boundingBox())!;
+    expect(box.y + box.height).toBeLessThanOrEqual(await page.evaluate(() => window.innerHeight));
+    await nellaSchermata('tastierino');
+    await rispondi(page, { lettera: 'C', alterazione: 0 });
+    await expect(page.getByRole('region', { name: 'Riscontro' })).toBeInViewport({ ratio: 1 });
+    await nellaSchermata('foglio');
+    // Dalla riga in alto si torna al capitolo.
+    await expect(page.getByRole('link', { name: 'Torna al capitolo' })).toBeVisible();
+  } else {
+    const [sotto, sopra] = await Promise.all([page.locator('.esercizio').boundingBox(), tastierino.boundingBox()]);
+    expect(sopra!.y).toBeGreaterThan(sotto!.y + sotto!.height);
+    await rispondi(page, { lettera: 'C', alterazione: 0 });
+    const foglio = await page.getByRole('region', { name: 'Riscontro' }).boundingBox();
+    expect(foglio!.y).toBeGreaterThan(sotto!.y + sotto!.height);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  }
 });

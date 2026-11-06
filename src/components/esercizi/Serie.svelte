@@ -15,8 +15,10 @@
     t: Dizionario['serie'];
     dichiarazioni: DichiarazioneEsercizio[];
     successivo?: { href: string; etichetta: string };
+    /** Il link al capitolo, che col dito sta nella riga dell'avanzamento al posto di quello della pagina. */
+    capitolo: { href: string; etichetta: string };
   }
-  let { lingua, t, dichiarazioni, successivo }: Props = $props();
+  let { lingua, t, dichiarazioni, successivo, capitolo }: Props = $props();
 
   const LUNGHEZZA = 10;
   const seed = new URLSearchParams(window.location.search).get('seed');
@@ -28,19 +30,11 @@
   let n = $state(0);
   let giuste = $state(0);
   let riscontro = $state<Riscontro | undefined>();
-  /** Altezza del fondo fisso (tastierino o foglio): il body la riserva in fondo, così non copre la fine della pagina. */
-  let altezzaFondo = $state(0);
+  // Durante la Serie <html> ha data-serie (lo mette già la pagina, prima del primo disegno): col dito la pagina
+  // è alta quanto lo schermo e non scorre (regole nella pagina degli Esercizi). Nel riepilogo torna normale.
   $effect(() => {
-    document.body.style.paddingBottom = esercizio ? `${altezzaFondo}px` : '';
-  });
-  let cartaEsercizio = $state<HTMLDivElement>();
-
-  // Il fondo fisso non deve coprire il pentagramma, neanche a 320 px: se lo copre, si scorre quanto basta.
-  $effect(() => {
-    if (!cartaEsercizio || !altezzaFondo) return;
-    void riscontro;
-    const sotto = cartaEsercizio.getBoundingClientRect().bottom - (window.innerHeight - altezzaFondo - 8);
-    if (sotto > 0) window.scrollBy(0, sotto);
+    document.documentElement.toggleAttribute('data-serie', !!esercizio);
+    return () => document.documentElement.removeAttribute('data-serie');
   });
 
   const dichiarazione = $derived(dichiarazioni[scheda]!);
@@ -87,27 +81,26 @@
   {#if esercizio}
     {@const numero = n + 1}
     <div class="avanzamento">
+      <a class="torna" href={capitolo.href} aria-label={capitolo.etichetta}>←</a>
       <span id="avanzamento">{t.avanzamento.replace('{n}', String(numero))}</span>
       <div class="barra" role="progressbar" aria-labelledby="avanzamento" aria-valuemin="1" aria-valuemax={LUNGHEZZA} aria-valuenow={numero}>
         <div style:width="{(numero / LUNGHEZZA) * 100}%"></div>
       </div>
     </div>
 
-    <div class="esercizio" bind:this={cartaEsercizio}>
+    <div class="esercizio" class:risposto={riscontro}>
       <p class="domanda">{t.domande[esercizio.tipo]}</p>
       <Pentagramma abc={esercizio.abc} />
     </div>
 
-    <div class="fondo" bind:clientHeight={altezzaFondo}>
-      <div class="wrap">
-        {#if riscontro}
-          <Foglio {t} {lingua} {riscontro} onavanti={avanti} />
-        {:else}
-          {#key `${serieIniziate}-${n}`}
-            <TastierinoNota {t} onrisposta={rispondi} />
-          {/key}
-        {/if}
-      </div>
+    <div class="fondo">
+      {#if riscontro}
+        <Foglio {t} {lingua} {riscontro} onavanti={avanti} />
+      {:else}
+        {#key `${serieIniziate}-${n}`}
+          <TastierinoNota {t} onrisposta={rispondi} />
+        {/key}
+      {/if}
     </div>
   {:else}
     <section class="riepilogo" aria-labelledby="riepilogo">
@@ -134,10 +127,23 @@
     padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
   }
   .domanda { font-weight: 700; font-size: 1.15rem; margin: 0 0 12px; }
-  .fondo {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-    padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-    background: var(--bg); border-top: 1px solid var(--line); box-shadow: 0 -6px 16px rgb(0 0 0 / 0.08);
+  /* Il foglio di riscontro prende il posto del tastierino: dopo l'errore la soluzione compare subito, senza "Riprova". */
+  .fondo { margin-top: 16px; }
+  .torna { display: none; }
+  /*
+   * Col dito, durante la Serie, tutto sta nello schermo: riquadro in alto, tastierino o foglio in fondo, nella zona
+   * del pollice. Dopo la risposta la domanda si nasconde, così sui telefoni piccoli resta posto per il pentagramma.
+   */
+  @media not ((hover: hover) and (pointer: fine)) {
+    :global(html[data-serie]) .serie { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    :global(html[data-serie]) .esercizio { flex: 0 1 auto; min-height: 0; overflow: hidden; }
+    :global(html[data-serie]) .esercizio.risposto .domanda { display: none; }
+    :global(html[data-serie]) .fondo { margin-top: auto; padding-top: 12px; padding-bottom: env(safe-area-inset-bottom); }
+    :global(html[data-serie]) .avanzamento { margin-bottom: 8px; }
+    :global(html[data-serie]) .torna {
+      display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px;
+      margin-left: -12px; font-size: 1.4rem; text-decoration: none;
+    }
   }
   .riepilogo { padding: 16px 0; }
   .punteggio { font-size: 1.3rem; font-weight: 700; }
