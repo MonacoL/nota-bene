@@ -15,7 +15,7 @@ The site uses no cookies and saves nothing in your browser: no `localStorage` an
 
 ## What GitHub logs
 
-The site is hosted on GitHub Pages. When you open a page, GitHub logs your IP address for security purposes, as it does for every GitHub Pages site. GitHub handles this data as an independent controller: whoever runs Nota Bene does not see these logs and does not decide how they are used. The details are in the [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+The site is hosted on GitHub Pages. When you open a page, GitHub logs your IP address for security purposes, as it does for every GitHub Pages site. GitHub handles this data as an independent controller. The details are in the [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
 ## Fonts, libraries and sounds
 

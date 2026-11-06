@@ -18,6 +18,6 @@ Oggi il sito non raccoglie dati, non usa cookie né storage nel browser e non ca
 
 ## Testi, AI e revisione umana
 
-I testi dei Capitoli e delle pagine di servizio partono da una bozza di Claude e li rivede una persona, che ne è responsabile (pagina "Uso dell'intelligenza artificiale"). Ogni file in `contenuti/` ha nel frontmatter `revisione: { da, data }` con chi l'ha rivisto e quando; un file inglese ha anche `tradotto_da` (ADR-0006).
+I testi dei Capitoli e delle pagine di servizio partono da una bozza di Claude e li rivede una persona, che ne è responsabile (pagina "Uso dell'intelligenza artificiale"). Ogni file Markdown in `contenuti/` ha nel frontmatter `revisione: { da, data }` con chi l'ha rivisto e quando; un file inglese ha anche `tradotto_da` (ADR-0006).
 
 **Regola: l'AI non rimette mano a un testo dopo la revisione umana.** Quando `revisione.da` nomina una persona, il testo si corregge solo a mano, e chi lo corregge aggiorna `revisione`. Una bozza non ancora rivista ha `da: "nessuno, …"` e l'AI può ancora lavorarci. La CI non controlla le modifiche dopo la data di revisione: la regola si rispetta in revisione della pull request.

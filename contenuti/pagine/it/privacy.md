@@ -14,7 +14,7 @@ Il sito non usa cookie e non salva niente nel browser: niente `localStorage` e n
 
 ## Che cosa registra GitHub
 
-Il sito è ospitato da GitHub Pages. Quando apri una pagina, GitHub registra il tuo indirizzo IP per motivi di sicurezza, come per qualunque sito di GitHub Pages. GitHub tratta questi dati come titolare autonomo: chi gestisce Nota Bene non vede questi registri e non decide come si usano. I dettagli sono nel [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+Il sito è ospitato da GitHub Pages. Quando apri una pagina, GitHub registra il tuo indirizzo IP per motivi di sicurezza, come per qualunque sito di GitHub Pages. GitHub tratta questi dati come titolare autonomo. I dettagli sono nel [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
 ## Font, librerie e suoni
 
