@@ -15,6 +15,11 @@ const t = testi(lingua);
 const tAltra = testi(altraLingua(lingua));
 const titoloPagina = titolo ? `${titolo} / ${t.nomeSito}` : t.nomeSito;
 const base = import.meta.env.BASE_URL;
+// Le voci del menu: link nell'intestazione da 440 px in su, pulsante con le lineette sotto (ticket "Home introduttiva con menu verso Capitoli e Letture").
+const voci = [
+  { href: url(lingua, 'capitoli/'), testo: t.navCapitoli },
+  { href: url(lingua, 'letture/'), testo: t.letture },
+];
 const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'] as const;
 ---
 <!doctype html>
@@ -35,7 +40,7 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
       <div class="wrap">
         <a class="marchio" href={url(lingua)}><Segno /><Scritta /></a>
         <nav class="nav" aria-label={t.navPrincipale}>
-          <a href={url(lingua, 'letture/')}>{t.letture}</a>
+          {voci.map((v) => <a href={v.href}>{v.testo}</a>)}
         </nav>
         <CambioLingua
           client:load
@@ -44,6 +49,15 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
           etichetta={t.cambiaLingua}
           nomeAltraLingua={tAltra.lingua}
         />
+        <details class="menu">
+          <summary aria-label={t.menu} title={t.menu}>
+            <svg class="apri" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+            <svg class="chiudi" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg>
+          </summary>
+          <nav aria-label={t.navPrincipale}>
+            {voci.map((v) => <a href={v.href}>{v.testo}</a>)}
+          </nav>
+        </details>
       </div>
     </header>
     <main id="contenuto" class="wrap">
@@ -59,6 +73,18 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
         <p class="licenze">{t.piePagina.licenze}</p>
       </div>
     </footer>
+    <script>
+      // Il menu con le lineette si chiude con Esc o toccando fuori; senza JavaScript si apre e si chiude dal pulsante.
+      const menu = document.querySelector<HTMLDetailsElement>('header .menu');
+      if (menu) {
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+        });
+        document.addEventListener('click', (e) => {
+          if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+        });
+      }
+    </script>
   </body>
 </html>
 
@@ -74,8 +100,32 @@ const pagineServizio = ['privacy', 'intelligenza-artificiale', 'crediti', 'conta
     color: var(--ink); text-decoration: none;
   }
   .nav { margin-left: auto; }
-  @media (max-width: 359px) { .top .wrap { column-gap: 2px; } .marchio { gap: 6px; } }
   .nav a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font-weight: 700; }
+  /* Marchio, link e lingua insieme chiedono circa 430 px: sotto i 440 i link passano nel pulsante con le lineette. */
+  .menu { display: none; }
+  @media (max-width: 439px) {
+    .top .wrap { position: relative; }
+    .marchio { gap: 6px; }
+    .nav { display: none; }
+    .top :global(.lingua) { margin-left: auto; }
+    .menu { display: block; }
+  }
+  .menu summary {
+    display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin-right: -12px;
+    list-style: none; cursor: pointer; color: var(--ink); border-radius: var(--radius);
+  }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu svg { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+  .menu .chiudi, .menu[open] .apri { display: none; }
+  .menu[open] .chiudi { display: block; }
+  .menu nav {
+    position: absolute; z-index: 10; top: 100%; left: 0; right: 0;
+    background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 6px 12px rgb(0 0 0 / 0.08);
+  }
+  .menu nav a {
+    display: flex; align-items: center; min-height: 48px; padding: 0 16px;
+    border-top: 1px solid var(--line); font-weight: 700; text-decoration: none;
+  }
   .piede { border-top: 1px solid var(--line); font-size: 0.9rem; color: var(--muted); padding: 16px 0 24px; }
   .piede ul { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 0 16px; }
   .piede li a { display: inline-flex; align-items: center; min-height: 48px; }

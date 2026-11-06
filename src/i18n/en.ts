@@ -12,7 +12,6 @@ export const en: Dizionario = {
   letture: 'Readings',
   cambiaLingua: 'Language',
   inCostruzione: 'Site under construction: content is coming soon.',
-  percorso: 'Path',
   capitolo: 'Chapter',
   capitoloInPreparazione: 'This chapter is being prepared.',
   esercizi: 'Exercises',
@@ -42,6 +41,24 @@ export const en: Dizionario = {
   provaLetture: 'Try the readings',
   provaLettureAvanzate: 'Try the advanced readings',
   navCapitoli: 'Chapters',
+  menu: 'Menu',
+  introCapitoli: 'The suggested path goes in order, but every chapter is always open.',
+  introHome: {
+    perChi: {
+      titolo: "Who it's for",
+      testo: 'For amateur choir singers starting from scratch, who study mostly on their phone, whenever they have a spare moment.',
+    },
+    comeSiUsa: {
+      titolo: 'How to use it',
+      testo: 'Read the chapters in order and practice with their exercises. Once you know movable do, move on to the readings.',
+    },
+    cosaNonFa: {
+      titolo: 'No account',
+      testo: "You don't sign up and nothing is saved: come in, study, and leave.",
+    },
+    comincia: 'Start with chapter 1',
+    tuttiICapitoli: 'All chapters',
+  },
   avvisoNonTradotto: 'This chapter has not been translated yet, so it is shown in Italian.',
   ingressoLetture: 'Once you know movable do, put your sight-singing to the test with excerpts from real choral pieces.',
   vaiAlleLetture: 'Go to the readings',
