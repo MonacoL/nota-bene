@@ -1,12 +1,16 @@
 smplr 1.1.0, di danigb (https://github.com/danigb/smplr)
 
-Asset: libreria che suona i campioni del pianoforte, inclusa nel JavaScript del sito dal pacchetto npm
-smplr, versione fissata in package.json (ADR-0008)
+Asset: libreria che suona i campioni del pianoforte di questa cartella, inclusa nel JavaScript del sito
+dal pacchetto npm smplr, versione fissata in package.json (ADR-0008)
 Licenza: MIT
 
-La licenza è dichiarata in package.json ("license": "MIT") e in fondo al README ("## License / MIT License").
-Il repository non ha un file LICENSE (verificato il 2026-11-06), quindi il copyright qui sotto riporta
-l'autore come lo indica package.json ("author": "danigb"). Il testo è quello standard della licenza MIT.
+Fonti della licenza, nel pacchetto installato (node_modules/smplr/, versione 1.1.0):
+- package.json: "license": "MIT" e "author": "danigb";
+- README.md, ultima sezione: "## License" seguito da "MIT License", senza riga di copyright.
+Il repository https://github.com/danigb/smplr non ha un file LICENSE e GitHub non vi riconosce una licenza
+(verificato il 2026-11-06); nemmeno il pacchetto npm contiene un file di licenza. La riga di copyright qui
+sotto riporta quindi l'autore come lo indica package.json, senza anno, e il testo è quello standard della
+licenza MIT. Il file sta in public/ perché si pubblichi con il sito insieme al codice di smplr.
 
 MIT License
 

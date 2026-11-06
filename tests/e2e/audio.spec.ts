@@ -194,6 +194,15 @@ test('si scaricano solo i campioni delle note della lettura, accordo compreso, e
   expect(richieste).toHaveLength(4);
 });
 
+test('le licenze di smplr e dei campioni si pubblicano con il sito', async ({ request }) => {
+  // smplr finisce nel JavaScript del sito: la licenza MIT chiede che l'avviso viaggi con il codice.
+  for (const [file, testo] of [['smplr-LICENSE.txt', 'MIT License'], ['splendid-grand-piano-LICENSE.txt', 'Public Domain']]) {
+    const risposta = await request.get(`audio/pianoforte/${file}`);
+    expect(risposta.status(), file).toBe(200);
+    expect(await risposta.text()).toContain(testo);
+  }
+});
+
 test('se i campioni non arrivano suona un oscillatore a triangolo', async ({ page }) => {
   await apri(page, SOPRANO, { campioni: 'mancano' });
   await pulsante(page, 'Riferimento tonale').click();
