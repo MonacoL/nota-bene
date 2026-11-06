@@ -1,6 +1,7 @@
 .claude/
 node_modules/
 dist/
+dist-esempio/
 .astro/
 test-results/
 playwright-report/

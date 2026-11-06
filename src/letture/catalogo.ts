@@ -9,9 +9,9 @@ import { parse } from 'yaml';
 import { sillabe as calcolaSillabe, type Mutazione, type NotaScritta, type Sillaba, type Tonalita } from '../sillabe';
 import { semitoni, type Nota } from '../esercizi/note';
 import { leggiAbc, leggiTonalita } from './abc';
+import { VOCI, type Voce } from './voci';
 
-export const VOCI = ['soprano', 'contralto', 'tenore', 'basso'] as const;
-export type Voce = (typeof VOCI)[number];
+export { VOCI, type Voce };
 
 const FONTI = { mutopia: 'Mutopia', cpdl: 'CPDL' } as const;
 /** Le licenze accettate (ricerca "Formati e licenze di CPDL e Mutopia", #3): niente NC, ND né "Personal". */

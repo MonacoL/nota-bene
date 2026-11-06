@@ -30,7 +30,7 @@ Il nome della cartella è il Brano in kebab-case, ed è la prima parte degli id:
 npm run nuova-edizione -- if-ye-love-me --mutopia 'https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=412'
 ```
 
-**Da CPDL** il file si scarica a mano, perché il sito è dietro Cloudflare:
+**Da CPDL** il file si scarica a mano, perché il sito è dietro Cloudflare. Cloudflare blocca le richieste automatiche (curl, fetch dello script, WebFetch di un agente), ma non un browser vero: con Claude in Chrome (`/chrome` in Claude Code) la pagina si apre e la verifica di Cloudflare passa da sola in pochi secondi, senza cliccare niente. Un agente può quindi leggere la pagina del Brano dal browser, confrontare le Edizioni e trovare il link del file giusto; il download lo conferma la persona, e se Cloudflare chiede una casella o un CAPTCHA la risolve lei. Poi:
 
 ```sh
 npm run nuova-edizione -- on-the-resurrection-morning --file ~/Scaricati/Hornsey_Wesley_SS.mxl \

@@ -109,9 +109,16 @@ export const en: Dizionario = {
     notaEstratto: 'Excerpt of the {voce} voice part, measures {inizio}–{fine}, transcribed into ABC notation with movable-do syllables.',
     notaMutazione: 'Do shift marked at measure {battuta}: {tonalita}.',
     notaData: 'Last modified: {data}.',
+    ritirata: 'This reading is no longer available.',
+  },
+  elencoLetture: {
+    avanzate: 'Advanced readings',
+    filtro: 'Filter by voice part',
+    tutte: 'All voice parts',
+    riga: '{autore}, {voce}, {battute} measures',
+    nessuna: 'No readings for this voice part.',
   },
   pagine: {
-    letture: 'Readings',
     privacy: 'Privacy',
     'intelligenza-artificiale': 'Use of artificial intelligence',
     crediti: 'Credits',

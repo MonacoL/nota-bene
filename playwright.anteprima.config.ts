@@ -5,6 +5,8 @@ import base from './playwright.config';
 export default defineConfig({
   ...base,
   testDir: 'tests/anteprima',
+  // Solo il sito vero: il job delle anteprime non costruisce quello con il catalogo d'esempio.
+  webServer: Array.isArray(base.webServer) ? base.webServer[0] : base.webServer,
   reporter: [['list']],
   projects: [{ name: 'phone-360-chromium', use: { ...devices['Galaxy S8'] } }],
 });
