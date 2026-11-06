@@ -1,0 +1,18 @@
+# Asset di terzi di questa cartella, per la pagina dei crediti (convenzione nel README, sezione "Licenze").
+# Ogni file di licenza della cartella deve essere citato da una voce, altrimenti la build si ferma.
+- nome: Atkinson Hyperlegible Next
+  autori: The Atkinson Hyperlegible Next Project Authors
+  licenza: SIL Open Font License 1.1
+  url: https://github.com/googlefonts/atkinson-hyperlegible-next
+  file_licenza: atkinson-hyperlegible-next-LICENSE.txt
+  nota:
+    it: pesi 400 e 700, sottoinsieme latino
+    en: weights 400 and 700, Latin subset
+- nome: Noto Music
+  autori: The Noto Project Authors
+  licenza: SIL Open Font License 1.1
+  url: https://github.com/notofonts/music
+  file_licenza: noto-music-LICENSE.txt
+  nota:
+    it: ridotto ai tre glifi ♭ ♮ ♯
+    en: reduced to the three glyphs ♭ ♮ ♯

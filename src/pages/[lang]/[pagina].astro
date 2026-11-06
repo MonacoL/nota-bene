@@ -1,18 +1,83 @@
 ---
+// Le pagine di servizio (ticket #14): /<lingua>/privacy/, intelligenza-artificiale/, crediti/, contatti/.
+// Il testo è il Markdown di contenuti/pagine/<lingua>/; nei crediti le sezioni "Brani" e "asset di terzi"
+// sono generate da edizione.yml e dai crediti.yml accanto agli asset. Chi ha rivisto i Capitoli compare
+// in Contatti e nei Ringraziamenti solo se è in contenuti/revisori.yml, cioè con il consenso scritto.
+import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { LINGUE, testi, url, type Lingua } from '../../i18n';
-import { PROVVISORIE, type Provvisoria } from '../../pagine-provvisorie';
+import { REPOSITORY } from '../../config';
+import { LINGUE, testi, type Lingua } from '../../i18n';
+import { PAGINE_SERVIZIO, type PaginaServizio } from '../../contenuti/pagine';
+import { crediti, paginaServizio, revisioni } from '../../contenuti/servizio';
+import { dataEstesa, riempi } from '../../letture/testi';
 
 export function getStaticPaths() {
-  return LINGUE.flatMap((lang) => PROVVISORIE.map((pagina) => ({ params: { lang, pagina } })));
+  return LINGUE.flatMap((lang) => PAGINE_SERVIZIO.map((pagina) => ({ params: { lang, pagina } })));
 }
 
 const lingua = Astro.params.lang as Lingua;
-const pagina = Astro.params.pagina as Provvisoria;
+const id = Astro.params.pagina as PaginaServizio;
 const t = testi(lingua);
+const ts = t.servizio;
+const pagina = await paginaServizio(lingua, id);
+const { Content } = await render(pagina);
+const generati = id === 'crediti' ? await crediti() : undefined;
+const frasiRevisione = id === 'crediti' || id === 'contatti' ? await revisioni(lingua) : [];
 ---
-<Base lingua={lingua} titolo={t.pagine[pagina]}>
-  <h1>{t.pagine[pagina]}</h1>
-  <p class="muted">{t.paginaInPreparazione}</p>
-  <p><a href={url(lingua)}>{t.tornaAllaHome}</a></p>
+<Base lingua={lingua} titolo={t.pagine[id]}>
+  <h1>{t.pagine[id]}</h1>
+  <p class="aggiornata muted">{riempi(ts.aggiornata, { data: dataEstesa(pagina.data.aggiornata, lingua) })}</p>
+
+  <article class="testo">
+    {generati && (
+      <>
+        <section aria-labelledby="brani">
+          <h2 id="brani">{ts.brani}</h2>
+          <p>{ts.introBrani}</p>
+          {generati.brani.length === 0 && <p class="muted">{ts.nessunBrano}</p>}
+          <ul class="voci">
+            {generati.brani.map((b) => (
+              <li>
+                <strong>{b.brano}</strong>, {b.autore}.
+                {' '}{ts.fonte}: <a href={b.url} rel="external">{b.fonte}, {b.edizione}</a>.
+                {' '}{t.lettura.editore}: {b.editore}.
+                {' '}{t.lettura.licenza}: <a href={b.licenza.url} rel="external license">{b.licenza.nome}</a>.
+                {b.trascrizione && <>{' '}{ts.trascrizione}: <a href={b.trascrizione.url} rel="external license">{b.trascrizione.nome}</a>.</>}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section aria-labelledby="asset">
+          <h2 id="asset">{ts.asset}</h2>
+          <p>{ts.introAsset}</p>
+          <ul class="voci">
+            {generati.asset.map((a) => (
+              <li>
+                <a href={a.url} rel="external"><strong>{a.nome}</strong></a>, {a.autori}{a.nota && <> ({a.nota[lingua]})</>}.
+                {' '}{t.lettura.licenza}: {a.licenza}
+                {a.fileLicenza.length > 0 && <> ({a.fileLicenza.map((f, i) => <>{i > 0 && ', '}<a href={`${REPOSITORY}/blob/main/${f}`} rel="external license">{a.fileLicenza.length > 1 ? f.split('/').at(-1) : ts.testoLicenza}</a></>)})</>}.
+              </li>
+            ))}
+          </ul>
+        </section>
+      </>
+    )}
+
+    <Content />
+
+    {id === 'crediti' && frasiRevisione.map((f) => <p>{f}</p>)}
+    {id === 'contatti' && frasiRevisione.length > 0 && (
+      <section aria-labelledby="revisioni">
+        <h2 id="revisioni">{ts.revisioni}</h2>
+        {frasiRevisione.map((f) => <p>{f}</p>)}
+      </section>
+    )}
+  </article>
 </Base>
+
+<style>
+  .aggiornata { margin-top: -0.4em; font-size: 0.94rem; }
+  .voci { padding-left: 1.2em; }
+  .voci li { margin-bottom: 0.6em; }
+  .testo :global(a) { overflow-wrap: anywhere; }
+</style>

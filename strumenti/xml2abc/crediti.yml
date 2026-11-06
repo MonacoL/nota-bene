@@ -1,0 +1,10 @@
+# Asset di terzi di questa cartella, per la pagina dei crediti (convenzione nel README, sezione "Licenze").
+- nome: xml2abc 177
+  autori: Willem G. Vree
+  licenza: GNU Lesser General Public License
+  url: https://wim.vree.org/svgParse/xml2abc.html
+  # L'intestazione di xml2abc.py non indica la versione della LGPL: qui ci sono i testi della 3.0 e della GPL che richiama.
+  file_licenza: [COPYING.LESSER, COPYING]
+  nota:
+    it: lo usa solo chi importa le letture, il sito non lo esegue
+    en: used only to import readings, the site does not run it

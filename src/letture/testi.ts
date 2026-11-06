@@ -12,6 +12,10 @@ const LOCALI: Record<Lingua, string> = { it: 'it-IT', en: 'en-US' };
 export const riempi = (modello: string, valori: Record<string, string | number>) =>
   modello.replace(/\{(\w+)\}/g, (_, k: string) => String(valori[k]));
 
+/** "6 novembre 2026" / "November 6, 2026". */
+export const dataEstesa = (data: Date, lingua: Lingua) =>
+  new Intl.DateTimeFormat(LOCALI[lingua], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(data);
+
 /** "Fa maggiore" / "F major". */
 export const nomeTonalita = ({ tonica, modo }: Tonalita, t: Dizionario, lingua: Lingua) =>
   `${nomeNota(tonica, lingua)} ${t.lettura.modi[modo]}`;
@@ -19,9 +23,7 @@ export const nomeTonalita = ({ tonica, modo }: Tonalita, t: Dizionario, lingua: 
 /** La nota delle modifiche richiesta dalla CPDL License (ADR-0003): estratto e trascrizione, Mutazioni, campo libero, data. */
 export function notaDelleModifiche(lettura: Lettura, t: Dizionario, lingua: Lingua): string {
   const tl = t.lettura;
-  const data = new Intl.DateTimeFormat(LOCALI[lingua], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
-    lettura.modificata,
-  );
+  const data = dataEstesa(lettura.modificata, lingua);
   return [
     riempi(tl.notaEstratto, { voce: tl.voci[lettura.voce], inizio: lettura.battute.inizio, fine: lettura.battute.fine }),
     ...lettura.mutazioni.map((m) => riempi(tl.notaMutazione, { battuta: m.battuta, tonalita: nomeTonalita(m.tonalita, t, lingua) })),

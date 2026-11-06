@@ -1,7 +1,7 @@
 // Le pagine che esistono oggi, nelle due lingue. Ogni ticket che aggiunge pagine le aggiunge qui.
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
-import { PROVVISORIE } from '../../src/pagine-provvisorie';
+import { PAGINE_SERVIZIO } from '../../src/contenuti/pagine';
 
 export const LINGUE = ['it', 'en'] as const;
 
@@ -23,7 +23,7 @@ export const PAGINE = LINGUE.flatMap((l) => [
   `${l}/`,
   `${l}/capitoli/`,
   `${l}/letture/`,
-  ...PROVVISORIE.map((p) => `${l}/${p}/`),
+  ...PAGINE_SERVIZIO.map((p) => `${l}/${p}/`),
   ...CAPITOLI.flatMap((c) => [`${l}/capitoli/${c}/`, `${l}/capitoli/${c}/esercizi/`]),
   ...LETTURE.map((id) => `${l}/letture/${id}/`),
 ]);

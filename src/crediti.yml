@@ -1,0 +1,5 @@
+# Pacchetti npm che finiscono nel sito e vanno nei crediti tra gli asset di terzi (convenzione nel README, sezione "Licenze").
+# Versione, licenza e file di licenza si leggono dal pacchetto installato in node_modules.
+- pacchetto: abcjs
+  autori: Paul Rosen, Gregory Dyke
+  url: https://abcjs.net
