@@ -18,10 +18,10 @@ export const it = {
   eserciziInPreparazione: 'Gli esercizi di questo capitolo sono in preparazione.',
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota' },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba' },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
-    domande: { 'nomina-la-nota': 'Come si chiama questa nota?' },
+    domande: { 'nomina-la-nota': 'Come si chiama questa nota?', 'nomina-la-sillaba': 'Che sillaba è questa nota?' },
     risposta: 'Risposta',
     alterazioni: { bemolle: 'bemolle', bequadro: 'bequadro', diesis: 'diesis' },
     note: { C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si' },

@@ -8,6 +8,7 @@
   import type { Dizionario } from '../../i18n/it';
   import Pentagramma from './Pentagramma.svelte';
   import TastierinoNota from './TastierinoNota.svelte';
+  import TastierinoSillaba from './TastierinoSillaba.svelte';
   import Foglio from './Foglio.svelte';
 
   interface Props {
@@ -98,7 +99,11 @@
         <Foglio {t} {lingua} {riscontro} onavanti={avanti} />
       {:else}
         {#key `${serieIniziate}-${n}`}
-          <TastierinoNota {t} onrisposta={rispondi} />
+          {#if dichiarazione.tipo === 'nomina-la-sillaba'}
+            <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
+          {:else}
+            <TastierinoNota {t} onrisposta={rispondi} />
+          {/if}
         {/key}
       {/if}
     </div>
