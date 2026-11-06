@@ -1,0 +1,59 @@
+# Commenta una PR con il link agli screenshot delle sue Letture (ticket #34), fatti dal job "anteprime" della CI.
+# Gira in un workflow separato perché il job della PR, anche da un fork, ha il token in sola lettura.
+# Non esegue codice della PR: legge solo il numero della PR e l'elenco delle Letture dall'artifact.
+name: Commenta le anteprime
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: read
+  pull-requests: write
+
+jobs:
+  commenta:
+    if: github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Artifact delle anteprime
+        id: artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN: ${{ github.event.workflow_run.id }}
+        run: |
+          id=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN/artifacts" --jq '.artifacts[] | select(.name == "anteprime") | .id')
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+      - if: steps.artifact.outputs.id != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: anteprime-pr
+          path: pr/
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - if: steps.artifact.outputs.id != ''
+        name: Commento sulla PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN: ${{ github.event.workflow_run.id }}
+          ARTIFACT: ${{ steps.artifact.outputs.id }}
+        run: |
+          pr=$(tr -dc '0-9' < pr/numero)
+          marcatore='<!-- anteprime-letture -->'
+          {
+            echo "$marcatore"
+            echo '### Anteprime delle Letture'
+            echo
+            echo "Screenshot a 360 px con la Soluzione visibile: [scarica le anteprime](https://github.com/$GITHUB_REPOSITORY/actions/runs/$RUN/artifacts/$ARTIFACT)."
+            echo 'Confrontale con il PDF della Fonte, seguendo la checklist della PR.'
+            echo
+            # Solo id nel formato <brano>/<voce>-<inizio>-<fine>: l'artifact viene dalla PR e non si fida.
+            grep -E '^[a-z0-9-]+/[a-z]+-[0-9]+-[0-9]+$' pr/letture | sed 's/.*/- `&`/'
+          } > commento.md
+          esistente=$(gh api "repos/$GITHUB_REPOSITORY/issues/$pr/comments" --paginate --jq ".[] | select(.body | startswith(\"$marcatore\")) | .id" | head -1)
+          if [ -n "$esistente" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$esistente" -F body=@commento.md > /dev/null
+          else
+            gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body-file commento.md
+          fi

@@ -11,7 +11,11 @@
     "valida:letture": "tsx scripts/valida-letture.ts",
     "test:unit": "vitest run",
     "test:e2e": "npm run build && scripts/playwright-docker.sh",
-    "test:update": "npm run build && scripts/playwright-docker.sh --update-snapshots=changed"
+    "test:update": "npm run build && scripts/playwright-docker.sh --update-snapshots=changed",
+    "elenco-da-verificare": "tsx scripts/elenco-da-verificare.ts",
+    "nuova-edizione": "tsx scripts/nuova-edizione.ts",
+    "letture-toccate": "tsx scripts/letture-toccate.ts",
+    "nuova-lettura": "tsx scripts/nuova-lettura.ts"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "0.4.7",

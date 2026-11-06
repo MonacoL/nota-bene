@@ -1,0 +1,25 @@
+X:1
+T:Title
+%%score [ ( 1 2 ) ( 3 4 ) ]
+L:1/4
+Q:1/4=90
+M:4/4
+I:linebreak $
+K:G
+V:1 treble nm="S A"
+V:2 treble 
+V:3 bass nm="T B"
+V:4 bass 
+V:1
+"^Hornsey (87. 83)""^S. S. Wesley\n(1810-1876)""^Sabine Baring Gould\n(1810-76)""^On the resurrection morning" D D G B | %1
+ A B c d | B A/G/ A d | E G F2 || B e e d | G c c B | E2 F2 | G4 |] %8
+V:2
+ D D E G | G F G A | D E E D | D ^C D2 || D E A A | G G =F F | E2 (E D) | D4 |] %8
+V:3
+ B, A, B, D | E D C/B,/ A, | B, B, A, F, | B, A, A,2 || B, B, A, D | D C =F, B, | %6
+ (B, A,) (A,3/2 C/) | B,4 |] %8
+V:4
+"_1. On the resurrection morning\nSoul and body meet again;\nNo more sorrow, no more weeping,\nNo more pain!\n\n2. Here awhile they must be parted,\nAnd the flesh its Sabbath keep,\nWaiting in a holy stillness,\nWrapt in sleep.\n\n3. For a while the wearied body\nLies with feet towards the morn;\nTill the last and brightest Easter\nDay be born.\n\n4. But the soul in contemplation\nUtters earnest prayer and strong,\nBursting at the resurrection\nInto song." G, F, E, D, | %1
+ C, D, E, F, | G, G, F, B,,/A,,/ | %3
+ G,, A,,"_5. Soul and body reunited\nThenceforth nothing shall divide,\nWaking up in Christ's own likeness,\nSatisfied.\n\n6. O the beauty, O the gladness\nOf that resurrection day,\nWhich shall not through endless ages\nPass away.\n\n7. On that happy Easter morning\nAll the graves their dead restore;\nFather, sister, child, and mother\nMeet once more.\n\n8. To that brightest of all meetings\nBring us, Jesu Christ, at last,\nBy thy Cross, through death and judgment,\nHolding fast.\n" D,2 || %4
+ G, G, F, B,, | E, E, D, G,, | C,2 D,2 | G,,4 |] %8
