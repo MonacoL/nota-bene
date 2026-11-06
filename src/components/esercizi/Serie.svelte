@@ -9,6 +9,7 @@
   import Pentagramma from './Pentagramma.svelte';
   import TastierinoNota from './TastierinoNota.svelte';
   import TastierinoSillaba from './TastierinoSillaba.svelte';
+  import TastierinoIntervallo from './TastierinoIntervallo.svelte';
   import Foglio from './Foglio.svelte';
 
   interface Props {
@@ -72,7 +73,7 @@
 
 <div class="serie">
   {#if dichiarazioni.length > 1}
-    <div class="schede" role="tablist" aria-label={t.schede}>
+    <div class="schede" class:risposto={riscontro} role="tablist" aria-label={t.schede}>
       {#each dichiarazioni as d, i (d.tipo)}
         <button type="button" role="tab" aria-selected={i === scheda} onclick={() => scegliScheda(i)}>{titoloTipo(d.tipo)}</button>
       {/each}
@@ -101,6 +102,8 @@
         {#key `${serieIniziate}-${n}`}
           {#if dichiarazione.tipo === 'nomina-la-sillaba'}
             <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
+          {:else if dichiarazione.tipo === 'riconosci-intervallo' || dichiarazione.tipo === 'rivolta-intervallo'}
+            <TastierinoIntervallo {t} onrisposta={rispondi} />
           {:else}
             <TastierinoNota {t} onrisposta={rispondi} />
           {/if}
@@ -145,6 +148,11 @@
     :global(html[data-serie]) .esercizio.risposto .domanda { display: none; }
     :global(html[data-serie]) .fondo { margin-top: auto; padding-top: 12px; padding-bottom: env(safe-area-inset-bottom); }
     :global(html[data-serie]) .avanzamento { margin-bottom: 8px; }
+    /* Le schede su una riga sola, anche a 320 px: il nome va a capo dentro la scheda, e il pentagramma resta in vista. */
+    :global(html[data-serie]) .schede { flex-wrap: nowrap; margin-bottom: 8px; }
+    :global(html[data-serie]) .schede button { flex: 1 1 0; padding: 2px 8px; font-size: 0.9rem; line-height: 1.15; }
+    /* Come la domanda: durante il riscontro le schede non servono, e il posto va al pentagramma. */
+    :global(html[data-serie]) .schede.risposto { display: none; }
     :global(html[data-serie]) .torna {
       display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px;
       margin-left: -12px; font-size: 1.4rem; text-decoration: none;

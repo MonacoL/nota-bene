@@ -12,6 +12,8 @@ const revisione = z.object({
 const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('nomina-la-nota'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('nomina-la-sillaba'), chiavi: z.array(z.enum(CHIAVI)).nonempty(), cromatiche: z.boolean() }).strict(),
+  z.object({ tipo: z.literal('riconosci-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('rivolta-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
 ]);
 
 /** Gli Esercizi del Capitolo, una scheda per tipo: un tipo non si dichiara due volte. */
