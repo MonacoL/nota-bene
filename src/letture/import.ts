@@ -125,11 +125,14 @@ export function estraiLettura(abc: string, taglio: Taglio): string {
   const sillabe = testo.join(' ').split(/\s+|(?<=[^\\]-)/).filter((t) => t && t !== '|');
   const prima = battute.slice(0, da).reduce((n, b) => n + note(b), 0);
   const scelto = sillabe.slice(prima, prima + scelte.reduce((n, b) => n + note(b), 0));
+  // Un "|" per Battuta, allineato alle note (ticket #30): l'a capo della Lettura divide il Testo per Battuta.
+  let usate = 0;
+  const perBattuta = scelte.map((b) => scelto.slice(usate, (usate += note(b))).join(' '));
   return [
     ...testata,
     `K:${k}${clef} % ${SEGNAPOSTO}: major o minor`,
     `${scelte.join(' | ')} |]`,
-    ...(scelto.some((t) => t !== '*' && t !== '_') ? [`w: ${scelto.join(' ')}`] : []),
+    ...(scelto.some((t) => t !== '*' && t !== '_') ? [`w: ${perBattuta.join(' | ')} |`] : []),
     '',
   ].join('\n');
 }

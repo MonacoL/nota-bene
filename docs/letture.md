@@ -60,6 +60,7 @@ Lo script lancia xml2abc (in `strumenti/xml2abc/`, serve Python 3) sul sorgente 
 - `--musicxml <file>` usa un file diverso dal sorgente dichiarato.
 - Il levare iniziale del Brano è la Battuta 0. Lo script taglia Battute intere: se l'estratto comincia con un levare a metà Brano, la parte che manca si aggiunge a mano.
 - Il Testo si taglia insieme alle note se il MusicXML lo lega alle note. Alcune Edizioni scrivono le strofe come testo libero sotto la musica: allora la Lettura resta senza Testo, oppure il Testo si scrive a mano in una riga `w:`.
+- La riga `w:` ha un `|` per Battuta, allineato alle note: `w: If ye | love me, | _ keep my com- |`. In ogni Battuta ogni nota prende una sillaba, un `_` (la sillaba di prima continua) o un `*` (nessuna sillaba); le pause no. Serve all'a capo della Lettura, che divide note, Testo e Sillabe per Battuta (ticket [#30](https://github.com/MonacoL/nota-bene/issues/30)); lo script lo scrive da solo e la validazione lo controlla con la regola `testo`.
 - Senza Andamento nella Fonte lo script non scrive il `Q:`: lo si aggiunge a mano (ADR-0008).
 - Le Note di una Voce di tenore in chiave di violino ottava bassa si scrivono un'ottava sopra (ADR-0003).
 
@@ -83,7 +84,7 @@ npm run valida:letture
 
 ## 4. Criteri dell'estratto
 
-La CI controlla da sola numero di Battute (da 4 a 12, levare escluso), durate, salti fino all'ottava, estensione fino alla decima, pause fino a 2 Battute, niente gruppi irregolari, Armatura fino a 3 alterazioni (4 nelle Letture avanzate).
+La CI controlla da sola numero di Battute (da 4 a 12, levare escluso), durate, salti fino all'ottava, estensione fino alla decima, pause fino a 2 Battute, niente gruppi irregolari, Armatura fino a 3 alterazioni (4 nelle Letture avanzate), un `|` per Battuta nelle righe `w:`.
 
 Non può controllare, e lo chiede la checklist della PR:
 

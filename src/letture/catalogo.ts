@@ -250,6 +250,7 @@ export function catalogo(cartella: string, opzioni: Opzioni): Esito {
       if (altezze.length && Math.max(...altezze) - Math.min(...altezze) > 16) {
         erroreLettura('estensione', "l'estensione supera la decima tra la nota più grave e la più acuta");
       }
+      for (const problema of testoNonAllineato(abc, letto.note)) erroreLettura('testo', problema);
       if (letto.cambiaTonalita) {
         erroreLettura('mutazioni', "niente cambi [K:] nell'ABC: una Mutazione si annota in edizione.yml, con Battuta, posizione e nuova Tonalità");
       }
@@ -321,6 +322,60 @@ function segnaposto(valore: unknown, percorso = ''): string[] {
 }
 
 const uguali = (a: number, b: number) => Math.abs(a - b) < 1e-9;
+
+/**
+ * Ticket #30: l'a capo divide note, Testo e Sillabe per Battuta, quindi ogni riga w: ha un "|" per Battuta e in ogni
+ * Battuta una sillaba (o un "_" o un "*") per nota, pause escluse. Le Battute qui contano da 1, come nell'ABC.
+ */
+function testoNonAllineato(abc: string, note: readonly NotaScritta[]): string[] {
+  const quante = note.at(-1)?.battuta ?? 0;
+  const perBattuta = Array.from({ length: quante }, (_, i) => note.filter((n) => n.battuta === i + 1 && !n.pausa).length);
+  const problemi: string[] = [];
+  const righe = abc.split('\n').filter((r) => r.startsWith('w:'));
+  righe.forEach((riga, r) => {
+    const quale = righe.length > 1 ? ` n. ${r + 1}` : '';
+    const pezzi = riga.slice(2).split('|');
+    if (!pezzi.at(-1)!.trim()) pezzi.pop();
+    if (pezzi.length !== quante) {
+      problemi.push(`la riga w:${quale} ha ${pezzi.length} Battute e la musica ${quante}: serve un "|" per Battuta, allineato alle note`);
+      return;
+    }
+    pezzi.forEach((pezzo, b) => {
+      const sillabe = contaSillabe(pezzo);
+      if (sillabe !== perBattuta[b]) {
+        problemi.push(`riga w:${quale}, Battuta ${b + 1} dell'ABC: ${sillabe} sillabe per ${perBattuta[b]} note`);
+      }
+    });
+  });
+  return problemi;
+}
+
+/**
+ * Quante note copre un pezzo di riga w: (ABC 2.1, 4.3): uno spazio o un "-" chiude una sillaba; "_" e "*" coprono una
+ * nota senza sillaba nuova; "~" unisce due parole sotto una nota; un "-" dopo uno spazio o un altro "-" copre una nota.
+ */
+function contaSillabe(pezzo: string): number {
+  let quante = 0;
+  // Se si è dentro una sillaba non ancora contata.
+  let inSillaba = false;
+  for (let i = 0; i < pezzo.length; i++) {
+    const c = pezzo[i]!;
+    if (c === ' ' || c === '\t') {
+      if (inSillaba) quante++;
+      inSillaba = false;
+    } else if (c === '-' || c === '_' || c === '*') {
+      // Il "-" chiude la sillaba in corso; senza sillaba in corso è lui a coprire una nota. "_" e "*" la coprono sempre.
+      if (inSillaba) quante++;
+      if (c !== '-' || !inSillaba) quante++;
+      inSillaba = false;
+    } else {
+      // "\-" è un trattino scritto, dentro la sillaba.
+      if (c === '\\') i++;
+      inSillaba = true;
+    }
+  }
+  return quante + (inSillaba ? 1 : 0);
+}
 
 /**
  * Le Battute dell'estratto secondo il Tempo: quelle (da 1) che non durano quanto devono e quante sono. La prima può
