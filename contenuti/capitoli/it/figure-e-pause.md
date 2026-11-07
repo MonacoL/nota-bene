@@ -25,7 +25,9 @@ X:1
 M:4/4
 L:1/4
 K:C
-B4 | B2 B2 | B B B B | B/B/ B/B/ B/B/ B/B/ | B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 |]
+B4 | B2 B2 | B B B B |
+B/B/ B/B/ B/B/ B/B/ |
+B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 |]
 ```
 
 Le battute qui sopra durano tutte uguale: una semibreve, poi due minime, quattro semiminime, otto crome e sedici semicrome.
