@@ -2,8 +2,8 @@
 # Claude's draft from ticket #14: no human review yet. Whoever reviews it writes their name and the date here.
 # The "Pieces" and "Third-party assets" sections are not here: the build generates them, before this text.
 revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-06 }
-tradotto_da: 2026-11-06
-aggiornata: 2026-11-06
+tradotto_da: 2026-11-07
+aggiornata: 2026-11-07
 ---
 
 _Draft awaiting review._
@@ -17,5 +17,7 @@ _Draft awaiting review._
 Copyright Luca Monaco and the Nota Bene contributors.
 
 ## Acknowledgments
+
+Thanks to Maestro Matteo Sabetta, whose movable DO conventions Nota Bene follows.
 
 Thanks to CPDL and Mutopia, and to the people who publish there the editions that make the readings possible.

@@ -19,7 +19,10 @@ export default defineConfig({
   // Un solo set di baseline, quello Linux dell'immagine Docker di Playwright: niente {platform} nel nome.
   snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}',
   expect: {
-    toHaveScreenshot: { maxDiffPixelRatio: 0.001, animations: 'disabled', caret: 'hide', scale: 'css' },
+    // Tolleranza tarata sugli SVG reali (#40): nell'immagine Docker il rumore fra due sessioni è di 0–5 pixel
+    // (webkit), mentre una nota spostata di un grado in un esempio ne cambia 70–75.
+    // Una soglia in pixel e non in proporzione: lo 0,1% di una pagina intera sono migliaia di pixel, e la nota passava.
+    toHaveScreenshot: { maxDiffPixels: 10, animations: 'disabled', caret: 'hide', scale: 'css' },
   },
   use: {
     baseURL: `http://127.0.0.1:${PORTA}/nota-bene/`,

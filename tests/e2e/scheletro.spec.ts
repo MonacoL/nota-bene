@@ -10,6 +10,15 @@ async function nessunoScrollOrizzontale(page: Page) {
   expect(scrollWidth, 'la pagina scorre in orizzontale').toBeLessThanOrEqual(innerWidth);
 }
 
+// Compiti prima del lancio (#40): il sito è aperto ai motori di ricerca e non dice più "in costruzione".
+for (const lingua of LINGUE) {
+  test(`${lingua}: il sito è indicizzabile e senza avviso di costruzione`, async ({ page }) => {
+    await page.goto(`${lingua}/`);
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+    await expect(page.getByRole('note')).toHaveCount(0);
+  });
+}
+
 test('la radice porta sempre a /it/', async ({ page }) => {
   await page.goto('./');
   await expect(page).toHaveURL(/\/nota-bene\/it\/$/);

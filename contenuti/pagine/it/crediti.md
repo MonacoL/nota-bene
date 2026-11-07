@@ -2,7 +2,7 @@
 # Bozza di Claude dal ticket #14: nessuna revisione umana ancora. Chi la rivede scrive qui il suo nome e la data.
 # Le sezioni "Brani" e "Asset di terzi" non stanno qui: le genera la build, prima di questo testo.
 revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-06 }
-aggiornata: 2026-11-06
+aggiornata: 2026-11-07
 ---
 
 _Bozza in attesa di revisione._
@@ -16,5 +16,7 @@ _Bozza in attesa di revisione._
 Copyright di Luca Monaco e dei contributori di Nota Bene.
 
 ## Ringraziamenti
+
+Grazie al maestro Matteo Sabetta: Nota Bene segue le convenzioni del DO mobile con cui insegna.
 
 Grazie a CPDL e a Mutopia, e a chi vi pubblica le edizioni che rendono possibili le letture.
