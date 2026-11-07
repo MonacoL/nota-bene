@@ -19,7 +19,8 @@ export function disegnaACapo(contenitore: HTMLElement, abc: string, { larghezza,
     add_classes: true,
     scale: scala,
     // In abcjs 6.7.2 staffwidth è già in px di uscita: scale rimpicciolisce solo i simboli (prototipo #8).
-    staffwidth: larghezza,
+    // Un px in meno: in un rigo stirato la stanghetta finale "|]" sporge di qualche decimo oltre staffwidth.
+    staffwidth: larghezza - 1,
     paddingleft: 0,
     paddingright: 0,
     paddingtop: 0,
