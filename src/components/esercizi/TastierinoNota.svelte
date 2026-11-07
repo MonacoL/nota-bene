@@ -1,13 +1,18 @@
 <script lang="ts">
   // Risposta di "Nomina la nota": ♭ ♮ ♯, uno dei 7 nomi, poi Verifica (ticket "Interazione negli Esercizi di teoria da telefono").
+  // È anche il primo passo di "Trova Tonica e Modo" (ticket #35): lì il pulsante dice "Avanti →" e, tornando
+  // indietro dal secondo passo, ritrova la tonica scelta.
   import type { Alterazione, Lettera } from '../../esercizi';
   import type { Dizionario } from '../../i18n/it';
 
   interface Props {
     t: Dizionario['serie'];
     onrisposta: (risposta: { lettera: Lettera; alterazione: Alterazione }) => void;
+    /** Il testo del pulsante che conferma; di solito Verifica. */
+    invio?: string;
+    iniziale?: { lettera: Lettera; alterazione: Alterazione };
   }
-  let { t, onrisposta }: Props = $props();
+  let { t, onrisposta, invio = t.verifica, iniziale }: Props = $props();
 
   const ALTERAZIONI = [
     { valore: -1, segno: '♭', nome: 'bemolle' },
@@ -16,8 +21,11 @@
   ] as const;
   const LETTERE: Lettera[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
-  let alterazione = $state<Alterazione>(0);
-  let lettera = $state<Lettera | undefined>();
+  // Il valore iniziale si legge una volta, poi lo cambia il corista.
+  // svelte-ignore state_referenced_locally
+  let alterazione = $state<Alterazione>(iniziale?.alterazione ?? 0);
+  // svelte-ignore state_referenced_locally
+  let lettera = $state<Lettera | undefined>(iniziale?.lettera);
 </script>
 
 <div class="tastierino" role="group" aria-label={t.risposta}>
@@ -35,7 +43,7 @@
   </div>
   <div class="riga invio">
     <button type="button" class="verifica" disabled={!lettera} onclick={() => lettera && onrisposta({ lettera, alterazione })}>
-      {t.verifica}
+      {invio}
     </button>
   </div>
 </div>

@@ -20,7 +20,7 @@ export const it = {
   ascoltaEsempio: "Ascolta l'esempio",
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo' },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'trova-tonica-e-modo': 'Trova tonica e modo', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo' },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
     domande: {
@@ -30,6 +30,7 @@ export const it = {
       'rivolta-intervallo': 'Qual è il rivolto di questo intervallo?',
       'completa-la-battuta': 'Quali figure completano la battuta?',
       'riconosci-il-tempo': 'In che tempo sono queste battute?',
+      'trova-tonica-e-modo': 'Qual è la tonalità di questa melodia?',
     },
     risposta: 'Risposta',
     alterazioni: { bemolle: 'bemolle', bequadro: 'bequadro', diesis: 'diesis' },
@@ -40,6 +41,10 @@ export const it = {
     figure: { semibreve: 'semibreve', minima: 'minima', semiminima: 'semiminima', croma: 'croma' },
     punto: 'punto',
     verifica: 'Verifica',
+    /** Il pulsante dell'Ascolto negli Esercizi che si possono sentire (ticket #35). */
+    ascolta: 'Ascolta',
+    /** "Trova Tonica e Modo": il secondo passo della risposta, e il pulsante per tornare al primo. */
+    modo: { domanda: 'Maggiore o minore?', tonica: '← Tonica: {nome}', maggiore: 'maggiore', minore: 'minore' },
     riscontro: 'Riscontro',
     giusto: '✓ Giusto',
     sbagliato: '✗ Non è così',

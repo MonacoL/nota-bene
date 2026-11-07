@@ -2,7 +2,8 @@
 // Riferimento tonale e le note da caricare. Lo usano la pagina della Lettura alla build e il controllo dei
 // campioni in CI. Le altezze sono numeri MIDI reali (Do centrale = C4 = 60): il tenore in chiave di violino
 // ottava bassa è già un'ottava sotto la scritta, perché leggiAbc riporta le Note reali (ADR-0003).
-import { semitoni, tasto, type Nota } from '../esercizi/note';
+import { RIGHI, type Chiave } from '../esercizi/nomina-la-nota';
+import { daGrado, semitoni, tasto, type Nota } from '../esercizi/note';
 import { leggiAbc } from '../letture/abc';
 import type { Tonalita } from '../sillabe';
 
@@ -58,4 +59,17 @@ export function audioDellaLettura(abc: string, tonalita: Tonalita): AudioDellaLe
   const riferimento = riferimentoTonale(tonalita, altezze[0]!);
   const note = [...new Set([...altezze, ...riferimento.accordo])].sort((a, b) => a - b);
   return { riferimento, note };
+}
+
+/**
+ * Le altezze che gli Esercizi possono suonare nelle Chiavi date (ticket #35): le Note reali dal taglio sotto il rigo
+ * al taglio sopra, un semitono in più da ogni parte per le alterazioni. Le note cambiano a ogni Esercizio, quindi
+ * si caricano i campioni di tutta l'estensione, al primo tocco.
+ */
+export function noteDelleChiavi(chiavi: readonly Chiave[]): number[] {
+  const note = chiavi.flatMap((c) => {
+    const [da, a] = [midi(daGrado(RIGHI[c].da)) - 1, midi(daGrado(RIGHI[c].a)) + 1];
+    return Array.from({ length: a - da + 1 }, (_, i) => da + i);
+  });
+  return [...new Set(note)].sort((a, b) => a - b);
 }

@@ -2,6 +2,11 @@
   // La Serie: 10 Esercizi dello stesso tipo con barra di avanzamento, foglio di riscontro e riepilogo.
   // Una scheda per tipo se il Capitolo ne ha più di uno; cambiare scheda fa ripartire la Serie. Non si salva niente.
   // Con ?seed=s nell'URL l'Esercizio n (da 0) della prima Serie usa il seed s + n: serve ai test.
+  // "Riconosci l'intervallo" e "Trova Tonica e Modo" si possono ascoltare (ticket #35), col lettore delle Letture.
+  import type { TuneObject } from 'abcjs';
+  import { ascoltoIlluminato } from '../../audio/ascolto';
+  import { creaLettore } from '../../audio/lettore';
+  import { noteDelleChiavi } from '../../audio/note';
   import { genera, valuta, type Esercizio, type Riscontro, type Tipo } from '../../esercizi';
   import type { DichiarazioneEsercizio } from '../../contenuti/schemi';
   import type { Lingua } from '../../i18n';
@@ -10,6 +15,7 @@
   import TastierinoNota from './TastierinoNota.svelte';
   import TastierinoSillaba from './TastierinoSillaba.svelte';
   import TastierinoIntervallo from './TastierinoIntervallo.svelte';
+  import TastierinoTonicaEModo from './TastierinoTonicaEModo.svelte';
   import TastierinoScala from './TastierinoScala.svelte';
   import TastierinoFigure from './TastierinoFigure.svelte';
   import SceltaTempo from './SceltaTempo.svelte';
@@ -76,6 +82,28 @@
   }
 
   const titoloTipo = (tipo: Tipo) => t.tipi[tipo];
+
+  /** I tipi che si possono ascoltare; le loro dichiarazioni hanno tutte le Chiavi. */
+  const DA_ASCOLTARE: Tipo[] = ['riconosci-intervallo', 'trova-tonica-e-modo'];
+  const chiaviDaAscoltare = dichiarazioni.flatMap((d) => (DA_ASCOLTARE.includes(d.tipo) && 'chiavi' in d ? d.chiavi : []));
+  let suona = $state(false);
+  let disegno: TuneObject | undefined;
+  const lettore = creaLettore<'esercizio'>({
+    campioni: `${import.meta.env.BASE_URL}audio/pianoforte/`,
+    note: noteDelleChiavi(chiaviDaAscoltare),
+    cambio: (f) => (suona = f !== null),
+  });
+  function ascolta() {
+    if (!disegno) return;
+    const a = ascoltoIlluminato(disegno);
+    lettore.tocca('esercizio', a.note, a.evidenzia);
+  }
+  /** Un disegno nuovo (un altro Esercizio, o un'altra larghezza): le note illuminate erano del disegno di prima. */
+  function nuovoDisegno(d: TuneObject) {
+    lettore.ferma();
+    disegno = d;
+  }
+  $effect(() => () => lettore.chiudi());
 </script>
 
 <div class="serie">
@@ -99,10 +127,13 @@
 
     <div class="esercizio" class:risposto={riscontro}>
       <p class="domanda">{'domanda' in esercizio ? esercizio.domanda[lingua] : t.domande[esercizio.tipo]}</p>
-      {#if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'riconosci-il-tempo'}
-        <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={esercizio.tipo === 'costruisci-la-scala' ? 1.2 : 1.1} />
+      {#if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'riconosci-il-tempo' || esercizio.tipo === 'trova-tonica-e-modo'}
+        <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={esercizio.tipo === 'costruisci-la-scala' ? 1.2 : 1.1} ondisegno={nuovoDisegno} />
       {:else}
-        <Pentagramma abc={bozza ?? esercizio.abc} />
+        <Pentagramma abc={bozza ?? esercizio.abc} ondisegno={nuovoDisegno} />
+      {/if}
+      {#if DA_ASCOLTARE.includes(esercizio.tipo)}
+        <p class="ascolto"><button type="button" class="ascolta" aria-pressed={suona} onclick={ascolta}>{t.ascolta}</button></p>
       {/if}
     </div>
 
@@ -119,6 +150,8 @@
             <SceltaTempo {t} scelte={esercizio.scelte} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'costruisci-la-scala'}
             <TastierinoScala {t} tonica={esercizio.tonica} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'trova-tonica-e-modo'}
+            <TastierinoTonicaEModo {t} onrisposta={rispondi} />
           {:else if dichiarazione.tipo === 'riconosci-intervallo' || dichiarazione.tipo === 'rivolta-intervallo'}
             <TastierinoIntervallo {t} onrisposta={rispondi} />
           {:else}
@@ -152,6 +185,7 @@
     padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
   }
   .domanda { font-weight: 700; font-size: 1.15rem; margin: 0 0 12px; }
+  .ascolto { display: flex; justify-content: center; margin: 12px 0 0; }
   /* Il foglio di riscontro prende il posto del tastierino: dopo l'errore la soluzione compare subito, senza "Riprova". */
   .fondo { margin-top: 16px; }
   .torna { display: none; }
