@@ -1,4 +1,5 @@
-// Disegno con abcjs, comune agli esempi dei Capitoli e agli Esercizi.
+// Disegno con abcjs dei pentagrammi degli Esercizi, su un rigo solo. Gli esempi dei Capitoli vanno a capo come le
+// Letture (src/scripts/a-capo.ts, ticket #63).
 // abcjs disegna in currentColor: il pentagramma prende il colore del testo, quindi segue il tema (ADR-0009).
 import { renderAbc } from 'abcjs';
 
