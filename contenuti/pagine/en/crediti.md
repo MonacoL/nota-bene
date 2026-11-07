@@ -11,7 +11,7 @@ _Draft awaiting review._
 ## Nota Bene's licenses
 
 - The site's code is licensed under [MIT](https://github.com/MonacoL/nota-bene/blob/main/LICENSE).
-- The original texts (chapters, theory exercises, translations and these pages) are licensed under [CC BY-SA 4.0](https://github.com/MonacoL/nota-bene/blob/main/LICENSE-CONTENUTI).
+- The original texts (chapters, theory exercises, translations, and these pages) are licensed under [CC BY-SA 4.0](https://github.com/MonacoL/nota-bene/blob/main/LICENSE-CONTENUTI).
 - Each reading has the license of its edition, written below the score. Our ABC transcriptions of public domain editions are [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 Copyright Luca Monaco and the Nota Bene contributors.

@@ -7,7 +7,7 @@ aggiornata: 2026-11-06
 
 _Draft awaiting review._
 
-Nota Bene does not collect personal data. There are no accounts, forms, analytics or ads.
+Nota Bene does not collect personal data. There are no accounts, forms, analytics, or ads.
 
 ## Cookies and browser storage
 
@@ -17,9 +17,9 @@ The site uses no cookies and no `localStorage`. The only thing it saves in your 
 
 The site is hosted on GitHub Pages. When you open a page, GitHub logs your IP address for security purposes, as it does for every GitHub Pages site. GitHub handles this data as an independent controller. The details are in the [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
-## Fonts, libraries and sounds
+## Fonts, libraries, and sounds
 
-Fonts, libraries and audio samples are served by the site itself, not by third-party services.
+Fonts, libraries, and audio samples are served by the site itself, not by third-party services.
 
 ## Links to other sites
 
