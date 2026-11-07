@@ -48,4 +48,9 @@ describe('dividiEsempio', () => {
     const abc = 'X:1\nL:1/2\nK:C\nC z E | [CG] D |]\nw: DO MI SOL RE\n';
     expect(ricomposto(abc, [[0, 1], [1, 2]])).toEqual(['C z E |', 'w: DO MI |', '[CG] D |]', 'w: SOL RE |']);
   });
+
+  it('un campo dentro la musica, come un cambio di Tempo, non prende un segno', () => {
+    const abc = 'X:1\nM:2/4\nL:1/4\nK:C\n[M:3/4] C E G | E C |]\nw: DO MI SOL MI DO\n';
+    expect(ricomposto(abc, [[0, 1], [1, 2]])).toEqual(['[M:3/4] C E G |', 'w: DO MI SOL |', 'E C |]', 'w: MI DO |']);
+  });
 });
