@@ -41,6 +41,9 @@ test('"Costruisci la scala": ogni nota compare sul rigo, ⌫ cancella l\'ultima,
 });
 
 test('una Serie di "Costruisci la scala" nel Capitolo 6, con le scale minori', async ({ page }) => {
+  // Dieci scale da sette note sono circa 170 azioni: da solo il test dura 10-18 secondi, con la suite
+  // completa in locale supera i 30 di default (issue #59). Non manca un'attesa, è lungo davvero.
+  test.slow();
   await page.goto(`it/capitoli/${MINORE}/esercizi/?seed=70`);
   const foglio = page.getByRole('region', { name: 'Riscontro' });
   for (let n = 0; n < 10; n++) {
