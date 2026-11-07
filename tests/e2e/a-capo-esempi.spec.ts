@@ -2,7 +2,11 @@
 // disponibile, quante più Battute possibile per rigo, e non viene mai tagliato; il calcolo si rifà a ogni cambio di
 // larghezza.
 import { expect, test, type Page } from '@playwright/test';
+import { apri as apriPagina, fuoriDalBordo, righiDi, segniCheSiToccano } from './abcjs';
 import { CAPITOLI, LINGUE } from './pagine';
+
+const apri = (page: Page, percorso: string) => apriPagina(page, percorso, '.pentagramma');
+const esempio = (page: Page, i: number) => page.locator('.pentagramma').nth(i);
 
 /**
  * Gli esempi della pagina il cui disegno esce dall'SVG, o il cui SVG è più largo della colonna (il CSS lo
@@ -31,43 +35,14 @@ function tagliati(page: Page): Promise<string[]> {
   );
 }
 
-/** Quanti righi ha l'esempio numero `i` (da 0) della pagina. */
-function righiDi(page: Page, i: number): Promise<number> {
-  return page.locator('.pentagramma').nth(i).evaluate((p) => {
-    const righi = new Set([...p.querySelectorAll('.abcjs-note')].map((n) => /abcjs-l(\d+)/.exec(n.getAttribute('class') ?? '')?.[1]));
-    return righi.size;
-  });
-}
-
-/** Le coppie di annotazioni ("^5ª") vicine, sullo stesso rigo, che si toccano: "sinistra | destra". */
-function annotazioniCheSiToccano(page: Page): Promise<string[]> {
-  return page.locator('.pentagramma').evaluateAll((pentagrammi) =>
-    pentagrammi.flatMap((p) => {
-      const scatole = [...p.querySelectorAll('.abcjs-annotation')].map((a) => ({ r: a.getBoundingClientRect(), testo: a.textContent ?? '' }));
-      return scatole.flatMap((a) =>
-        scatole
-          .filter((b) => a !== b && Math.abs(a.r.top - b.r.top) < 2 && a.r.left <= b.r.left && b.r.left < a.r.right + 1)
-          .map((b) => `${a.testo} | ${b.testo}`),
-      );
-    }),
-  );
-}
-
-/** Apre la pagina e aspetta che gli esempi siano disegnati, se ce ne sono, con il font del sito. */
-async function apri(page: Page, percorso: string) {
-  await page.goto(percorso);
-  await page.evaluate(() => document.fonts.ready);
-  const esempi = await page.locator('.pentagramma').count();
-  await expect(page.locator('.pentagramma svg')).toHaveCount(esempi);
-}
-
 for (const lingua of LINGUE) {
   for (const capitolo of CAPITOLI) {
     test(`${lingua}/${capitolo}: a 360 px nessun esempio esce dal suo SVG`, async ({ page }, info) => {
       test.skip(!info.project.name.startsWith('phone-360'), 'si controlla a 360 px, su Chromium e Firefox');
       await apri(page, `${lingua}/capitoli/${capitolo}/`);
       expect(await tagliati(page)).toEqual([]);
-      expect(await annotazioniCheSiToccano(page)).toEqual([]);
+      expect(await fuoriDalBordo(page.locator('.pentagramma'))).toEqual([]);
+      expect(await segniCheSiToccano(page.locator('.pentagramma'), '.abcjs-annotation')).toEqual([]);
     });
   }
 }
@@ -77,16 +52,17 @@ test('un esempio che ci sta resta su un rigo, uno diviso a mano si ricompone, e 
   // Figure e pause, primo esempio: cinque Battute fino alle semicrome, scritte a mano su tre righi. A larghezza piena
   // le prime quattro stanno insieme, le semicrome no.
   await apri(page, 'it/capitoli/figure-e-pause/');
-  expect(await righiDi(page, 0)).toBe(2);
+  expect(await righiDi(esempio(page, 0))).toBe(2);
 
   // DO mobile, primo esempio: due Battute con otto Sillabe, su un rigo se c'è posto, su due a 360 px.
   await apri(page, 'it/capitoli/do-mobile/');
-  expect(await righiDi(page, 0)).toBe(1);
+  expect(await righiDi(esempio(page, 0))).toBe(1);
 
   await page.setViewportSize({ width: 360, height: 740 });
-  await expect.poll(() => righiDi(page, 0)).toBe(2);
+  await expect.poll(() => righiDi(esempio(page, 0))).toBe(2);
   expect(await tagliati(page)).toEqual([]);
+  expect(await fuoriDalBordo(page.locator('.pentagramma'))).toEqual([]);
 
   await page.setViewportSize({ width: 1280, height: 720 });
-  await expect.poll(() => righiDi(page, 0)).toBe(1);
+  await expect.poll(() => righiDi(esempio(page, 0))).toBe(1);
 });

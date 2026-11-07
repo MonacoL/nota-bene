@@ -5,7 +5,10 @@
 import { renderAbc, type AbcVisualParams, type TuneObject } from 'abcjs';
 import { daMisurare, dividi, inRighi, righi, siToccano, type Divisa, type Scatola } from '../letture/a-capo';
 
-/** `divisore` divide l'ABC per Battuta: di norma quello delle Letture, per gli esempi dei Capitoli dividiEsempio. */
+/**
+ * `divisore` divide l'ABC per Battuta: di norma quello delle Letture, per gli esempi dei Capitoli dividiEsempio
+ * (src/markdown/esempi.ts).
+ */
 type Opzioni = { larghezza: number; scala: number; divisore?: (abc: string) => Divisa };
 
 /**

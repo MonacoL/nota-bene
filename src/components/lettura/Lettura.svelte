@@ -8,6 +8,7 @@
   // L'a capo (ticket #30) mette in ogni rigo quante più Battute possibile senza che le sillabe si tocchino, e si
   // rifà a ogni cambio di larghezza, anche per lo zoom del browser: src/scripts/a-capo.ts.
   import type { TuneObject } from 'abcjs';
+  import { daRidisegnare, dimentica } from '../../scripts/abc';
   import { disegnaACapo } from '../../scripts/a-capo';
   import { ascoltoIlluminato } from '../../audio/ascolto';
   import { creaLettore, type Funzione } from '../../audio/lettore';
@@ -57,8 +58,7 @@
   function disegna() {
     // Si misura il contenitore e non la partitura: abcjs dà al div in cui disegna la larghezza dell'SVG.
     const larghezza = Math.floor(lettura.clientWidth);
-    if (!larghezza || partitura.dataset.larghezza === String(larghezza)) return;
-    partitura.dataset.larghezza = String(larghezza);
+    if (!larghezza || !daRidisegnare(partitura, larghezza, abc)) return;
     // Le note illuminate dell'Ascolto appartengono al disegno di prima.
     if (lettore.inCorso() === 'ascolto') lettore.ferma();
     disegnata = disegnaACapo(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), { larghezza, scala: SCALA });
@@ -76,7 +76,7 @@
     let attivo = true;
     document.fonts.ready.then(() => {
       if (!attivo) return;
-      delete partitura.dataset.larghezza;
+      dimentica(partitura);
       disegna();
     });
     const osservatore = new ResizeObserver(disegna);
