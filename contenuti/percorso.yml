@@ -11,7 +11,7 @@
 - id: chiavi
   numero: 2
   it: { titolo: "Chiavi", riga: "Violino, violino ottava bassa e basso: quale voce usa quale, e dove sta il Do4." }
-  en: { titolo: "Clefs", riga: "Treble, tenor, and bass: which voice part uses which, and where C4 sits." }
+  en: { titolo: "Clefs", riga: "Treble, octave treble, and bass: which voice part uses which, and where C4 sits." }
 
 - id: figure-e-pause
   numero: 3

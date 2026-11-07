@@ -6,6 +6,7 @@ Il nome inglese di ogni termine sta in `GLOSSARY.md`, nella riga `_In inglese_`.
 
 - **Tempo** (l'indicazione 3/4) diventa **Time signature**, e **Andamento** diventa **Tempo**: in inglese "tempo" è la velocità;
 - **Contralto** diventa **Alto**;
+- la chiave di **violino ottava bassa** diventa **octave treble clef**, non "tenor clef", che in inglese è la chiave di Do sulla 4ª riga;
 - le Note si scrivono con le lettere e l'ottava (Do4 → C4), mentre le Sillabe restano DO RE MI FA SOL LA TI. Sulla pagina inglese, quindi, Nota e Sillaba si distinguono a colpo d'occhio, e l'Esercizio "nomina la Nota" ha i pulsanti C D E F G A B;
 - **Mutazione** diventa **Do shift**, non "mutation", che rimanda alla solmisazione per esacordi;
 - titoli dei Brani, Testo cantato, nomi di compositori ed editori e nomi delle Fonti non si traducono.

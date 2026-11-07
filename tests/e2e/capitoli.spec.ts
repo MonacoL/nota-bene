@@ -86,7 +86,7 @@ test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Notes, whole steps, and half steps');
   await expect(page.locator('article.testo')).not.toHaveAttribute('lang', /.*/);
   await expect(page.getByRole('note').filter({ hasText: 'shown in Italian' })).toHaveCount(0);
-  await expect(page.locator('.pentagramma svg')).toHaveCount(2);
+  await expect(page.locator('.pentagramma svg')).toHaveCount(5);
   await expect(page.locator('nav.seguito').getByRole('link', { name: 'Next chapter →' })).toHaveAttribute('href', `/nota-bene/en/capitoli/${CAPITOLI[1]}/`);
 });
 
