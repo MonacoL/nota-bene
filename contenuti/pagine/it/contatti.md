@@ -1,15 +1,14 @@
 ---
 # Bozza di Claude dal ticket #14: nessuna revisione umana ancora. Chi la rivede scrive qui il suo nome e la data.
-# L'email dedicata a Nota Bene non esiste ancora (compito prima del lancio): finché non c'è resta il segnaposto.
 revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-06 }
-aggiornata: 2026-11-06
+aggiornata: 2026-11-07
 ---
 
 _Bozza in attesa di revisione._
 
 ## Scrivere a Nota Bene
 
-L'indirizzo email di Nota Bene è **[DA COMPILARE: email dedicata a Nota Bene]**.
+L'indirizzo email di Nota Bene è [monaco.luca.ve@gmail.com](mailto:monaco.luca.ve@gmail.com).
 
 Per segnalare un errore in un capitolo o in una lettura, o un problema di licenza, puoi anche aprire una segnalazione nelle [GitHub Issues](https://github.com/MonacoL/nota-bene/issues). Serve un account GitHub, e quello che scrivi lì è pubblico.
 
