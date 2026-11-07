@@ -1,0 +1,57 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente DergrimmigTod.ly è copiato così com'era il giorno dell'import.
+# Melodia del 1539 armonizzata da Gustav Schreck, dal Volksliederbuch für gemischten Chor (Peters, 1915).
+brano: Der grimmig Tod
+autore: Gustav Schreck
+fonte: mutopia
+edizione: Mutopia-2014/03/23-1704
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1704
+editore: Klaus Rettinghaus
+licenza:
+  tipo: CC BY
+  come_appare: Creative Commons Attribution 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20260607173717/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1704
+sorgente:
+  file: DergrimmigTod.ly
+  sha256: 895775b2759e9517dad29ba853f055d57fa9bd79a423af61cd3a84d3c2e67fcd
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: soprano-14-22
+    voce: soprano
+    battute: [14, 22]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    da_verificare: "Melodia del 1539 in minore naturale, e la prima frase chiude su Re: da confermare che si legga come la minore."
+    modificata: 2026-11-07
+  - id: contralto-17-22
+    voce: contralto
+    battute: [17, 22]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Contralto."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the alto notes."
+    da_verificare: "Melodia del 1539 in minore naturale, e la prima frase chiude su Re: da confermare che si legga come la minore."
+    modificata: 2026-11-07
+  - id: tenore-1-8
+    voce: tenore
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    da_verificare: "Melodia del 1539 in minore naturale, e la prima frase chiude su Re: da confermare che si legga come la minore."
+    modificata: 2026-11-07
+  - id: basso-14-22
+    voce: basso
+    battute: [14, 22]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes."
+    da_verificare: "Melodia del 1539 in minore naturale, e la prima frase chiude su Re: da confermare che si legga come la minore."
+    modificata: 2026-11-07

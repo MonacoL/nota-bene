@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:mp="http://www.mutopiaproject.org/piece-data/0.1/">
+
+<rdf:Description rdf:about=".">
+    <mp:title>Brich an, o schönes Morgenlicht</mp:title>
+    <mp:composer>BachJS</mp:composer>
+    <mp:opus>BWV 248</mp:opus>
+    <mp:lyricist>Johann Rist</mp:lyricist>
+    <mp:for>Choir (SATB)</mp:for>
+    <mp:date>1734</mp:date>
+    <mp:style>Baroque</mp:style>
+    <mp:metre/>
+    <mp:arranger/>
+    <mp:source>Breitkopf &amp;amp; Härtel, Leipzig, 1856</mp:source>
+    <mp:licence>Creative Commons Attribution-ShareAlike 4.0</mp:licence>
+
+    <mp:lyFile>Bach_BrichAn.ly</mp:lyFile>
+    <mp:midFile>Bach_BrichAn.mid</mp:midFile>
+    <mp:psFileA4>Bach_BrichAn-a4.ps.gz</mp:psFileA4>
+    <mp:pdfFileA4>Bach_BrichAn-a4.pdf</mp:pdfFileA4>
+    <mp:psFileLet>Bach_BrichAn-let.ps.gz</mp:psFileLet>
+    <mp:pdfFileLet>Bach_BrichAn-let.pdf</mp:pdfFileLet>
+    <mp:pngFile>Bach_BrichAn-preview.svg</mp:pngFile>
+    <mp:pngHeight>0</mp:pngHeight>
+    <mp:pngWidth>0</mp:pngWidth>
+
+    <mp:id>Mutopia-2016/04/22-1900</mp:id>
+    <mp:maintainer>Joram Berger</mp:maintainer>
+    <mp:maintainerEmail/>
+    <mp:maintainerWeb>http://joramberger.de</mp:maintainerWeb>
+    <mp:moreInfo/>
+    <mp:lilypondVersion>2.18.2</mp:lilypondVersion>
+</rdf:Description>
+
+</rdf:RDF>

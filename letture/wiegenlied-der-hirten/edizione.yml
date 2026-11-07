@@ -1,0 +1,53 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente Wiegenlied.ly è copiato così com'era il giorno dell'import.
+# Melodia popolare della Contea di Glatz (1842) armonizzata da Max Bruch, dal Volksliederbuch für gemischten Chor (Peters, 1915).
+brano: Wiegenlied der Hirten
+autore: Max Bruch
+fonte: mutopia
+edizione: Mutopia-2014/03/21-632
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=632
+editore: Klaus Rettinghaus
+licenza:
+  tipo: CC BY
+  come_appare: Creative Commons Attribution 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20240222174030/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=632
+sorgente:
+  file: Wiegenlied.ly
+  sha256: c6e15f790ac372cdcd5073f91c99bd49a3e902995e07f955d9884f5c87f6bb17
+letture:
+  # Le Letture sono estratte dal .ly con LilyPond 2.26 (event listener) e il Testo della prima strofa è allineato per istante.
+  # Il Testo è legato solo al Soprano: per Contralto, Tenore e Basso l'allineamento va riscontrato sul PDF.
+  - id: soprano-1-8
+    voce: soprano
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-07
+  - id: contralto-1-8
+    voce: contralto
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Contralto."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the alto notes."
+    modificata: 2026-11-07
+  - id: tenore-9-12
+    voce: tenore
+    battute: [9, 12]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    modificata: 2026-11-07
+  - id: basso-5-8
+    voce: basso
+    battute: [5, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes."
+    modificata: 2026-11-07
