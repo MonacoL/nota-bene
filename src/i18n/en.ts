@@ -17,6 +17,8 @@ export const en: Dizionario = {
   esercizi: 'Exercises',
   eserciziDi: 'Exercises: {titolo}',
   eserciziInPreparazione: 'The exercises for this chapter are being prepared.',
+  /** Il pulsante sotto ogni esempio musicale di un Capitolo (Ascolto dell'esempio, ticket #35). */
+  ascoltaEsempio: 'Listen to the example',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
     tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the time signature' },

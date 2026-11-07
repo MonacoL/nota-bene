@@ -9,15 +9,16 @@ import { SplendidGrandPiano } from 'smplr';
 import { fileCampione, VELOCITY, VELOCITY_SUONATA } from './campioni';
 import type { NotaDaSuonare } from './note';
 
-export type Funzione = 'riferimento' | 'ascolto';
+/** Nelle Letture il Riferimento tonale e l'Ascolto di verifica; nei Capitoli un Ascolto dell'esempio per esempio. */
+export type Funzione = string;
 
-export type Opzioni = {
+export type Opzioni<F extends Funzione> = {
   /** L'indirizzo della cartella dei campioni, con la barra finale. */
   campioni: string;
   /** Le altezze MIDI che la Lettura può suonare: si caricano solo i loro campioni. */
   note: readonly number[];
   /** Chiamata quando una funzione parte o si ferma (null). */
-  cambio: (funzione: Funzione | null) => void;
+  cambio: (funzione: F | null) => void;
 };
 
 /** I campioni sono tagliati a 5 s (public/audio/pianoforte/): una nota più lunga si chiude prima, col rilascio. */
@@ -30,14 +31,14 @@ const ANTICIPO = 0.1;
 const CACHE = 'nota-bene-campioni-v1';
 
 type Piano = ReturnType<typeof SplendidGrandPiano>;
-type Esecuzione = { funzione: Funzione; ferma: () => void };
+type Esecuzione<F> = { funzione: F; ferma: () => void };
 
-export function creaLettore(opzioni: Opzioni) {
+export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzioni: Opzioni<F>) {
   let ctx: AudioContext | undefined;
   let piano: Piano | undefined;
   /** true se tutti i campioni sono arrivati; false se ne manca almeno uno, e allora si suona con l'oscillatore. */
   let pronto: Promise<boolean> | undefined;
-  let inCorso: Esecuzione | undefined;
+  let inCorso: Esecuzione<F> | undefined;
 
   function sblocca(): AudioContext {
     const sessione = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
@@ -109,7 +110,7 @@ export function creaLettore(opzioni: Opzioni) {
    * Il tocco su un pulsante: ferma l'altra funzione, e se questa stava suonando la ferma e basta. Va chiamata nel
    * gestore del click, prima di ogni await.
    */
-  function tocca(funzione: Funzione, note: () => NotaDaSuonare[], evidenzia?: (indice: number) => void) {
+  function tocca(funzione: F, note: () => NotaDaSuonare[], evidenzia?: (indice: number) => void) {
     const ctx = sblocca();
     const eraQuesta = inCorso?.funzione === funzione;
     ferma();
@@ -117,7 +118,7 @@ export function creaLettore(opzioni: Opzioni) {
     pronto ??= caricaPiano(ctx);
     let fermata = false;
     const azioni: (() => void)[] = [];
-    const esecuzione: Esecuzione = {
+    const esecuzione: Esecuzione<F> = {
       funzione,
       ferma: () => {
         fermata = true;
@@ -151,7 +152,7 @@ export function creaLettore(opzioni: Opzioni) {
     tocca,
     ferma,
     /** La funzione che sta suonando, o che aspetta i campioni per farlo. */
-    inCorso: (): Funzione | null => inCorso?.funzione ?? null,
+    inCorso: (): F | null => inCorso?.funzione ?? null,
     /** Per lasciare la pagina: ferma tutto e chiude il contesto. */
     chiudi() {
       ferma();

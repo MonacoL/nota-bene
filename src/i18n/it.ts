@@ -16,6 +16,8 @@ export const it = {
   esercizi: 'Esercizi',
   eserciziDi: 'Esercizi: {titolo}',
   eserciziInPreparazione: 'Gli esercizi di questo capitolo sono in preparazione.',
+  /** Il pulsante sotto ogni esempio musicale di un Capitolo (Ascolto dell'esempio, ticket #35). */
+  ascoltaEsempio: "Ascolta l'esempio",
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
     tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo' },

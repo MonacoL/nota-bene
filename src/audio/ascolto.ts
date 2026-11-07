@@ -17,12 +17,21 @@ export type Ascolto = {
   elementi: Element[][];
 };
 
+/** L'Andamento degli esempi dei Capitoli senza Q: (ticket #35), in semiminime al minuto: Q:1/4=80. */
+export const SEMIMINIME_AL_MINUTO = 80;
+
+/**
+ * Le note di una partitura, ai suoi tempi. Senza Q: suona a SEMIMINIME_AL_MINUTO: abcjs conta le pulsazioni del
+ * Tempo (in 6/8 la semiminima puntata), quindi l'Andamento si converte, e si arrotonda come fa TimingCallbacks.
+ */
 export function ascoltoDi(partitura: TuneObject): Ascolto {
   // setUpAudio mette su ogni nota le sue altezze MIDI, che TimingCallbacks riporta negli eventi.
   partitura.setUpAudio({});
-  const eventi = new abcjs.TimingCallbacks(partitura, {}).noteTimings as Evento[];
+  const conQ = !!partitura.metaText?.tempo;
+  const pulsazioni = conQ ? undefined : Math.round((SEMIMINIME_AL_MINUTO * 0.25) / partitura.getBeatLength());
+  const eventi = new abcjs.TimingCallbacks(partitura, pulsazioni ? { qpm: pulsazioni } : {}).noteTimings as Evento[];
   // Le durate di midiPitches sono in semibrevi.
-  const msPerSemibreve = partitura.millisecondsPerMeasure() / partitura.getBarLength();
+  const msPerSemibreve = partitura.millisecondsPerMeasure(pulsazioni) / partitura.getBarLength();
   const note: NotaDaSuonare[] = [];
   const elementi: Element[][] = [];
   for (const e of eventi) {
@@ -36,10 +45,11 @@ export function ascoltoDi(partitura: TuneObject): Ascolto {
 }
 
 /**
- * L'Ascolto di verifica di una partitura, pronto per il lettore: le note, e l'evidenziazione che illumina la nota
- * che suona con le sue sillabe (la classe "suona") e fa scorrere la pagina perché resti in vista sopra i comandi.
+ * L'Ascolto di una partitura, pronto per il lettore: le note, e l'evidenziazione che illumina la nota che suona con
+ * le sue sillabe (la classe "suona"). Con i comandi, la pagina scorre perché la nota resti in vista sopra di loro:
+ * serve alle Letture, lunghe; gli esempi dei Capitoli e degli Esercizi stanno accanto al loro pulsante.
  */
-export function ascoltoIlluminato(partitura: TuneObject, comandi: Element) {
+export function ascoltoIlluminato(partitura: TuneObject, comandi?: Element) {
   let elementi: Element[][] = [];
   let illuminati: Element[] = [];
   return {
@@ -52,9 +62,23 @@ export function ascoltoIlluminato(partitura: TuneObject, comandi: Element) {
       for (const e of illuminati) e.classList.remove('suona');
       illuminati = elementi[indice] ?? [];
       for (const e of illuminati) e.classList.add('suona');
-      if (illuminati[0]) inVista(illuminati[0], comandi);
+      if (illuminati[0] && comandi) inVista(illuminati[0], comandi);
     },
   };
+}
+
+/** Le altezze MIDI reali di un ABC, senza ripetizioni: quelle di cui caricare i campioni prima di suonarlo. */
+export function altezzeDi(abc: string): number[] {
+  const [partitura] = abcjs.parseOnly(abc);
+  if (!partitura) return [];
+  partitura.setUpAudio({});
+  const altezze = partitura.lines
+    .flatMap((r) => r.staff ?? [])
+    .flatMap((s) => s.voices ?? [])
+    .flat()
+    .flatMap((e) => (e as { midiPitches?: { pitch: number }[] }).midiPitches ?? [])
+    .map((p) => p.pitch);
+  return [...new Set(altezze)].sort((a, b) => a - b);
 }
 
 /** Scorre la pagina se l'elemento è uscito dallo schermo o sta sotto la barra dei comandi (su telefono è in basso). */

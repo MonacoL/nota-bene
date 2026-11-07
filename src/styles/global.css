@@ -101,3 +101,11 @@ main { flex: 1; padding-bottom: 32px; }
   font-weight: 700; text-decoration: none;
 }
 .pulsante.secondario { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+
+/* Il pulsante dell'Ascolto, sotto un esempio o un Esercizio (ticket #35): premuto mentre suona, come nelle Letture. */
+button.ascolta {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px;
+  border-radius: var(--radius); background: transparent; color: var(--accent); border: 2px solid var(--accent);
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+button.ascolta[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); }
