@@ -2,7 +2,8 @@
 // si porta nella forma di una Lettura (un rigo di musica, righe w: con un tratto per Battuta) e va a capo con
 // lo stesso algoritmo. Qui si prova la parte che legge l'esempio, senza DOM.
 import { describe, expect, it } from 'vitest';
-import { dividiEsempio, inRighi } from '../../src/letture/a-capo';
+import { inRighi } from '../../src/letture/a-capo';
+import { dividiEsempio } from '../../src/capitoli/esempi';
 
 /** L'esempio ricomposto su `righi` (da dividiEsempio e inRighi), senza l'intestazione. */
 function ricomposto(abc: string, righi?: [number, number][]): string[] {
