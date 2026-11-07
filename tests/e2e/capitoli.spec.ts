@@ -81,12 +81,6 @@ test('nei Capitoli 9 e 10 c\'è "Prova le letture"; il 10 porta alle avanzate ed
   await expect(seguito.getByRole('link', { name: 'Capitolo successivo →' })).toHaveCount(0);
 });
 
-test('un Capitolo senza testo è in preparazione', async ({ page }) => {
-  // Il Capitolo 7 è l'ultimo ancora senza testo: quando arriva, questo test va tolto (lo copre già il test unitario).
-  await page.goto(`it/capitoli/${CAPITOLI[6]}/`);
-  await expect(page.getByText('Questo capitolo è in preparazione.')).toBeVisible();
-});
-
 test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso', async ({ page }) => {
   await page.goto(`en/capitoli/${PRIMO}/`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Notes, whole steps, and half steps');
