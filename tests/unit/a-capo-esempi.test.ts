@@ -3,7 +3,7 @@
 // lo stesso algoritmo. Qui si prova la parte che legge l'esempio, senza DOM.
 import { describe, expect, it } from 'vitest';
 import { inRighi } from '../../src/letture/a-capo';
-import { dividiEsempio } from '../../src/markdown/esempi';
+import { dividiEsempio } from '../../src/capitoli/esempi';
 
 /** L'esempio ricomposto su `righi` (da dividiEsempio e inRighi), senza l'intestazione. */
 function ricomposto(abc: string, righi?: [number, number][]): string[] {

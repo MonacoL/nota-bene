@@ -1,5 +1,5 @@
 // A capo responsive della Lettura (ticket #30, prototipo #8), in TypeScript puro: niente DOM. Gli esempi dei
-// Capitoli (ticket #63) si portano nella forma di una Lettura in src/markdown/esempi.ts e vanno a capo con questo.
+// Capitoli (ticket #63) si portano nella forma di una Lettura in src/capitoli/esempi.ts e vanno a capo con questo.
 // L'ABC si divide per Battuta, note e righe w: insieme (le righe w: hanno un tratto per Battuta, ADR-0003 e
 // src/letture/righe-w.ts), e si ricompone con un rigo per gruppo di Battute. Quante Battute stanno in un rigo lo
 // decide chi disegna e misura.

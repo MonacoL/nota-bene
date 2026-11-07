@@ -7,7 +7,7 @@ import { daMisurare, dividi, inRighi, righi, siToccano, type Divisa, type Scatol
 
 /**
  * `divisore` divide l'ABC per Battuta: di norma quello delle Letture, per gli esempi dei Capitoli dividiEsempio
- * (src/markdown/esempi.ts).
+ * (src/capitoli/esempi.ts).
  */
 type Opzioni = { larghezza: number; scala: number; divisore?: (abc: string) => Divisa };
 

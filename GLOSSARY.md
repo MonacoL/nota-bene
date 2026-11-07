@@ -65,6 +65,11 @@ Esecuzione sonora facoltativa, su richiesta, dell'estratto di una Lettura, per c
 _Avoid_: playback, soluzione audio
 _In inglese_: Playback check; il pulsante dice "Listen to check"
 
+**Ascolto dell'esempio**:
+Esecuzione sonora facoltativa, su richiesta, di un esempio musicale di un Capitolo, con lo stesso pianoforte delle Letture.
+_Avoid_: audio, playback
+_In inglese_: Example playback
+
 ## Repertorio
 
 **Brano**:

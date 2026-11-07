@@ -8,7 +8,7 @@
   // L'a capo (ticket #30) mette in ogni rigo quante più Battute possibile senza che le sillabe si tocchino, e si
   // rifà a ogni cambio di larghezza, anche per lo zoom del browser: src/scripts/a-capo.ts.
   import type { TuneObject } from 'abcjs';
-  import { daRidisegnare, dimentica } from '../../scripts/abc';
+  import { dimenticaDisegno, segnaDisegno } from '../../scripts/disegno';
   import { disegnaACapo } from '../../scripts/a-capo';
   import { ascoltoIlluminato } from '../../audio/ascolto';
   import { creaLettore, type Funzione } from '../../audio/lettore';
@@ -36,7 +36,7 @@
 
   // Testo e Sillabe a circa 16 px (ADR-0009): 15 pt in abcjs sono 20 px, per la scala 0,8.
   const SCALA = 0.8;
-  const intestazione = '%%vocalfont "Atkinson Hyperlegible Next" 15\n';
+  const daDisegnare = abc.replace(/^(X:.*\n)/, `$1%%vocalfont "Atkinson Hyperlegible Next" 15\n`);
 
   let soluzione = $state(false);
   let partitura: HTMLDivElement;
@@ -58,10 +58,10 @@
   function disegna() {
     // Si misura il contenitore e non la partitura: abcjs dà al div in cui disegna la larghezza dell'SVG.
     const larghezza = Math.floor(lettura.clientWidth);
-    if (!larghezza || !daRidisegnare(partitura, larghezza, abc)) return;
+    if (!larghezza || !segnaDisegno(partitura, larghezza, daDisegnare)) return;
     // Le note illuminate dell'Ascolto appartengono al disegno di prima.
     if (lettore.inCorso() === 'ascolto') lettore.ferma();
-    disegnata = disegnaACapo(partitura, abc.replace(/^(X:.*\n)/, `$1${intestazione}`), { larghezza, scala: SCALA });
+    disegnata = disegnaACapo(partitura, daDisegnare, { larghezza, scala: SCALA });
     // abcjs mette le righe w: della stessa nota in un <text>, un <tspan> per riga, anche vuoto: la Sillaba è
     // il tspan dopo quelli del Testo. Le note legate hanno lì solo uno spazio e restano senza marca.
     for (const nota of partitura.querySelectorAll('.abcjs-lyric')) {
@@ -76,7 +76,7 @@
     let attivo = true;
     document.fonts.ready.then(() => {
       if (!attivo) return;
-      dimentica(partitura);
+      dimenticaDisegno(partitura);
       disegna();
     });
     const osservatore = new ResizeObserver(disegna);
