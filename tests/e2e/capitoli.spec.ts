@@ -59,7 +59,7 @@ test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page
 test('gli esempi abc diventano pentagrammi nel colore del testo', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/`);
   const pentagrammi = page.locator('.pentagramma svg');
-  await expect(pentagrammi).toHaveCount(2);
+  await expect(pentagrammi).toHaveCount(5);
   await expect(pentagrammi.first().locator('.abcjs-note').first()).toBeVisible();
   for (const tema of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: tema });
