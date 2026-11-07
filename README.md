@@ -17,7 +17,7 @@ La repo contiene tre cose con tre licenze diverse (ADR-0005). Il copyright è di
 
 | Cartella o file | Che cosa contiene | Licenza |
 | --- | --- | --- |
-| tutto ciò che le righe sotto non nominano: `src/`, `scripts/`, `public/`, `tests/`, `docs/`, file di configurazione | il codice del sito, della build e della validazione, e la sua documentazione | MIT, in [`LICENSE`](LICENSE) |
+| tutto ciò che le righe sotto non nominano: `src/`, `scripts/`, `strumenti/lilypond/`, `public/`, `tests/`, `docs/`, file di configurazione | il codice del sito, della build e della validazione, e la sua documentazione | MIT, in [`LICENSE`](LICENSE) |
 | `contenuti/` | Capitoli, traduzioni, pagine di servizio | CC BY-SA 4.0, in [`LICENSE-CONTENUTI`](LICENSE-CONTENUTI) |
 | `letture/<brano>/` | le Letture in ABC e il sorgente copiato dalla Fonte | quella dell'Edizione, in `edizione.yml`; le nostre trascrizioni di un'Edizione di pubblico dominio sono CC0 (`trascrizioni: CC0`) |
 | `tests/e2e/letture-esempio/`, `tests/unit/letture/` | Letture d'esempio per i test | come `letture/`: quella del loro `edizione.yml` |

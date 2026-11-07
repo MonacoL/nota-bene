@@ -64,7 +64,19 @@ Lo script lancia xml2abc (in `strumenti/xml2abc/`, serve Python 3) sul sorgente 
 - Senza Andamento nella Fonte lo script non scrive il `Q:`: lo si aggiunge a mano (ADR-0008).
 - Le Note di una Voce di tenore in chiave di violino ottava bassa si scrivono un'ottava sopra (ADR-0003).
 
-**Da Mutopia** l'estratto si trascrive a mano in ABC guardando il PDF, sul modello di `letture/if-ye-love-me/soprano-1-7.abc`, e la Lettura si aggiunge a mano in `edizione.yml` e in `pubblicate.txt`.
+**Da un sorgente LilyPond** (Mutopia) lo stesso comando usa `strumenti/lilypond/ly2abc.py`. LilyPond legge il brano con un event listener, che dà ogni nota con Battuta, posizione, altezza e durata: `\relative`, levare e legature li risolve lui, senza trascrivere a mano. Serve LilyPond 2.24 o successivo: il comando `lilypond` nel PATH, oppure la variabile `LILYPOND` con il percorso (il pacchetto per Linux si estrae dove si vuole, senza installarlo). Il funzionamento è in `strumenti/lilypond/README.md`.
+
+```sh
+npm run nuova-lettura -- wiegenlied-der-hirten --voce soprano --battute 9-12          # elenca Voci e Testi
+npm run nuova-lettura -- wiegenlied-der-hirten --voce soprano --battute 9-12 \
+  --v Sopran --levare 1/8 --testo verseone
+```
+
+- `--v` è il nome della Voce in LilyPond; senza, lo script elenca le Voci e i Testi del brano. Per vedere le note Battuta per Battuta e scegliere l'estratto: `python3 strumenti/lilypond/ly2abc.py mostra <file.ly> <Voce> 1-12`.
+- `--levare 1/8` prende quella durata, in semibrevi, dalla fine della Battuta prima della prima: è il levare della frase. `--taglia 1/4` toglie dall'ultima Battuta il levare della frase dopo, e lo sostituisce con una pausa.
+- Il Testo è la prima strofa del contesto `--testo`, oppure quello legato alla Voce, se c'è. Si allinea per istante: ogni nota prende la sillaba che comincia con lei, le altre un `_`. Spesso il Testo è scritto solo sotto il Soprano: per le altre Voci l'allineamento va controllato sul PDF, e se il ritmo è diverso da quello del Soprano si corregge a mano. Lo script segnala le sillabe che cadono dentro una nota della Voce.
+- Una Voce divisa, come un'ottava nell'ultima Battuta, ferma lo script; `--piu-grave` tiene la nota più grave, e la scelta va scritta in `modifiche`.
+- Se nel sorgente il tenore è in chiave di basso, come nei Brani del Volksliederbuch, va scritto in `modifiche`: la Lettura lo mette in chiave di violino ottava bassa.
 
 ### Le decisioni da compilare
 
