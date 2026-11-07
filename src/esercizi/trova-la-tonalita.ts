@@ -1,8 +1,8 @@
 // Esercizio "Trova la tonalità" (Capitoli 5 e 6): un'Armatura; la domanda dice se la Tonalità è maggiore o minore,
 // e si risponde con la Tonica (♭ ♮ ♯ e nome, poi Verifica). Tra gli errori tipici c'è la relativa, e la spiegazione la nomina.
-import { abcTonalita, armatura, BEMOLLE, DIESIS, tonicaMaggiore } from './armature';
+import { abcTonalita, BEMOLLE, DIESIS, tonicaMaggiore, tonicaMinore } from './armature';
 import { casuale } from './casuale';
-import { LETTERE, type Alterazione, type Lettera } from './note';
+import type { Alterazione, Lettera } from './note';
 import { nomeNota, type Testi } from './testi';
 
 export type Modo = 'maggiore' | 'minore';
@@ -26,12 +26,6 @@ const DOMANDE: Record<Modo, Testi> = {
   minore: { it: 'Quale tonalità minore ha questa armatura?', en: 'Which minor key has this key signature?' },
 };
 const MODI_EN: Record<Modo, string> = { maggiore: 'major', minore: 'minor' };
-
-/** La relativa minore: la tonica sta sul 6° grado della maggiore, una terza minore sotto. */
-function tonicaMinore(quinte: number): Tonica {
-  const lettera = LETTERE[(LETTERE.indexOf(tonicaMaggiore(quinte).lettera) + 5) % 7]!;
-  return { lettera, alterazione: armatura(quinte)[lettera] };
-}
 
 const tonicaDi = (quinte: number, modo: Modo) => (modo === 'maggiore' ? tonicaMaggiore(quinte) : tonicaMinore(quinte));
 const nomi = (t: Tonica): Testi => ({ it: nomeNota(t, 'it'), en: nomeNota(t, 'en') });

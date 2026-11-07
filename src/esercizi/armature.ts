@@ -17,6 +17,12 @@ export function tonicaMaggiore(quinte: number): { lettera: Lettera; alterazione:
   return { lettera, alterazione: armatura(quinte)[lettera] };
 }
 
+/** La Tonica della relativa minore: sta sul 6° grado della maggiore, una terza minore sotto. */
+export function tonicaMinore(quinte: number): { lettera: Lettera; alterazione: Alterazione } {
+  const lettera = LETTERE[(LETTERE.indexOf(tonicaMaggiore(quinte).lettera) + 5) % 7]!;
+  return { lettera, alterazione: armatura(quinte)[lettera] };
+}
+
 /** La Tonalità maggiore come la scrive il `K:` dell'ABC: "Bb", "F#". */
 export function abcTonalita(quinte: number): string {
   const { lettera, alterazione } = tonicaMaggiore(quinte);

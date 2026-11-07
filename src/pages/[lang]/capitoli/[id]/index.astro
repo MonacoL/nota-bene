@@ -34,7 +34,7 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
   {testo?.ripiego && <p class="avviso" role="note">{t.avvisoNonTradotto}</p>}
 
   {Contenuto
-    ? <article class="testo" lang={testo!.ripiego ? testo!.lingua : undefined}><Contenuto /></article>
+    ? <article class="testo" lang={testo!.ripiego ? testo!.lingua : undefined} data-ascolta={t.ascoltaEsempio}><Contenuto /></article>
     : <p class="muted">{t.capitoloInPreparazione}</p>}
 
   <nav class="seguito" aria-label={t.navCapitoli}>
@@ -63,6 +63,8 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
   }
   .testo :global(.pentagramma) { margin: 0.5em 0 1.2em; color: var(--ink); }
   .testo :global(.pentagramma svg) { display: block; max-width: 100%; height: auto; }
+  .testo :global(.pentagramma .suona) { fill: var(--suona); }
+  .testo :global(.pentagramma + .ascolta) { margin: -0.6em 0 1.2em; }
   .seguito { margin-top: 2em; padding-top: 1em; border-top: 1px solid var(--line); }
   .azioni { display: flex; flex-wrap: wrap; gap: 12px; }
   .vicini { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; }

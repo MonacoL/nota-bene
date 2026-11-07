@@ -1,8 +1,7 @@
 ---
-# Esercizio provvisorio: "Trova Tonica e Modo" arriva con il ticket #35. Il Capitolo si rivede dopo, con l'esercizio giusto qui.
 revisione: { da: "nessuno, bozza di Claude", data: 2026-11-07 }
 esercizi:
-  - { tipo: trova-la-tonalita, modi: [maggiore, minore] }
+  - { tipo: trova-tonica-e-modo, chiavi: [violino, violino-ottava-bassa, basso] }
 ---
 
 Un'armatura vale per due tonalità, una maggiore e la sua relativa minore. Per sapere quale delle due usa un brano bisogna guardare la musica. Questo capitolo spiega come trovare la tonica e poi il modo, cioè se il passaggio è maggiore o minore.

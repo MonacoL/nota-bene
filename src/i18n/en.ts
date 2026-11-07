@@ -17,9 +17,11 @@ export const en: Dizionario = {
   esercizi: 'Exercises',
   eserciziDi: 'Exercises: {titolo}',
   eserciziInPreparazione: 'The exercises for this chapter are being prepared.',
+  /** Il pulsante sotto ogni esempio musicale di un Capitolo (Ascolto dell'esempio, ticket #35). */
+  ascoltaEsempio: 'Listen to the example',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the time signature' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the time signature' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
     domande: {
@@ -29,6 +31,7 @@ export const en: Dizionario = {
       'rivolta-intervallo': 'What is the inversion of this interval?',
       'completa-la-battuta': 'Which note values complete the measure?',
       'riconosci-il-tempo': 'What time signature are these measures in?',
+      'trova-tonica-e-modo': 'What key is this melody in?',
     },
     risposta: 'Answer',
     alterazioni: { bemolle: 'flat', bequadro: 'natural', diesis: 'sharp' },
@@ -39,6 +42,10 @@ export const en: Dizionario = {
     figure: { semibreve: 'whole note', minima: 'half note', semiminima: 'quarter note', croma: 'eighth note' },
     punto: 'dot',
     verifica: 'Check',
+    /** Il pulsante dell'Ascolto negli Esercizi che si possono sentire (ticket #35). */
+    ascolta: 'Listen',
+    /** "Find the tonic and mode": the second step of the answer, and the button back to the first. */
+    modo: { domanda: 'Major or minor?', tonica: '← Tonic: {nome}', maggiore: 'major', minore: 'minor' },
     riscontro: 'Feedback',
     giusto: '✓ Correct',
     sbagliato: '✗ Not quite',
