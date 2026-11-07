@@ -147,7 +147,7 @@ _In inglese_: Do shift _(evitare: mutation)_
 **Chiave**:
 Uno dei tre segni usati in partitura: chiave di violino, chiave di violino ottava bassa (per i tenori), chiave di basso.
 _Avoid_: chiave di Do (non trattata)
-_In inglese_: Clef: treble, tenor (treble 8vb), bass
+_In inglese_: Clef: treble, octave treble (treble 8vb), bass _(evitare: tenor clef, che in inglese è la chiave di Do sulla 4ª riga)_
 
 **Figura**:
 Il segno che indica la durata di una nota o di una pausa (semibreve, minima, semiminima, croma, semicroma).
