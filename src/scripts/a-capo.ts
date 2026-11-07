@@ -26,7 +26,8 @@ export function disegnaACapo(
     add_classes: true,
     scale: scala,
     // In abcjs 6.7.2 staffwidth è già in px di uscita: scale rimpicciolisce solo i simboli (prototipo #8).
-    // Un px in meno: in un rigo stirato la stanghetta finale "|]" sporge di qualche decimo oltre staffwidth.
+    // Un px in meno della colonna: in un rigo stirato la stanghetta finale "|]" sporge di qualche decimo oltre
+    // staffwidth. Il bordo per problema() resta staffwidth + 1, come prima.
     staffwidth: larghezza - 1,
     paddingleft: 0,
     paddingright: 0,
@@ -51,7 +52,8 @@ export function disegnaACapo(
 
 /** Che cosa non va nel rigo disegnato numero `riga` (da 0): qualcosa esce dal bordo, o due segni si toccano. */
 function problema(contenitore: HTMLElement, riga: number, larghezza: number): string | undefined {
-  const bordo = contenitore.getBoundingClientRect().left + larghezza + 1;
+  // larghezza è quella della colonna; il rigo è disegnato a larghezza - 1 (vedi staffwidth) e tollera 1 px.
+  const bordo = contenitore.getBoundingClientRect().left + larghezza;
   const delRigo = [...contenitore.querySelectorAll(`.abcjs-l${riga}`)];
   const esce = delRigo.some(
     (e) => e.matches('.abcjs-note, .abcjs-bar, .abcjs-lyric, .abcjs-annotation') && e.getBoundingClientRect().right > bordo,
