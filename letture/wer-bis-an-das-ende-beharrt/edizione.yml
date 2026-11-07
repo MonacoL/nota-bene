@@ -1,0 +1,33 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente elias_32.ly è copiato così com'era il giorno dell'import.
+# Coro n. 32 dell'oratorio Elias, op. 70.
+brano: Wer bis an das Ende beharrt
+autore: Felix Mendelssohn
+fonte: mutopia
+edizione: Mutopia-2013/02/21-598
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=598
+editore: Kris Van Bruwaene
+licenza:
+  tipo: CC BY-SA
+  come_appare: Creative Commons Attribution-ShareAlike 3.0
+  url: https://creativecommons.org/licenses/by-sa/3.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20251206204719/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=598
+sorgente:
+  file: elias_32.ly
+  sha256: 2737c0f4b5c6be3ce470a013574bb3ed13d0e77045523279a5c7009049dfabd7
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: contralto-17-24
+    voce: contralto
+    battute: [17, 24]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni:
+      - battuta: 19
+        posizione: 1
+        tonalita: G minor
+      - battuta: 20
+        posizione: 1
+        tonalita: A minor
+    da_verificare: 'Due Mutazioni ravvicinate (sol minore, poi la minore) e melismi lunghi su "harrt" e "selig": da confermare che la Lettura sia adatta.'
+    modificata: 2026-11-07

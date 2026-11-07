@@ -23,6 +23,27 @@ letture:
     battute: [1, 7]
     prerequisiti: [do-mobile]
     modifiche:
-      it: Le legature di portamento su note uguali (battute 2–3 e 6–7) sono scritte come legature di valore.
-      en: Slurs between equal notes (measures 2–3 and 6–7) are written as ties.
+      it: "Le legature di portamento su note uguali (battute 2–3 e 6–7) sono scritte come legature di valore."
+      en: "Slurs between equal notes (measures 2–3 and 6–7) are written as ties."
     modificata: 2026-11-06
+  - id: contralto-7-13
+    voce: contralto
+    battute: [7, 13]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-07
+  - id: tenore-1-8
+    voce: tenore
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Le legature di portamento su note uguali (battute 2–3, 4–5 e 7–8) sono scritte come legature di valore."
+      en: "Slurs between equal notes (measures 2–3, 4–5 and 7–8) are written as ties."
+    modificata: 2026-11-07
+  - id: basso-7-13
+    voce: basso
+    battute: [7, 13]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-07

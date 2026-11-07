@@ -1,0 +1,57 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente DerguteKamerad.ly è copiato così com'era il giorno dell'import.
+# Melodia popolare armonizzata da Hermann Suter, dal Volksliederbuch für gemischten Chor (Peters, 1915).
+brano: Der gute Kamerad
+autore: Hermann Suter
+fonte: mutopia
+edizione: Mutopia-2014/03/23-730
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=730
+editore: Klaus Rettinghaus
+licenza:
+  tipo: CC BY
+  come_appare: Creative Commons Attribution 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20260124180327/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=730
+sorgente:
+  file: DerguteKamerad.ly
+  sha256: 9b9bb3d26612f50c052e141d2911a05c0f9b9fd1aa1783bdea2b223fed893947
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: contralto-1-4
+    voce: contralto
+    battute: [1, 4]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Contralto."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the alto notes."
+    modificata: 2026-11-07
+  - id: tenore-5-12
+    voce: tenore
+    battute: [5, 12]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    modificata: 2026-11-07
+  - id: basso-1-4
+    voce: basso
+    battute: [1, 4]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso. All'ultima Battuta la Fonte divide il Basso in ottava (Mi e La): qui c'è solo il La grave."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes. In the last measure the source splits the bass part into octaves (E and A): only the low A is kept here."
+    modificata: 2026-11-07
+  - id: basso-5-12
+    voce: basso
+    battute: [5, 12]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso. All'ultima Battuta la Fonte divide il Basso in ottava (Mi e La): qui c'è solo il La grave."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes. In the last measure the source splits the bass part into octaves (E and A): only the low A is kept here."
+    da_verificare: "Il Re♯ della battuta 7 porta verso Mi: letto come Sillaba cromatica (FI), ma si può leggere come Mutazione."
+    modificata: 2026-11-07

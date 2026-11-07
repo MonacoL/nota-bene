@@ -1,0 +1,63 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente Tharau.ly è copiato così com'era il giorno dell'import.
+# Melodia di Friedrich Silcher (1825) armonizzata da Ernst Eduard Taubert, dal Volksliederbuch für gemischten Chor (Peters, 1915).
+brano: Ännchen von Tharau
+autore: Friedrich Silcher
+fonte: mutopia
+edizione: Mutopia-2014/03/21-629
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=629
+editore: Klaus Rettinghaus
+licenza:
+  tipo: CC BY
+  come_appare: Creative Commons Attribution 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20240422093857/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=629
+sorgente:
+  file: Tharau.ly
+  sha256: 369c18124f015c32d9a1778f8c3acd01cfa69ff377fa5333221e22c2c1676f0d
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: soprano-1-8
+    voce: soprano
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-07
+  - id: contralto-17-24
+    voce: contralto
+    battute: [17, 24]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Contralto."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the alto notes."
+    modificata: 2026-11-07
+  - id: tenore-1-8
+    voce: tenore
+    battute: [1, 8]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    da_verificare: "Finisce con il Tenore che si muove (La, Si♭, Do) mentre il Soprano chiude la frase: da confermare la fine dell'estratto."
+    modificata: 2026-11-07
+  - id: tenore-17-24
+    voce: tenore
+    battute: [17, 24]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    modificata: 2026-11-07
+  - id: basso-17-24
+    voce: basso
+    battute: [17, 24]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes."
+    modificata: 2026-11-07

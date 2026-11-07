@@ -1,0 +1,31 @@
+# Edizione CPDL (ADR-0003), creata da nuova-edizione. Il sorgente 188_Ich_dank_dir_schon.mxl è copiato così com'era il giorno dell'import.
+# Corale n. 188 dei Vierstimmige Choralgesänge (1785), trascritto da Barry Johnston.
+brano: Ich dank dir schon durch deinen Sohn
+autore: Johann Sebastian Bach
+fonte: cpdl
+edizione: "#61347"
+url: https://www.cpdl.org/wiki/index.php/Ich_dank_dir_schon_durch_deinen_Sohn,_BWV_349_(Johann_Sebastian_Bach)
+editore: Barry Johnston
+licenza:
+  tipo: CPDL License
+  come_appare: CPDL
+  url: https://www.cpdl.org/wiki/index.php/ChoralWiki:CPDL
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20240415074239/https://www.cpdl.org/wiki/index.php/Ich_dank_dir_schon_durch_deinen_Sohn,_BWV_349_(Johann_Sebastian_Bach)
+sorgente:
+  file: 188_Ich_dank_dir_schon.mxl
+  sha256: bf11ba1c7eda01da58f2280458626dd4057038958cb9178845852a8d48dd2b96
+letture:
+  # Da 188_Ich_dank_dir_schon.mxl con nuova-lettura (V:4); il Testo è scritto a mano dalla prima strofa del Soprano.
+  - id: basso-1-8
+    voce: basso
+    battute: [1, 8]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni:
+      - battuta: 5
+        posizione: 2
+        tonalita: Bb major
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes."
+    modificata: 2026-11-07

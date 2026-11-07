@@ -1,0 +1,36 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente Abendlied.ly è copiato così com'era il giorno dell'import.
+# Melodia popolare (1532) armonizzata da Engelbert Humperdinck, dal Volksliederbuch für gemischten Chor (Peters, 1915).
+brano: Ein geistlich Abendlied
+autore: Engelbert Humperdinck
+fonte: mutopia
+edizione: Mutopia-2014/03/23-854
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=854
+editore: Klaus Rettinghaus
+licenza:
+  tipo: CC BY
+  come_appare: Creative Commons Attribution 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20240815205144/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=854
+sorgente:
+  file: Abendlied.ly
+  sha256: 045a2c2ffef063eadcd8a9f3bf331892af71e90ca71502a666d90d0031cc53df
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: soprano-1-8
+    voce: soprano
+    battute: [1, 8]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni:
+      - battuta: 7
+        posizione: 4
+        tonalita: C major
+    da_verificare: "Dopo la Mutazione restano due note (Si e Do): da confermare che basti per una Lettura con Mutazione."
+    modificata: 2026-11-07
+  - id: contralto-1-8
+    voce: contralto
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modificata: 2026-11-07

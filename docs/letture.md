@@ -103,6 +103,8 @@ La v1 punta a **32 Letture** da **8–10 Brani**. Per ogni Voce:
 
 In tutto il catalogo servono almeno 4 Tonalità diverse e il Testo in almeno 3 Letture su 4. Se una Voce non arriva al suo numero, la v1 esce lo stesso e la differenza si annota.
 
+Differenze del catalogo iniziale (ticket [#38](https://github.com/MonacoL/nota-bene/issues/38)): le 32 Letture vengono da 11 Brani invece che da 8–10. La Mutazione del Basso viene da un corale di Bach su CPDL (BWV 349, trascrizione di Barry Johnston). L'unico candidato su Mutopia, Hymn of Eve (Uxbridge), è stato scartato perché non si sa chi abbia scritto l'armonizzazione del Methodist Hymn Book 1933.
+
 ## 6. La PR
 
 Il template della PR ha la checklist. La CI:

@@ -1,0 +1,58 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente alas.ly è copiato così com'era il giorno dell'import.
+# Composizione originale messa dall'autore nel pubblico dominio; testo di Isaac Watts.
+brano: Alas! and Did My Savior Bleed?
+autore: James Banks
+fonte: mutopia
+edizione: Mutopia-2006/09/07-813
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=813
+editore: James Banks
+licenza:
+  tipo: PD
+  come_appare: Public Domain
+  url: https://creativecommons.org/licenses/publicdomain/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20260612180709/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=813
+trascrizioni: CC0
+sorgente:
+  file: alas.ly
+  sha256: e7a9092b98327f9e510e47f3e2a2a1266f10120e5f1e19ae4e754d1fa5e30533
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: soprano-9-16
+    voce: soprano
+    battute: [9, 16]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    da_verificare: "Composizione recente di un autore non professionista, in minore naturale senza sensibile: da confermare il Modo e la scelta del Brano."
+    modificata: 2026-11-07
+  - id: contralto-9-16
+    voce: contralto
+    battute: [9, 16]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Contralto."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the alto notes."
+    da_verificare: "Composizione recente di un autore non professionista, in minore naturale senza sensibile: da confermare il Modo e la scelta del Brano."
+    modificata: 2026-11-07
+  - id: tenore-9-16
+    voce: tenore
+    battute: [9, 16]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Nella Fonte il Tenore è in chiave di basso; qui è in chiave di violino ottava bassa. Il Testo, scritto sotto il Soprano, è allineato alle note del Tenore."
+      en: "The tenor part is in bass clef in the source and in tenor treble clef here. The lyrics, printed under the soprano part, are aligned to the tenor notes."
+    da_verificare: "Composizione recente di un autore non professionista, in minore naturale senza sensibile: da confermare il Modo e la scelta del Brano."
+    modificata: 2026-11-07
+  - id: basso-1-8
+    voce: basso
+    battute: [1, 8]
+    prerequisiti: [do-mobile]
+    mutazioni: []
+    modifiche:
+      it: "Il Testo, che nella Fonte è scritto sotto il Soprano, è allineato alle note del Basso."
+      en: "The lyrics, printed under the soprano part in the source, are aligned to the bass notes."
+    da_verificare: "Composizione recente di un autore non professionista, in minore naturale senza sensibile: da confermare il Modo e la scelta del Brano."
+    modificata: 2026-11-07

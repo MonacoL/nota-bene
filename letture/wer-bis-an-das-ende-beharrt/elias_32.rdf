@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:mp="http://www.mutopiaproject.org/piece-data/0.1/">
+
+<rdf:Description rdf:about=".">
+    <mp:title>Wer bis an das Ende beharrt</mp:title>
+    <mp:composer>Mendelssohn-BartholdyF</mp:composer>
+    <mp:opus>Opus 70, Nr. 32</mp:opus>
+    <mp:lyricist>Mt. 10, 22</mp:lyricist>
+    <mp:for>Voice (SATB)</mp:for>
+    <mp:date/>
+    <mp:style>Romantic</mp:style>
+    <mp:metre>Andante sostenuto</mp:metre>
+    <mp:arranger/>
+    <mp:source>Breitkopf &amp;amp; Härtel</mp:source>
+    <mp:licence>Creative Commons Attribution-ShareAlike 3.0</mp:licence>
+
+    <mp:lyFile>elias_32.ly</mp:lyFile>
+    <mp:midFile>elias_32.mid</mp:midFile>
+    <mp:psFileA4>elias_32-a4.ps.gz</mp:psFileA4>
+    <mp:pdfFileA4>elias_32-a4.pdf</mp:pdfFileA4>
+    <mp:psFileLet>elias_32-let.ps.gz</mp:psFileLet>
+    <mp:pdfFileLet>elias_32-let.pdf</mp:pdfFileLet>
+    <mp:pngFile>elias_32-preview.png</mp:pngFile>
+    <mp:pngHeight>225</mp:pngHeight>
+    <mp:pngWidth>458</mp:pngWidth>
+
+    <mp:id>Mutopia-2013/02/21-598</mp:id>
+    <mp:maintainer>Kris Van Bruwaene</mp:maintainer>
+    <mp:maintainerEmail>kris.vanbruwaene@gmail.com</mp:maintainerEmail>
+    <mp:maintainerWeb/>
+    <mp:moreInfo/>
+    <mp:lilypondVersion>2.16.1</mp:lilypondVersion>
+</rdf:Description>
+
+</rdf:RDF>

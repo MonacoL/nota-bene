@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:mp="http://www.mutopiaproject.org/piece-data/0.1/">
+
+<rdf:Description rdf:about=".">
+    <mp:title>Ein geistlich Abendlied</mp:title>
+    <mp:composer>HumperdinckE</mp:composer>
+    <mp:opus/>
+    <mp:lyricist>G. Kinkel (1815–1882)</mp:lyricist>
+    <mp:for>Choir (SATB)</mp:for>
+    <mp:date>1910s</mp:date>
+    <mp:style>Romantic</mp:style>
+    <mp:metre/>
+    <mp:arranger>Bearbeitung von Engelbert Humperdinck (1854–1921)</mp:arranger>
+    <mp:source>Leipzig : C. F. Peters, 1915</mp:source>
+    <mp:licence>Creative Commons Attribution 4.0</mp:licence>
+
+    <mp:lyFile>Abendlied.ly</mp:lyFile>
+    <mp:midFile>Abendlied.mid</mp:midFile>
+    <mp:psFileA4>Abendlied-a4.ps.gz</mp:psFileA4>
+    <mp:pdfFileA4>Abendlied-a4.pdf</mp:pdfFileA4>
+    <mp:psFileLet>Abendlied-let.ps.gz</mp:psFileLet>
+    <mp:pdfFileLet>Abendlied-let.pdf</mp:pdfFileLet>
+    <mp:pngFile>Abendlied-preview.svg</mp:pngFile>
+    <mp:pngHeight>0</mp:pngHeight>
+    <mp:pngWidth>0</mp:pngWidth>
+
+    <mp:id>Mutopia-2014/03/23-854</mp:id>
+    <mp:maintainer>Klaus Rettinghaus</mp:maintainer>
+    <mp:maintainerEmail/>
+    <mp:maintainerWeb/>
+    <mp:moreInfo/>
+    <mp:lilypondVersion>2.18.0</mp:lilypondVersion>
+</rdf:Description>
+
+</rdf:RDF>

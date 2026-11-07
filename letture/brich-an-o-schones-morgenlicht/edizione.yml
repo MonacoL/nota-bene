@@ -1,0 +1,40 @@
+# Edizione Mutopia (ADR-0003), creata da nuova-edizione. Il sorgente Bach_BrichAn.ly è copiato così com'era il giorno dell'import.
+# Corale n. 12 dell'Oratorio di Natale, BWV 248.
+brano: Brich an, o schönes Morgenlicht
+autore: Johann Sebastian Bach
+fonte: mutopia
+edizione: Mutopia-2016/04/22-1900
+url: https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1900
+editore: Joram Berger
+licenza:
+  tipo: CC BY-SA
+  come_appare: Creative Commons Attribution-ShareAlike 4.0
+  url: https://creativecommons.org/licenses/by-sa/4.0/
+  consultata: 2026-11-07
+  prova: https://web.archive.org/web/20260612180824/https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1900
+sorgente:
+  file: Bach_BrichAn.ly
+  sha256: a138e8cb5d276f24234635befc0a90c9ebdcb62a81fba4e37167938a2256cbac
+letture:
+  # Estratte dal .ly con LilyPond 2.26 (event listener); il Testo della prima strofa è allineato per istante.
+  # Dove il Testo sta solo sotto il Soprano, l'allineamento delle altre Voci va riscontrato sul PDF.
+  - id: soprano-7-10
+    voce: soprano
+    battute: [7, 10]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni: []
+    da_verificare: "Il Re♯ della battuta 8 porta verso mi minore: letto come Sillaba cromatica (SI), ma si può leggere come Mutazione."
+    modificata: 2026-11-07
+  - id: tenore-9-12
+    voce: tenore
+    battute: [9, 12]
+    prerequisiti: [do-mobile-avanzato]
+    mutazioni:
+      - battuta: 10
+        posizione: 4
+        tonalita: D major
+      - battuta: 11
+        posizione: 2
+        tonalita: G major
+    da_verificare: "Il Do♯ della battuta 10 è letto come Mutazione a Re maggiore, con ritorno a Sol alla battuta 11; si può leggere anche come Sillaba cromatica (FI) senza spostare il DO."
+    modificata: 2026-11-07

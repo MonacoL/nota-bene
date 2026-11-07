@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:mp="http://www.mutopiaproject.org/piece-data/0.1/">
+
+<rdf:Description rdf:about=".">
+    <mp:title>Der gute Kamerad</mp:title>
+    <mp:composer>SuterH</mp:composer>
+    <mp:opus/>
+    <mp:lyricist>L. Uhland (1787–1862), 1809</mp:lyricist>
+    <mp:for>Choir (SATB)</mp:for>
+    <mp:date>1910s</mp:date>
+    <mp:style>Romantic</mp:style>
+    <mp:metre/>
+    <mp:arranger>bearbeitet von Hermann Suter (1870–1926)</mp:arranger>
+    <mp:source>Leipzig : C. F. Peters, 1915</mp:source>
+    <mp:licence>Creative Commons Attribution 4.0</mp:licence>
+
+    <mp:lyFile>DerguteKamerad.ly</mp:lyFile>
+    <mp:midFile>DerguteKamerad.mid</mp:midFile>
+    <mp:psFileA4>DerguteKamerad-a4.ps.gz</mp:psFileA4>
+    <mp:pdfFileA4>DerguteKamerad-a4.pdf</mp:pdfFileA4>
+    <mp:psFileLet>DerguteKamerad-let.ps.gz</mp:psFileLet>
+    <mp:pdfFileLet>DerguteKamerad-let.pdf</mp:pdfFileLet>
+    <mp:pngFile>DerguteKamerad-preview.svg</mp:pngFile>
+    <mp:pngHeight>0</mp:pngHeight>
+    <mp:pngWidth>0</mp:pngWidth>
+
+    <mp:id>Mutopia-2014/03/23-730</mp:id>
+    <mp:maintainer>Klaus Rettinghaus</mp:maintainer>
+    <mp:maintainerEmail/>
+    <mp:maintainerWeb/>
+    <mp:moreInfo/>
+    <mp:lilypondVersion>2.18.0</mp:lilypondVersion>
+</rdf:Description>
+
+</rdf:RDF>
