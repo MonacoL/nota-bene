@@ -6,7 +6,7 @@ import { basename, join } from 'node:path';
 import { stringify } from 'yaml';
 import { leggiAbc } from './abc';
 import { SEGNAPOSTO, type Lettura } from './catalogo';
-import { rigaW } from './righe-w';
+import { noteConSegno, rigaW } from './righe-w';
 
 /** Lo scaricamento di un file, l'unica via verso la rete: lo script passa fetch, i test un finto. */
 export type Scarica = (url: string) => Promise<Uint8Array>;
@@ -124,11 +124,11 @@ export function estraiLettura(abc: string, taglio: Taglio): string {
   const scelte = battute.slice(da, taglio.fine + (levare ? 1 : 0));
   // Ogni nota prende un segno del Testo, anche quella legata (con * o _); le pause no (src/letture/righe-w.ts).
   const segni = testo.join(' ').split(/\s+|(?<=[^\\]-)/).filter((t) => t && t !== '|');
-  const prima = battute.slice(0, da).reduce((n, b) => n + note(b), 0);
-  const scelto = segni.slice(prima, prima + scelte.reduce((n, b) => n + note(b), 0));
+  const prima = battute.slice(0, da).reduce((n, b) => n + noteConSegno(b), 0);
+  const scelto = segni.slice(prima, prima + scelte.reduce((n, b) => n + noteConSegno(b), 0));
   // Un tratto per Battuta, allineato alle note (ticket #30): l'a capo della Lettura divide il Testo per Battuta.
   let usate = 0;
-  const perBattuta = scelte.map((b) => scelto.slice(usate, (usate += note(b))).join(' '));
+  const perBattuta = scelte.map((b) => scelto.slice(usate, (usate += noteConSegno(b))).join(' '));
   return [
     ...testata,
     `K:${k}${clef} % ${SEGNAPOSTO}: major o minor`,
@@ -136,15 +136,6 @@ export function estraiLettura(abc: string, taglio: Taglio): string {
     ...(scelto.some((t) => t !== '*' && t !== '_') ? [rigaW(perBattuta)] : []),
     '',
   ].join('\n');
-}
-
-/** Quante note ha una Battuta ABC: un accordo conta una, le pause e gli abbellimenti nessuna. */
-function note(battuta: string): number {
-  const pulita = battuta
-    .replace(/\[[A-Za-z]:[^\]]*\]/g, '')
-    .replace(/\{[^}]*\}/g, '')
-    .replace(/\[[^\]]*\]/g, 'C');
-  return (pulita.match(/[A-Ga-g]/g) ?? []).length;
 }
 
 /** L'elenco da portare al maestro: le Letture con da_verificare, con il motivo e il link alla pagina italiana. */
