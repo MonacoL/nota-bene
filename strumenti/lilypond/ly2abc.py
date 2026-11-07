@@ -44,7 +44,8 @@ def eventi(brano: Path) -> list[list[str]]:
     lilypond = os.environ.get("LILYPOND") or shutil.which("lilypond")
     if not lilypond or not Path(lilypond).exists():
         esci("Serve LilyPond: il comando lilypond nel PATH, oppure LILYPOND=/percorso/di/lilypond")
-    convert = Path(lilypond).parent / "convert-ly"
+    # convert-ly sta accanto al vero lilypond, anche quando nel PATH c'è un collegamento.
+    convert = Path(lilypond).resolve().parent / "convert-ly"
     with tempfile.TemporaryDirectory(prefix="ly2abc-") as lavoro:
         copia = Path(lavoro) / "brano.ly"
         shutil.copy(brano, copia)
