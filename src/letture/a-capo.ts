@@ -3,7 +3,7 @@
 // src/letture/righe-w.ts), e si ricompone con un rigo per gruppo di Battute. Quante Battute stanno in un rigo lo
 // decide chi disegna e misura.
 // Un segno è ciò che una riga w: mette sotto una nota: un frammento di Testo o una Sillaba della Soluzione.
-import { eRigaW, rigaW, tratti } from './righe-w';
+import { eRigaW, noteCoperte, rigaW, tratti } from './righe-w';
 
 /** Una Battuta: le sue note con la stanghetta che la chiude, il suo tratto di ogni riga di Testo e della Soluzione. */
 type Battuta = { note: string; stanghetta: string; testo: string[]; soluzione?: string };
@@ -131,4 +131,66 @@ export function siToccano(scatole: readonly Scatola[]): boolean {
     riga.sort((a, b) => a.sinistra - b.sinistra);
     return riga.some((s, i) => i > 0 && s.sinistra < riga[i - 1]!.destra + DISTANZA_MINIMA);
   });
+}
+
+/**
+ * Divide per Battuta l'ABC di un esempio di un Capitolo (ticket #63), scritto come viene: le righe w: possono non
+ * avere un "|" per Battuta, e un esempio diviso a mano su più righi ha una riga w: sotto ogni rigo. Si porta nella
+ * forma di una Lettura e si divide come lei.
+ */
+export function dividiEsempio(abc: string): Divisa {
+  const righe = abc.trimEnd().split('\n');
+  const k = righe.findIndex((r) => r.startsWith('K:'));
+  const intestazione = righe.slice(0, k + 1);
+  const corpo = righe.slice(k + 1).filter((r) => r.trim() && !r.startsWith('%'));
+  // I righi scritti, ognuno con le righe w: che lo seguono (una per strofa).
+  const scritti: { musica: string; righeW: string[] }[] = [];
+  for (const riga of corpo) {
+    if (!eRigaW(riga)) scritti.push({ musica: riga, righeW: [] });
+    else scritti.at(-1)?.righeW.push(riga);
+  }
+  const strofe = Math.max(0, ...scritti.map((s) => s.righeW.length));
+  const perStrofa: string[][] = Array.from({ length: strofe }, () => []);
+  for (const { musica, righeW } of scritti) {
+    const notePerBattuta = dividi([...intestazione, musica].join('\n')).battute.map((b) => noteDi(b.note));
+    for (let s = 0; s < strofe; s++) {
+      const riga = righeW[s];
+      perStrofa[s]!.push(...(riga ? perBattuta(riga, notePerBattuta) : notePerBattuta.map(() => '')));
+    }
+  }
+  const musica = scritti.map((s) => s.musica).join(' ');
+  return dividi([...intestazione, musica, ...perStrofa.map(rigaW)].join('\n'));
+}
+
+/** I tratti di una riga w:, uno per Battuta: se la riga non ha "|", si dividono i segni contando le note. */
+function perBattuta(riga: string, notePerBattuta: readonly number[]): string[] {
+  if (riga.includes('|')) return tratti(riga);
+  let resto = riga.slice(2).trim();
+  return notePerBattuta.map((quante) => {
+    const fine = fineDelTratto(resto, quante);
+    const tratto = resto.slice(0, fine).trim();
+    resto = resto.slice(fine).trim();
+    return tratto;
+  });
+}
+
+/** Dove finisce il tratto che copre `quante` note: al primo confine tra segni dopo cui le note coperte sono tante. */
+function fineDelTratto(testo: string, quante: number): number {
+  if (quante === 0) return 0;
+  for (let i = 1; i <= testo.length; i++) {
+    const confine = i === testo.length || testo[i] === ' ' || '-_*'.includes(testo[i - 1]!);
+    if (confine && noteCoperte(testo.slice(0, i)) >= quante) return i;
+  }
+  return testo.length;
+}
+
+/**
+ * Quante note di una Battuta prendono un segno della riga w:: un accordo è una nota, le pause no, e non contano
+ * annotazioni, decorazioni e abbellimenti.
+ */
+function noteDi(note: string): number {
+  const pulite = note
+    .replace(/"[^"]*"|![^!]*!|\{[^}]*\}/g, '')
+    .replace(/\[[^\]|]*\]/g, 'C');
+  return pulite.match(/[A-Ga-g]/g)?.length ?? 0;
 }
