@@ -1,6 +1,6 @@
 # Nota Bene
 
-Piattaforma di studio per coristi che partono da zero: teoria musicale di base ed esercizi, fino alla lettura a prima vista con il DO mobile.
+Piattaforma di studio per coristi che partono da zero: teoria musicale di base ed esercizi in tre Percorsi, ritmico, armonico e melodico, fino alla lettura a prima vista con il DO mobile.
 
 Ogni termine ha il suo nome inglese (`_In inglese_`) in inglese americano (ADR-0007): traduzioni e interfaccia usano quello, e una revisione umana ne controlla l'uso.
 
@@ -9,18 +9,43 @@ La maiuscola dei termini serve solo a riconoscerli in questo glossario, negli AD
 ## Percorso
 
 **Percorso**:
-Sequenza ordinata e consigliata di Capitoli, dalla scala maggiore al DO mobile. L'ordine è un suggerimento: ogni Capitolo è sempre accessibile.
-_Avoid_: corso, programma
-_In inglese_: Path
+Uno dei tre filoni di studio, ritmico, armonico e melodico, che partono tutti dal primo giorno. È un gruppo ordinato di Capitoli; i Percorsi si incrociano solo attraverso i Prerequisiti.
+_Avoid_: corso, programma, ramo, binario
+_In inglese_: Path: Rhythm path, Harmony path, Melody path
+
+**Scaletta**:
+L'ordine di studio consigliato dal maestro, una sola sequenza che alterna Capitoli dei tre Percorsi. Seguire la Scaletta è il modo di studio di partenza: ciò di cui mancano dei Prerequisiti resta bloccato finché non sono Capitoli completati.
+_Avoid_: programma, piano di studio, sequenza
+_In inglese_: Sequence; "follow the sequence"
+
+**Studio libero**:
+Il modo di studio in cui Capitoli, Esercizi e Letture sono tutti aperti, senza blocchi, nell'ordine che si vuole. Si sceglie al posto della Scaletta.
+_Avoid_: free roaming, modalità libera, navigazione libera
+_In inglese_: Free study
+
+**Prossimo passo**:
+Il primo Capitolo della Scaletta che non è completato e ha tutti i Prerequisiti completati.
+_Avoid_: prossimo capitolo, prossima lezione
+_In inglese_: Next step
 
 **Capitolo**:
-Unità di teoria su un solo argomento (es. scala minore, intervalli), con spiegazione ed Esercizi di teoria.
+Unità di teoria su un solo argomento (es. scala minore, intervalli), con spiegazione ed Esercizi di teoria. Appartiene a un solo Percorso.
 _Avoid_: lezione (si confonde con le lezioni dal maestro), modulo, unità
 _In inglese_: Chapter
 
+**Capitolo completato**:
+Capitolo di cui il corista ha fatto, per ogni tipo di Esercizio di teoria, una Serie con almeno 8 risposte giuste al primo colpo, oppure che ha segnato come già studiato.
+_Avoid_: capitolo superato, finito, fatto
+_In inglese_: Completed chapter
+
+**Progressi**:
+I Capitoli completati e la scelta fra Scaletta e Studio libero, ricordati solo sul dispositivo del corista, che li può cancellare.
+_Avoid_: account, profilo, storico, punteggio
+_In inglese_: Progress
+
 **Prerequisito**:
-Capitolo che serve aver studiato per affrontare una Lettura. I Prerequisiti di una Lettura ne definiscono la difficoltà.
-_Avoid_: livello, difficoltà numerica
+Capitolo che serve aver completato per affrontare un Capitolo, i suoi Esercizi di teoria o una Lettura, anche se sta in un altro Percorso. Chi segue la Scaletta trova bloccato ciò di cui manca un Prerequisito. I Prerequisiti di una Lettura ne definiscono la difficoltà.
+_Avoid_: livello, difficoltà numerica, requisito
 _In inglese_: Prerequisite
 
 ## Esercizi
@@ -31,7 +56,7 @@ _Avoid_: quiz, test
 _In inglese_: Theory exercise
 
 **Serie**:
-Dieci Esercizi di teoria dello stesso tipo, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva.
+Dieci Esercizi di teoria dello stesso tipo, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva; con almeno 8 risposte giuste al primo colpo conta però per il Capitolo completato.
 _Avoid_: sessione, quiz, test
 _In inglese_: Set _(evitare: quiz, test, session)_
 
