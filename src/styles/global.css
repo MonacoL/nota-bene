@@ -1,20 +1,32 @@
-/* Identità visiva (ADR-0009). I colori si definiscono solo qui, una volta per tema:
+/* Stile Vox Viva (ADR-0010). I colori si definiscono solo qui, in un tema solo più il foglio color carta:
    il test dei contrasti (tests/unit/contrasti.test.ts) li legge da questo file. */
 
 @font-face {
-  font-family: 'Atkinson Hyperlegible Next';
+  font-family: 'Open Sans';
   font-weight: 400;
   font-display: swap;
-  src: url('../assets/fonts/atkinson-hyperlegible-next-latin-400-normal.woff2') format('woff2');
+  src: url('../assets/fonts/open-sans-latin-400-normal.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'Atkinson Hyperlegible Next';
+  font-family: 'Open Sans';
   font-weight: 700;
   font-display: swap;
-  src: url('../assets/fonts/atkinson-hyperlegible-next-latin-700-normal.woff2') format('woff2');
+  src: url('../assets/fonts/open-sans-latin-700-normal.woff2') format('woff2');
 }
-/* ♭ ♮ ♯: Atkinson non li ha. Noto Music ridotto a tre glifi, ingrandito perché non vengano minuscoli.
-   In --font va dopo Atkinson: Safari su iOS prende le misure della riga dal primo font della lista, e con
+@font-face {
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/oswald-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/oswald-latin-700-normal.woff2') format('woff2');
+}
+/* ♭ ♮ ♯: né Open Sans né Oswald li hanno. Noto Music ridotto a tre glifi, ingrandito perché non vengano minuscoli.
+   Nelle liste va subito dopo il primo font: Safari su iOS prende le misure della riga dal primo font della lista, e con
    questo in testa il testo scende di qualche pixel (tests/unit/font.test.ts). */
 @font-face {
   font-family: 'Alterazioni';
@@ -25,41 +37,48 @@
 }
 
 :root {
-  color-scheme: light dark;
-  --font: 'Atkinson Hyperlegible Next', 'Alterazioni', system-ui, sans-serif;
-  --radius: 12px;
+  color-scheme: dark;
+  --font: 'Open Sans', 'Alterazioni', system-ui, sans-serif;
+  --font-titoli: 'Oswald', 'Alterazioni', 'Open Sans', sans-serif;
+  --radius: 4px;
 
-  --bg: #faf7f0;
-  --surface: #ffffff;
-  --ink: #1e1a16;
-  --muted: #5e554b;
-  --line: #d9cfbf;
-  --accent: #8a1c2c;
-  --accent-ink: #ffffff;
-  --sol: #1f4f8f;
-  --suona: #c2410c;
-  --ok: #1e6b3a;
-  --ok-bg: #e7f3ea;
-  --ko: #a3261b;
-  --ko-bg: #fbe9e6;
+  --bg: #151515;
+  --surface: #222222;
+  --ink: #dcdcdc;
+  --muted: #8a8a8a;
+  --line: #2f2f2f;
+  --accent: #ed7c2a;
+  --accent-2: #f39a55;
+  --accent-ink: #151515;
+  --sol: #8db7f0;
+  --suona: #f2a65a;
+  --ok: #7ccb93;
+  --ok-bg: #1b2e21;
+  --ko: #f2958a;
+  --ko-bg: #3a1d1a;
+
+  /* Il foglio di partiture, esempi ed Esercizi: note scure su carta, come in VoxStudio. */
+  --carta: #fbf8f3;
+  --carta-ink: #1e1a16;
+  --carta-sol: #1f4f8f;
+  --carta-suona: #c2410c;
+  --margine-foglio: 8px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #171411;
-    --surface: #221e1a;
-    --ink: #ede6da;
-    --muted: #b3a898;
-    --line: #3d352d;
-    --accent: #e89aa4;
-    --accent-ink: #2a0c11;
-    --sol: #8db7f0;
-    --suona: #f2a65a;
-    --ok: #7ccb93;
-    --ok-bg: #1b2e21;
-    --ko: #f2958a;
-    --ko-bg: #3a1d1a;
-  }
+/* Sul foglio la partitura (abcjs disegna in currentColor), le Sillabe e la nota illuminata prendono i colori della carta.
+   Il foglio sporge di --margine-foglio oltre la colonna, così alle note resta tutta la sua larghezza: chi lo mette
+   in pagina gli dà margin-inline: calc(-1 * var(--margine-foglio)). */
+.pentagramma, .partitura {
+  --ink: var(--carta-ink);
+  --sol: var(--carta-sol);
+  --suona: var(--carta-suona);
+  background: var(--carta);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 0 var(--margine-foglio);
+  margin-inline: calc(-1 * var(--margine-foglio));
+  /* abcjs dà al contenitore la larghezza della partitura: il margine interno si aggiunge, non si sottrae. */
+  box-sizing: content-box;
 }
 
 * { box-sizing: border-box; }
@@ -77,11 +96,18 @@ body {
   overflow-wrap: break-word;
 }
 
-h1, h2, h3 { font-weight: 700; line-height: 1.2; }
-h1 { font-size: 1.65rem; margin: 0.8em 0 0.35em; }
-h2 { font-size: 1.2rem; margin: 1.4em 0 0.4em; }
+/* Titoli in Oswald, maiuscolo e spaziato come in VoxStudio: il maiuscolo lo fa il CSS, i sorgenti restano come sono. */
+h1, h2, h3 {
+  font-family: var(--font-titoli); font-weight: 400; line-height: 1.25;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink);
+}
+h1 { font-size: 1.8rem; margin: 0.8em 0 0.4em; }
+h2 { font-size: 1.3rem; margin: 1.5em 0 0.5em; }
+h2::after { content: ""; display: block; width: 40px; height: 2px; margin-top: 8px; background: var(--accent); }
+h3 { font-size: 1.05rem; }
 p { margin: 0 0 0.9em; }
 a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-2); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
 .wrap { width: 100%; max-width: 680px; margin: 0 auto; padding: 0 16px; }
@@ -94,18 +120,21 @@ main { flex: 1; padding-bottom: 32px; }
 }
 .salta:focus { top: 8px; }
 
-/* Link con l'aspetto di un pulsante: alto 48 px (ADR-0009). */
+/* Link con l'aspetto di un pulsante: alto 48 px, maiuscolo come in VoxStudio (ADR-0010). Testo nero sull'arancio, per il contrasto. */
 .pulsante {
   display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px;
-  border-radius: var(--radius); background: var(--accent); color: var(--accent-ink);
-  font-weight: 700; text-decoration: none;
+  border-radius: var(--radius); background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent);
+  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
-.pulsante.secondario { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+.pulsante:hover { background: var(--accent-2); border-color: var(--accent-2); color: var(--accent-ink); }
+.pulsante.secondario { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.pulsante.secondario:hover { background: var(--accent); color: var(--accent-ink); }
 
 /* Il pulsante dell'Ascolto, sotto un esempio o un Esercizio (ticket #35): premuto mentre suona, come nelle Letture. */
 button.ascolta {
   display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px;
-  border-radius: var(--radius); background: transparent; color: var(--accent); border: 2px solid var(--accent);
-  font: inherit; font-weight: 700; cursor: pointer;
+  border-radius: var(--radius); background: transparent; color: var(--accent); border: 1px solid var(--accent);
+  font: inherit; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
 }
 button.ascolta[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); }

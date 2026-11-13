@@ -56,19 +56,21 @@ test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
 });
 
-test('gli esempi abc diventano pentagrammi nel colore del testo', async ({ page }) => {
+test('gli esempi abc diventano pentagrammi sul foglio color carta, anche col telefono in tema chiaro', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`it/capitoli/${PRIMO}/`);
   const pentagrammi = page.locator('.pentagramma svg');
   await expect(pentagrammi).toHaveCount(5);
   await expect(pentagrammi.first().locator('.abcjs-note').first()).toBeVisible();
-  for (const tema of ['light', 'dark'] as const) {
-    await page.emulateMedia({ colorScheme: tema });
-    const [nota, testo] = await Promise.all([
-      pentagrammi.first().locator('.abcjs-note path').first().evaluate((p) => getComputedStyle(p).fill),
-      page.locator('article.testo p').first().evaluate((p) => getComputedStyle(p).color),
-    ]);
-    expect(nota, tema).toBe(testo);
-  }
+  const [nota, foglio, pagina] = await Promise.all([
+    pentagrammi.first().locator('.abcjs-note path').first().evaluate((p) => getComputedStyle(p).fill),
+    page.locator('.pentagramma').first().evaluate((p) => getComputedStyle(p).backgroundColor),
+    page.locator('body').evaluate((b) => getComputedStyle(b).backgroundColor),
+  ]);
+  // Inchiostro e carta dell'ADR-0010; il fondo della pagina resta nero.
+  expect(nota).toBe('rgb(30, 26, 22)');
+  expect(foglio).toBe('rgb(251, 248, 243)');
+  expect(pagina).toBe('rgb(21, 21, 21)');
 });
 
 test('nei Capitoli 9 e 10 c\'è "Prova le letture"; il 10 porta alle avanzate ed è l\'ultimo', async ({ page }) => {

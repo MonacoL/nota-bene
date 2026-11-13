@@ -60,7 +60,7 @@
     font: inherit; font-size: 1.05rem; cursor: pointer;
   }
   .alterazioni button { font-size: 1.3rem; }
-  button[aria-pressed='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
   .verifica {
     min-width: 50%; padding: 0 24px; border: none; background: var(--accent); color: var(--accent-ink); font-weight: 700;
   }
