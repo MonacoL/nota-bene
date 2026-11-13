@@ -21,7 +21,7 @@ La repo contiene tre cose con tre licenze diverse (ADR-0005). Il copyright è di
 | `contenuti/` | Capitoli, traduzioni, pagine di servizio | CC BY-SA 4.0, in [`LICENSE-CONTENUTI`](LICENSE-CONTENUTI) |
 | `letture/<brano>/` | le Letture in ABC e il sorgente copiato dalla Fonte | quella dell'Edizione, in `edizione.yml`; le nostre trascrizioni di un'Edizione di pubblico dominio sono CC0 (`trascrizioni: CC0`) |
 | `tests/e2e/letture-esempio/`, `tests/unit/letture/` | Letture d'esempio per i test | come `letture/`: quella del loro `edizione.yml` |
-| `src/assets/fonts/` | i font Atkinson Hyperlegible Next e Noto Music | SIL OFL 1.1, nei file `*-LICENSE.txt` accanto ai font |
+| `src/assets/fonts/` | i font Oswald, Open Sans e Noto Music | SIL OFL 1.1, nei file `*-LICENSE.txt` accanto ai font |
 | `strumenti/xml2abc/` | xml2abc di Willem G. Vree, usato da `nuova-lettura` | GNU LGPL, in `COPYING.LESSER` e `COPYING` |
 
 I testi degli Esercizi di teoria sono CC BY-SA 4.0 per l'ADR-0005, ma oggi stanno nel codice, in `src/esercizi/testi.ts` e nei dizionari `src/i18n/`: per quei testi vale CC BY-SA 4.0, per il resto dei due file MIT.

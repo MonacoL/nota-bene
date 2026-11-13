@@ -1,4 +1,4 @@
-// Ricalcola dalle variabili CSS i contrasti WCAG 2.1 AA delle coppie dell'ADR-0009, nei due temi.
+// Ricalcola dalle variabili CSS i contrasti WCAG 2.1 AA delle coppie dell'ADR-0010: un tema solo, più il foglio color carta.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
@@ -20,8 +20,7 @@ function bloccoDopo(inizio: number): string {
   throw new Error('blocco CSS non chiuso');
 }
 
-const chiaro = variabili(bloccoDopo(css.indexOf(':root')));
-const scuro = { ...chiaro, ...variabili(bloccoDopo(css.indexOf('@media (prefers-color-scheme: dark)'))) };
+const colori = variabili(bloccoDopo(css.indexOf(':root')));
 
 function luminanza(hex: string): number {
   const [r, g, b] = hex.slice(1).match(/../g)!.map((x) => {
@@ -45,12 +44,18 @@ const COPPIE: [string, string, number][] = [
   ['accent', 'bg', 4.5],
   ['accent', 'surface', 4.5],
   ['accent-ink', 'accent', 4.5],
+  ['accent-ink', 'accent-2', 4.5],
+  ['accent-2', 'bg', 4.5],
   ['sol', 'bg', 4.5],
   ['sol', 'surface', 4.5],
   ['suona', 'bg', 3],
   ['suona', 'surface', 3],
   ['ok', 'ok-bg', 4.5],
   ['ko', 'ko-bg', 4.5],
+  // Il foglio di partiture, esempi ed Esercizi.
+  ['carta-ink', 'carta', 4.5],
+  ['carta-sol', 'carta', 4.5],
+  ['carta-suona', 'carta', 3],
 ];
 
 describe('rapporto di contrasto', () => {
@@ -60,16 +65,17 @@ describe('rapporto di contrasto', () => {
   });
 });
 
-for (const [tema, colori] of [['chiaro', chiaro], ['scuro', scuro]] as const) {
-  describe(`tema ${tema}`, () => {
-    it('definisce tutte le variabili delle coppie', () => {
-      for (const [a, b] of COPPIE) {
-        expect(colori[a], `--${a}`).toMatch(/^#/);
-        expect(colori[b], `--${b}`).toMatch(/^#/);
-      }
-    });
-    it.each(COPPIE)('--%s su --%s rispetta %s:1', (a, b, soglia) => {
-      expect(rapporto(colori[a]!, colori[b]!)).toBeGreaterThanOrEqual(soglia);
-    });
+describe('tema unico (ADR-0010)', () => {
+  it('non segue prefers-color-scheme', () => {
+    expect(css).not.toMatch(/prefers-color-scheme/);
   });
-}
+  it('definisce tutte le variabili delle coppie', () => {
+    for (const [a, b] of COPPIE) {
+      expect(colori[a], `--${a}`).toMatch(/^#/);
+      expect(colori[b], `--${b}`).toMatch(/^#/);
+    }
+  });
+  it.each(COPPIE)('--%s su --%s rispetta %s:1', (a, b, soglia) => {
+    expect(rapporto(colori[a]!, colori[b]!)).toBeGreaterThanOrEqual(soglia);
+  });
+});

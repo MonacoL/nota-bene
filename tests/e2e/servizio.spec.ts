@@ -43,7 +43,7 @@ for (const [lingua, brani, asset] of [['it', 'Brani', 'Asset di terzi'], ['en', 
     await expect(sezioneBrani.getByRole('listitem').filter({ hasText: 'If Ye Love Me' })).toContainText('Thomas Tallis');
     await expect(sezioneBrani.getByRole('listitem').filter({ hasText: 'If Ye Love Me' }).getByRole('link', { name: /Mutopia/ })).toHaveAttribute('href', /mutopiaproject\.org/);
     const sezioneAsset = page.getByRole('region', { name: asset, exact: true });
-    for (const nome of [/^abcjs \d/, 'Atkinson Hyperlegible Next', 'Noto Music', 'xml2abc 177']) {
+    for (const nome of [/^abcjs \d/, 'Oswald', 'Open Sans', 'Noto Music', 'xml2abc 177']) {
       await expect(sezioneAsset.getByRole('listitem').filter({ hasText: nome })).toHaveCount(1);
     }
   });

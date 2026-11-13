@@ -13,10 +13,11 @@ const SILLABE = '.abcjs-lyric tspan';
 const apriLettura = (page: Page, percorso = LETTURA) => apri(page, percorso, '.partitura', 1);
 const partitura = (page: Page) => page.locator('.partitura');
 
-/** Per ogni rigo disegnato, quanto resta dal bordo destro della partitura la sua ultima stanghetta. */
+/** Per ogni rigo disegnato, quanto resta dal bordo destro della partitura, dentro il margine del foglio (ADR-0010), la sua ultima stanghetta. */
 function righi(page: Page) {
   return page.locator('.lettura').evaluate((lettura) => {
-    const destra = lettura.getBoundingClientRect().right;
+    const foglio = lettura.querySelector('.partitura')!;
+    const destra = foglio.getBoundingClientRect().right - parseFloat(getComputedStyle(foglio).paddingRight);
     const rigo = (e: Element) => Number(/abcjs-l(\d+)/.exec(e.getAttribute('class') ?? '')?.[1]);
     const quanti = 1 + Math.max(...[...lettura.querySelectorAll('.partitura .abcjs-note')].map(rigo));
     return Array.from({ length: quanti }, (_, n) => {

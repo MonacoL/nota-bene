@@ -87,7 +87,7 @@ describe('assetDiTerzi', () => {
     const esito = assetDiTerzi('.');
     expect(esito.ok ? [] : esito.errori).toEqual([]);
     const nomi = esito.ok ? esito.asset.map((a) => a.nome) : [];
-    expect(nomi).toEqual(expect.arrayContaining(['Atkinson Hyperlegible Next', 'Noto Music', 'xml2abc 177']));
+    expect(nomi).toEqual(expect.arrayContaining(['Oswald', 'Open Sans', 'Noto Music', 'xml2abc 177']));
     expect(nomi.some((n) => /^abcjs \d/.test(n))).toBe(true);
   });
 

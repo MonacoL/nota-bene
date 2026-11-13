@@ -19,3 +19,9 @@ export function segnaDisegno(contenitore: HTMLElement, larghezza: number, abc: s
 export function dimenticaDisegno(contenitore: HTMLElement): void {
   disegni.delete(contenitore);
 }
+
+/** Il margine interno del foglio color carta (ADR-0010), a sinistra più a destra: la partitura ci sta dentro. */
+export function margineFoglio(foglio: HTMLElement): number {
+  const stile = getComputedStyle(foglio);
+  return (parseFloat(stile.paddingLeft) || 0) + (parseFloat(stile.paddingRight) || 0);
+}

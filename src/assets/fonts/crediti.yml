@@ -1,13 +1,21 @@
 # Asset di terzi di questa cartella, per la pagina dei crediti (convenzione nel README, sezione "Licenze").
 # Ogni file di licenza della cartella deve essere citato da una voce, altrimenti la build si ferma.
-- nome: Atkinson Hyperlegible Next
-  autori: The Atkinson Hyperlegible Next Project Authors
+- nome: Oswald
+  autori: The Oswald Project Authors
   licenza: SIL Open Font License 1.1
-  url: https://github.com/googlefonts/atkinson-hyperlegible-next
-  file_licenza: atkinson-hyperlegible-next-LICENSE.txt
+  url: https://github.com/googlefonts/OswaldFont
+  file_licenza: oswald-LICENSE.txt
   nota:
-    it: pesi 400 e 700, sottoinsieme latino
-    en: weights 400 and 700, Latin subset
+    it: pesi 400 e 700, sottoinsieme latino, dal pacchetto Fontsource 5.3.0
+    en: weights 400 and 700, Latin subset, from the Fontsource 5.3.0 package
+- nome: Open Sans
+  autori: The Open Sans Project Authors
+  licenza: SIL Open Font License 1.1
+  url: https://github.com/googlefonts/opensans
+  file_licenza: open-sans-LICENSE.txt
+  nota:
+    it: pesi 400 e 700, sottoinsieme latino, dal pacchetto Fontsource 5.3.0
+    en: weights 400 and 700, Latin subset, from the Fontsource 5.3.0 package
 - nome: Noto Music
   autori: The Noto Project Authors
   licenza: SIL Open Font License 1.1

@@ -34,9 +34,9 @@
   const voce = new URLSearchParams(window.location.search).get('voce') ?? '';
   const successiva = voce && voce in successive ? `${successive[voce]}?voce=${voce}` : successive['']!;
 
-  // Testo e Sillabe a circa 16 px (ADR-0009): 15 pt in abcjs sono 20 px, per la scala 0,8.
+  // Testo e Sillabe a circa 16 px (ADR-0009, font dall'ADR-0010): 15 pt in abcjs sono 20 px, per la scala 0,8.
   const SCALA = 0.8;
-  const daDisegnare = abc.replace(/^(X:.*\n)/, `$1%%vocalfont "Atkinson Hyperlegible Next" 15\n`);
+  const daDisegnare = abc.replace(/^(X:.*\n)/, `$1%%vocalfont "Open Sans" 15\n`);
 
   let soluzione = $state(false);
   let partitura: HTMLDivElement;
@@ -114,7 +114,7 @@
 </div>
 
 <style>
-  .partitura { color: var(--ink); margin: 16px 0 8px; min-height: 120px; }
+  .partitura { color: var(--ink); margin-top: 16px; margin-bottom: 8px; min-height: 120px; }
   /* Niente max-width sull'SVG: abcjs lo disegna largo staffwidth / scale e lo rimpicciolisce con un transform. */
   .partitura :global(svg) { display: block; }
   .partitura :global(.sillaba) { fill: var(--sol); font-weight: 700; }

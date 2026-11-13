@@ -1,4 +1,5 @@
-// Screenshot di confronto nei due temi (ADR-0009), sulle configurazioni scelte in playwright.config.ts.
+// Screenshot di confronto, sulle configurazioni scelte in playwright.config.ts. Un tema solo (ADR-0010): il telefono
+// è in tema chiaro, e il sito deve restare scuro lo stesso.
 import { expect, test } from '@playwright/test';
 import { genera } from '../../src/esercizi';
 import { CAPITOLI, LETTURE, LINGUE } from './pagine';
@@ -6,6 +7,8 @@ import { telefono } from './menu';
 
 /** Un seed il cui primo Esercizio è un Sol♭3 in chiave di violino ottava bassa: mostra l'8 e un'alterazione. */
 const SEED_FOGLIO = 13;
+
+const TEMI = ['light'] as const;
 
 const SCHERMATE = [
   { nome: 'home', percorso: '' },
@@ -15,8 +18,8 @@ const SCHERMATE = [
 
 for (const { nome, percorso } of SCHERMATE) {
   for (const lingua of LINGUE) {
-    for (const tema of ['light', 'dark'] as const) {
-      test(`${nome} ${lingua}, tema ${tema}`, async ({ page }, info) => {
+    for (const tema of TEMI) {
+      test(`${nome} ${lingua}`, async ({ page }, info) => {
         const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
         test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
         await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
@@ -25,7 +28,7 @@ for (const { nome, percorso } of SCHERMATE) {
         // Gli esempi abc si disegnano dopo il caricamento: si aspetta che ogni contenitore abbia il suo SVG.
         await expect(page.locator('.pentagramma:not(:has(svg))')).toHaveCount(0);
         await page.mouse.move(-1, -1);
-        await expect(page).toHaveScreenshot(`${nome}-${lingua}-${tema}.png`, { fullPage: true });
+        await expect(page).toHaveScreenshot(`${nome}-${lingua}.png`, { fullPage: true });
       });
     }
   }
@@ -35,8 +38,8 @@ for (const { nome, percorso } of SCHERMATE) {
 // Lo screenshot è della finestra e non della pagina intera, perché il foglio è fisso in basso.
 for (const esito of ['giusto', 'sbagliato'] as const) {
   for (const lingua of LINGUE) {
-    for (const tema of ['light', 'dark'] as const) {
-      test(`esercizi foglio ${esito} ${lingua}, tema ${tema}`, async ({ page }, info) => {
+    for (const tema of TEMI) {
+      test(`esercizi foglio ${esito} ${lingua}`, async ({ page }, info) => {
         const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
         test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
         const { nota } = genera('nomina-la-nota', { chiavi: ['violino', 'violino-ottava-bassa', 'basso'] }, SEED_FOGLIO);
@@ -51,7 +54,7 @@ for (const esito of ['giusto', 'sbagliato'] as const) {
         await tastierino.locator('.verifica').click();
         await expect(page.locator('.foglio')).toBeVisible();
         await page.mouse.move(-1, -1);
-        await expect(page).toHaveScreenshot(`esercizi-foglio-${esito}-${lingua}-${tema}.png`);
+        await expect(page).toHaveScreenshot(`esercizi-foglio-${esito}-${lingua}.png`);
       });
     }
   }
@@ -59,8 +62,8 @@ for (const esito of ['giusto', 'sbagliato'] as const) {
 
 // Il menu con le lineette aperto, sul telefono: screenshot della finestra, perché il pannello copre la pagina.
 for (const lingua of LINGUE) {
-  for (const tema of ['light', 'dark'] as const) {
-    test(`menu aperto ${lingua}, tema ${tema}`, async ({ page }, info) => {
+  for (const tema of TEMI) {
+    test(`menu aperto ${lingua}`, async ({ page }, info) => {
       const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
       test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
       test.skip(!telefono(page), 'da 440 px il menu è fatto di link');
@@ -69,14 +72,14 @@ for (const lingua of LINGUE) {
       await page.evaluate(() => document.fonts.ready);
       await page.locator('header .menu summary').click();
       await page.mouse.move(-1, -1);
-      await expect(page).toHaveScreenshot(`menu-aperto-${lingua}-${tema}.png`);
+      await expect(page).toHaveScreenshot(`menu-aperto-${lingua}.png`);
     });
   }
 }
 
 // "Riconosci l'intervallo" a 360 px, con numero e qualità scelti: il tastierino a due righe deve stare nello schermo.
-for (const tema of ['light', 'dark'] as const) {
-  test(`esercizi intervalli it, tema ${tema}`, async ({ page }, info) => {
+for (const tema of TEMI) {
+  test(`esercizi intervalli it`, async ({ page }, info) => {
     test.skip(info.project.name !== 'phone-360-chromium', 'solo a 360 px');
     await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
     await page.goto(`it/capitoli/${CAPITOLI[7]}/esercizi/?seed=${SEED_FOGLIO}`);
@@ -86,15 +89,15 @@ for (const tema of ['light', 'dark'] as const) {
     await tastierino.getByRole('button', { name: '3ª', exact: true }).click();
     await tastierino.getByRole('button', { name: 'maggiore', exact: true }).click();
     await page.mouse.move(-1, -1);
-    await expect(page).toHaveScreenshot(`esercizi-intervalli-it-${tema}.png`);
+    await expect(page).toHaveScreenshot(`esercizi-intervalli-it.png`);
   });
 }
 
 // La prima Lettura vera, con e senza Soluzione, a pagina intera: la barra dei comandi sul telefono resta in basso.
 for (const soluzione of [false, true]) {
   for (const lingua of LINGUE) {
-    for (const tema of ['light', 'dark'] as const) {
-      const nome = `lettura${soluzione ? '-soluzione' : ''}-${lingua}-${tema}`;
+    for (const tema of TEMI) {
+      const nome = `lettura${soluzione ? '-soluzione' : ''}-${lingua}`;
       test(`${nome}`, async ({ page }, info) => {
         const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
         test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
