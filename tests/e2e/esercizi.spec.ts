@@ -55,8 +55,8 @@ test('una Serie completa di "Nomina la nota", fino al riepilogo e a una nuova Se
   await page.getByRole('button', { name: 'Altri 10 esercizi' }).click();
   await expect(page.getByText('Esercizio 1 di 10')).toBeVisible();
 
-  // Non si salva niente.
-  expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+  // La Serie non si salva: in localStorage ci sono solo i Progressi (ADR-0011), niente in sessionStorage.
+  expect(await page.evaluate(() => [Object.keys(localStorage), sessionStorage.length])).toEqual([['nota-bene:progressi:v1'], 0]);
 });
 
 test('lo stesso tasto con un altro nome è sbagliato, e la spiegazione lo dice', async ({ page }) => {

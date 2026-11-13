@@ -55,11 +55,22 @@ export const schemaRevisori = z.array(
 
 const testiPercorso = z.object({ titolo: z.string().min(1), riga: z.string().min(1) }).strict();
 
-/** Una voce della scaletta: l'id è lo slug dell'URL e non contiene il numero, che può cambiare. */
+/** I tre Percorsi (ADR-0011), nell'ordine in cui la pagina dei Capitoli li mostra. */
+export const PERCORSI = ['ritmico', 'armonico', 'melodico'] as const;
+export type NomePercorso = (typeof PERCORSI)[number];
+
+const slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+
+/**
+ * Una voce della Scaletta: l'id è lo slug dell'URL e non contiene il numero, che è la posizione nella Scaletta e
+ * può cambiare. Ogni Capitolo sta in un solo Percorso; i Prerequisiti possono stare in un altro (ADR-0011).
+ */
 export const schemaVocePercorso = z
   .object({
-    id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    id: slug,
     numero: z.number().int().positive(),
+    percorso: z.enum(PERCORSI),
+    prerequisiti: z.array(slug).default([]),
     /** Solo nei Capitoli 9 e 10: il link "Prova le letture", alle Letture o alle Letture avanzate. */
     prova_letture: z.enum(['letture', 'avanzate']).optional(),
     it: testiPercorso,

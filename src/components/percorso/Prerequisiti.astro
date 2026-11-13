@@ -1,0 +1,38 @@
+---
+// I Prerequisiti di un Capitolo, come link, sopra il Capitolo e i suoi Esercizi (ADR-0011). Un Prerequisito di un
+// altro Percorso porta la sua etichetta: è un incrocio fra Percorsi.
+import type { Capitolo } from '../../contenuti/capitoli';
+import { testi, url, type Lingua } from '../../i18n';
+import EtichettaPercorso from './EtichettaPercorso.astro';
+
+interface Props {
+  lingua: Lingua;
+  capitolo: Capitolo;
+  tutti: readonly Capitolo[];
+}
+const { lingua, capitolo, tutti } = Astro.props;
+const t = testi(lingua);
+const prerequisiti = capitolo.prerequisiti.map((id) => tutti.find((c) => c.id === id)!);
+---
+<aside class="prerequisiti" data-capitolo={capitolo.id} data-prerequisiti={capitolo.prerequisiti.join(' ')}>
+  <EtichettaPercorso lingua={lingua} percorso={capitolo.percorso} />
+  {prerequisiti.length
+    ? (
+      <p>
+        {t.prerequisitiCapitolo}{' '}
+        {prerequisiti.map((p, i) => (
+          <>
+            <a href={url(lingua, `capitoli/${p.id}/`)}>{p.titolo}</a>
+            {p.percorso !== capitolo.percorso && <> <EtichettaPercorso lingua={lingua} percorso={p.percorso} /></>}
+            {i < prerequisiti.length - 1 ? ', ' : '.'}
+          </>
+        ))}
+      </p>
+    )
+    : <p>{t.nessunPrerequisito}</p>}
+</aside>
+
+<style>
+  .prerequisiti { margin: 0.6em 0 1em; color: var(--muted); }
+  .prerequisiti p { margin: 0.5em 0 0; }
+</style>

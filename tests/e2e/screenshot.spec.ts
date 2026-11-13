@@ -13,6 +13,9 @@ const TEMI = ['light'] as const;
 const SCHERMATE = [
   { nome: 'home', percorso: '' },
   { nome: 'capitoli', percorso: 'capitoli/' },
+  { nome: 'capitoli-per-percorso', percorso: 'capitoli/#per-percorso' },
+  // Il riquadro di blocco: Chiavi richiede il primo Capitolo, e si parte in Scaletta (ADR-0011).
+  { nome: 'capitolo-bloccato', percorso: 'capitoli/chiavi/' },
   { nome: 'capitolo-1', percorso: `capitoli/${CAPITOLI[0]}/` },
 ];
 
@@ -23,10 +26,13 @@ for (const { nome, percorso } of SCHERMATE) {
         const scelta = info.project.metadata.screenshot as 'it' | 'it+en' | undefined;
         test.skip(!scelta || (lingua === 'en' && scelta !== 'it+en'), 'niente screenshot su questa configurazione');
         await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+        // Il Capitolo bloccato si vede in Scaletta, come chi entra la prima volta; gli altri in Studio libero.
+        if (nome === 'capitolo-bloccato') await page.addInitScript(() => localStorage.clear());
         await page.goto(`${lingua}/${percorso}`);
         await page.evaluate(() => document.fonts.ready);
-        // Gli esempi abc si disegnano dopo il caricamento: si aspetta che ogni contenitore abbia il suo SVG.
-        await expect(page.locator('.pentagramma:not(:has(svg))')).toHaveCount(0);
+        // Gli esempi abc si disegnano dopo il caricamento: si aspetta che ogni contenitore visibile abbia il suo SVG
+        // (in un Capitolo bloccato sono nascosti, e si disegnano allo sblocco).
+        await expect(page.locator('.pentagramma:not(:has(svg)):visible')).toHaveCount(0);
         await page.mouse.move(-1, -1);
         await expect(page).toHaveScreenshot(`${nome}-${lingua}.png`, { fullPage: true });
       });

@@ -24,15 +24,15 @@ for (const [lingua, testi] of [
   });
 }
 
-test('la pagina Capitoli elenca i 10 Capitoli in ordine, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
+test('la pagina Capitoli elenca i 10 Capitoli nell\'ordine della Scaletta, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
   await page.goto('it/capitoli/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Capitoli');
-  const voci = page.locator('ol.percorso > li');
+  const voci = page.locator('#scaletta ol.elenco > li');
   await expect(voci).toHaveCount(10);
   for (const [i, id] of CAPITOLI.entries()) {
     const voce = voci.nth(i);
     await expect(voce.locator('.numero')).toHaveText(String(i + 1));
-    await expect(voce.locator('h2 a')).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/`);
+    await expect(voce.locator('h3 a')).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/`);
     await expect(voce.locator('.riga')).not.toBeEmpty();
     await expect(voce.getByRole('link', { name: /^Esercizi: / })).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/esercizi/`);
   }

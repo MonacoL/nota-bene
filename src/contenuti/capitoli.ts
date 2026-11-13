@@ -3,11 +3,15 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { avvisiTraduzione, controllaFile, ordina, scegliTesto, vicini, type AvvisoTraduzione } from './percorso';
 import type { Lingua } from '../i18n';
-import type { DichiarazioneEsercizio } from './schemi';
+import type { DichiarazioneEsercizio, NomePercorso } from './schemi';
 
 export type Capitolo = {
   id: string;
+  /** La posizione nella Scaletta (ADR-0011). */
   numero: number;
+  percorso: NomePercorso;
+  /** Gli id dei Prerequisiti, come in percorso.yml. */
+  prerequisiti: string[];
   titolo: string;
   riga: string;
   provaLetture?: 'letture' | 'avanzate';
@@ -49,6 +53,8 @@ export async function capitoli(lingua: Lingua): Promise<Capitolo[]> {
   return percorso.map((v) => ({
     id: v.id,
     numero: v.numero,
+    percorso: v.percorso,
+    prerequisiti: v.prerequisiti,
     titolo: v[lingua].titolo,
     riga: v[lingua].riga,
     provaLetture: v.prova_letture,

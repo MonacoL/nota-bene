@@ -5,6 +5,7 @@
 // La Lettura successiva (ticket #32) si calcola qui per ogni filtro ?voce=; il browser sceglie quella del filtro.
 import Base from '../../../../layouts/Base.astro';
 import Lettura from '../../../../components/lettura/Lettura.svelte';
+import Blocco from '../../../../components/percorso/Blocco.astro';
 import { LINGUE, riempi, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli } from '../../../../contenuti/capitoli';
 import { letture } from '../../../../contenuti/letture';
@@ -71,7 +72,10 @@ const successive = Object.fromEntries(
     </>
   ) : (
     <>
-      <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} successive={successive} audio={audio} t={tl} />
+      <Blocco lingua={lingua} prerequisiti={lettura.prerequisiti} />
+      <div class="bloccabile">
+        <Lettura client:only="svelte" abc={conSoluzione(lettura.abc, lettura.sillabe)} righeTesto={righeTesto} spiegazione={spiegazione} successive={successive} audio={audio} t={tl} />
+      </div>
 
       <footer class="attribuzione">
         <p>

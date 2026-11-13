@@ -1,8 +1,8 @@
 ---
 # Claude's draft from ticket #14: no human review yet. Whoever reviews it writes their name and the date here.
-revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-06 }
-tradotto_da: 2026-11-06
-aggiornata: 2026-11-06
+revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-13 }
+tradotto_da: 2026-11-13
+aggiornata: 2026-11-13
 ---
 
 _Draft awaiting review._
@@ -11,7 +11,12 @@ Nota Bene does not collect personal data. There are no accounts, forms, analytic
 
 ## Cookies and browser storage
 
-The site uses no cookies and no `localStorage`. The only thing it saves in your browser is the piano samples used by the starting pitch and the playback check: it keeps them in the browser cache (`CacheStorage`) so they don't download every time. They are the site's own audio files, the same for everyone, and say nothing about who listens to them. You can delete them by clearing the site's data in your browser settings. That is why there is no banner to accept. The language is part of the page address, in `/it/` or `/en/`.
+The site uses no cookies. It saves two things in your browser, and neither leaves your device:
+
+- **your progress**, in `localStorage`: which chapters you have completed and whether you follow the sequence or use free study. It unlocks chapters once you have done their prerequisites. It contains nothing about you, never reaches a server, and does not move between devices. You can delete it with "Clear my progress" on the chapters page, or by clearing the site's data in your browser settings;
+- **the piano samples** used by the starting pitch and the playback check, in the browser cache (`CacheStorage`), so they don't download every time. They are the site's own audio files, the same for everyone, and say nothing about who listens to them.
+
+Both only make the site do what you ask of it, which is why there is no banner to accept. The language is part of the page address, in `/it/` or `/en/`.
 
 ## What GitHub logs
 
