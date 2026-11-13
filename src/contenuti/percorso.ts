@@ -1,7 +1,10 @@
 // Regole del Percorso e dei Capitoli, in TypeScript puro: le pagine le usano alla build, i test con Vitest.
 import type { CapitoloEn, CapitoloIt, VocePercorso } from './schemi';
 
-/** La scaletta in ordine. Fallisce se i numeri non vanno da 1 a N senza buchi o se un id si ripete. */
+/**
+ * La Scaletta in ordine (ADR-0011). Fallisce se i numeri non vanno da 1 a N senza buchi, se un id si ripete o se un
+ * Prerequisito non è un Capitolo o non viene prima nella Scaletta (quindi anche se ci sono cicli).
+ */
 export function ordina(voci: readonly VocePercorso[]): VocePercorso[] {
   const ordinate = [...voci].sort((a, b) => a.numero - b.numero);
   ordinate.forEach((v, i) => {
@@ -9,7 +12,33 @@ export function ordina(voci: readonly VocePercorso[]): VocePercorso[] {
   });
   const ids = new Set(ordinate.map((v) => v.id));
   if (ids.size !== ordinate.length) throw new Error('Percorso: due Capitoli hanno lo stesso id');
+  // Ogni Prerequisito viene prima nella Scaletta: così non ci sono nemmeno cicli.
+  const posizione = new Map(ordinate.map((v) => [v.id, v.numero]));
+  for (const v of ordinate) {
+    for (const p of v.prerequisiti) {
+      if (!ids.has(p)) throw new Error(`Percorso: il Capitolo "${v.id}" ha il Prerequisito "${p}", che non è un Capitolo`);
+      if (posizione.get(p)! >= v.numero) {
+        throw new Error(`Percorso: il Capitolo "${v.id}" ha il Prerequisito "${p}", che nella Scaletta viene dopo (o è lui stesso)`);
+      }
+    }
+  }
   return ordinate;
+}
+
+/** I Prerequisiti non ancora completati (ADR-0011): in Scaletta, se ce n'è almeno uno, la pagina è bloccata. */
+export function mancanti(prerequisiti: readonly string[], completati: ReadonlySet<string>): string[] {
+  return prerequisiti.filter((p) => !completati.has(p));
+}
+
+/**
+ * Il prossimo passo (ADR-0011): il primo Capitolo della Scaletta, già in ordine, che non è completato e ha tutti i
+ * Prerequisiti completati. Nessuno se sono tutti completati.
+ */
+export function prossimoPasso(
+  scaletta: readonly { id: string; prerequisiti: readonly string[] }[],
+  completati: ReadonlySet<string>,
+): string | undefined {
+  return scaletta.find((c) => !completati.has(c.id) && mancanti(c.prerequisiti, completati).length === 0)?.id;
 }
 
 /** Il Capitolo prima e quello dopo nel Percorso, se ci sono. */

@@ -127,24 +127,29 @@ test.describe('controlli una volta sola', () => {
     expect(visti.size).toBeGreaterThanOrEqual(PAGINE.length);
   });
 
-  test('niente cookie, storage o risorse di terzi', async ({ page, context, baseURL }) => {
-    const origine = new URL(baseURL!).origin;
-    const esterne: string[] = [];
-    page.on('request', (r) => {
-      const u = new URL(r.url());
-      if (u.protocol !== 'data:' && u.origin !== origine) esterne.push(r.url());
+  // Da un browser vuoto, guardare le pagine non salva niente: i Progressi (ADR-0011) si scrivono solo quando il
+  // corista fa qualcosa (una Serie, "segna", la scelta del modo).
+  test.describe(() => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+    test('niente cookie, storage o risorse di terzi', async ({ page, context, baseURL }) => {
+      const origine = new URL(baseURL!).origin;
+      const esterne: string[] = [];
+      page.on('request', (r) => {
+        const u = new URL(r.url());
+        if (u.protocol !== 'data:' && u.origin !== origine) esterne.push(r.url());
+      });
+      for (const percorso of PAGINE) {
+        await page.goto(percorso);
+        await page.waitForLoadState('networkidle');
+        const storage = await page.evaluate(async () => ({
+          local: localStorage.length,
+          session: sessionStorage.length,
+          idb: (await indexedDB.databases()).length,
+        }));
+        expect(storage, percorso).toEqual({ local: 0, session: 0, idb: 0 });
+      }
+      expect(esterne).toEqual([]);
+      expect(await context.cookies()).toEqual([]);
     });
-    for (const percorso of PAGINE) {
-      await page.goto(percorso);
-      await page.waitForLoadState('networkidle');
-      const storage = await page.evaluate(async () => ({
-        local: localStorage.length,
-        session: sessionStorage.length,
-        idb: (await indexedDB.databases()).length,
-      }));
-      expect(storage, percorso).toEqual({ local: 0, session: 0, idb: 0 });
-    }
-    expect(esterne).toEqual([]);
-    expect(await context.cookies()).toEqual([]);
   });
 });

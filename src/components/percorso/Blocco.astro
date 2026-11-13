@@ -1,0 +1,88 @@
+---
+// Il blocco della Scaletta (ADR-0011): su un Capitolo, sui suoi Esercizi o su una Lettura con Prerequisiti mancanti,
+// in Scaletta, il contenuto (.bloccabile) si nasconde e al suo posto c'è questo riquadro. Il contenuto resta
+// nell'HTML: senza JavaScript non si blocca niente.
+// Prima del disegno uno script inline mette data-blocco="attesa" su <html> (il CSS nasconde .bloccabile), così il
+// contenuto non compare per un attimo per poi sparire; lo script del modulo decide. Se il modulo non arriva, dopo
+// qualche secondo il contenuto torna.
+import { capitoli } from '../../contenuti/capitoli';
+import { testi, url, type Lingua } from '../../i18n';
+
+interface Props {
+  lingua: Lingua;
+  prerequisiti: readonly string[];
+}
+const { lingua, prerequisiti } = Astro.props;
+const t = testi(lingua).progressi;
+const tutti = await capitoli(lingua);
+const elenco = prerequisiti.map((id) => tutti.find((c) => c.id === id)!);
+---
+{elenco.length > 0 && (
+  <>
+    <script is:inline>
+      document.documentElement.dataset.blocco = 'attesa';
+      setTimeout(() => { if (document.documentElement.dataset.blocco === 'attesa') delete document.documentElement.dataset.blocco; }, 4000);
+    </script>
+    <section class="blocco" data-prerequisiti={prerequisiti.join(' ')} aria-labelledby="titolo-blocco">
+      <h2 id="titolo-blocco">
+        <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M6 9V6.5a4 4 0 0 1 8 0V9" fill="none" stroke="currentColor" stroke-width="2" /><rect x="4" y="9" width="12" height="9" rx="2" /></svg>
+        {t.titoloBlocco}
+      </h2>
+      <p>{t.testoBlocco}</p>
+      <ul>
+        {elenco.map((c) => (
+          <li data-capitolo={c.id}>
+            <a href={url(lingua, `capitoli/${c.id}/`)}>{c.titolo}</a>
+            <button type="button" class="segna" data-capitolo={c.id} aria-label={t.segnaQuesto.replace('{titolo}', c.titolo)}>{t.segna}</button>
+          </li>
+        ))}
+      </ul>
+      <p><button type="button" class="pulsante libero">{t.passaAlLibero}</button></p>
+    </section>
+  </>
+)}
+
+<script>
+  import { mancanti } from '../../contenuti/percorso';
+  import { annunciaCambio, progressiDelSito, seguiProgressi } from '../../progressi/sito';
+
+  const blocco = document.querySelector<HTMLElement>('.blocco');
+  if (blocco) {
+    const prerequisiti = blocco.dataset.prerequisiti!.split(' ');
+    seguiProgressi(() => {
+      const progressi = progressiDelSito();
+      const manca = progressi.modo() === 'scaletta' ? mancanti(prerequisiti, progressi.completati()) : [];
+      for (const li of blocco.querySelectorAll<HTMLElement>('li[data-capitolo]')) li.hidden = !manca.includes(li.dataset.capitolo!);
+      if (manca.length) document.documentElement.dataset.blocco = 'si';
+      else delete document.documentElement.dataset.blocco;
+    });
+    blocco.addEventListener('click', (e) => {
+      const pulsante = (e.target as HTMLElement).closest('button');
+      if (!pulsante) return;
+      const progressi = progressiDelSito();
+      if (pulsante.classList.contains('libero')) progressi.scegliModo('libero');
+      else progressi.segna(pulsante.dataset.capitolo!);
+      annunciaCambio();
+    });
+  }
+</script>
+
+<style>
+  /* Senza JavaScript, e quando non manca niente, il riquadro non c'è. */
+  .blocco { display: none; }
+  :global(html[data-blocco='si']) .blocco {
+    display: block; margin: 1em 0; padding: 4px 18px 12px;
+    border: 1px solid var(--accent); border-radius: var(--radius); background: var(--surface);
+  }
+  h2 { margin-top: 0.8em; }
+  h2 svg { fill: var(--accent); color: var(--accent); vertical-align: -2px; margin-right: 8px; }
+  ul { list-style: none; margin: 0 0 8px; padding: 0; }
+  li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; padding: 4px 0; border-top: 1px solid var(--line); }
+  li a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; }
+  .segna {
+    min-height: 48px; padding: 0 14px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: transparent; color: var(--ink); font: inherit; font-size: 0.9rem; cursor: pointer;
+  }
+  .segna:hover { border-color: var(--accent); color: var(--accent); }
+  button.libero { font: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+</style>

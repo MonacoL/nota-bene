@@ -1,0 +1,45 @@
+---
+// Lo stato del Capitolo nei Progressi (ADR-0011): "✓ Capitolo completato", oppure il pulsante "Segna come già
+// studiato". Senza JavaScript non si vede, perché i Progressi stanno nel browser.
+import { testi, type Lingua } from '../../i18n';
+
+interface Props {
+  lingua: Lingua;
+  id: string;
+}
+const { lingua, id } = Astro.props;
+const t = testi(lingua).progressi;
+---
+<div class="stato-capitolo" data-capitolo={id} hidden>
+  <p class="fatto" hidden>{t.completato}</p>
+  <button type="button" class="pulsante secondario segna" hidden>{t.segna}</button>
+</div>
+
+<script>
+  import { annunciaCambio, progressiDelSito, seguiProgressi } from '../../progressi/sito';
+
+  for (const stato of document.querySelectorAll<HTMLElement>('.stato-capitolo')) {
+    const id = stato.dataset.capitolo!;
+    const fatto = stato.querySelector<HTMLElement>('.fatto')!;
+    const segna = stato.querySelector<HTMLButtonElement>('.segna')!;
+    const aggiorna = () => {
+      const completato = progressiDelSito().completato(id);
+      fatto.hidden = !completato;
+      segna.hidden = completato;
+    };
+    segna.addEventListener('click', () => {
+      progressiDelSito().segna(id);
+      annunciaCambio();
+      fatto.focus();
+    });
+    fatto.tabIndex = -1;
+    stato.hidden = false;
+    seguiProgressi(aggiorna);
+  }
+</script>
+
+<style>
+  .stato-capitolo { margin: 0 0 12px; }
+  .fatto { margin: 0; color: var(--ok); font-weight: 700; display: flex; align-items: center; min-height: 48px; }
+  .segna { font: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+</style>

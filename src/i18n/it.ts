@@ -53,6 +53,29 @@ export const it = {
     avanti: 'Avanti →',
     riepilogo: '{n} su 10 giuste al primo colpo',
     altri: 'Altri 10 esercizi',
+    /** Sotto il punteggio: se la Serie ha contato per il Capitolo completato (ADR-0011). */
+    contaCompletato: '✓ Questa serie conta: il capitolo è completato.',
+    contaManca: '✓ Questa serie conta. Per completare il capitolo manca una serie riuscita degli altri esercizi.',
+    nonConta: 'Con almeno {soglia} giuste al primo colpo la serie conta per completare il capitolo.',
+  },
+  /** I Progressi (ADR-0011): solo con JavaScript, perché stanno nel browser. */
+  progressi: {
+    completato: '✓ Capitolo completato',
+    segna: 'Segna come già studiato',
+    cancella: 'Cancella i miei progressi',
+    conferma: 'Tocca ancora per cancellare tutto',
+    cancellati: 'Progressi cancellati.',
+    /** Il pulsante dell'intestazione e della pagina dei Capitoli: premuto quando si fa Studio libero. */
+    studioLibero: 'Studio libero',
+    modoScaletta: 'Segui la scaletta: un capitolo si apre quando hai completato i suoi prerequisiti.',
+    modoLibero: 'Studio libero: tutto è aperto, nell\'ordine che vuoi.',
+    bloccato: 'bloccato',
+    prossimoPasso: 'Prossimo passo',
+    /** Il riquadro al posto di un Capitolo, dei suoi Esercizi o di una Lettura con Prerequisiti mancanti. */
+    titoloBlocco: 'Prima servono altri capitoli',
+    testoBlocco: 'Stai seguendo la scaletta: questa pagina si apre quando hai completato questi capitoli.',
+    segnaQuesto: 'Segna "{titolo}" come già studiato',
+    passaAlLibero: 'Passa allo studio libero',
   },
   capitoloPrecedente: '← Capitolo precedente',
   capitoloSuccessivo: 'Capitolo successivo →',
@@ -60,7 +83,16 @@ export const it = {
   provaLettureAvanzate: 'Prova le letture avanzate',
   navCapitoli: 'Capitoli',
   menu: 'Menu',
-  introCapitoli: 'Il percorso consigliato va in ordine, ma ogni capitolo è sempre aperto.',
+  introCapitoli: 'Si studia su tre percorsi insieme, ritmico, armonico e melodico. La scaletta del maestro li alterna.',
+  /** I tre Percorsi (ADR-0011): il nome nell'etichetta e il titolo della colonna nella vista per percorso. */
+  percorsi: { ritmico: 'ritmico', armonico: 'armonico', melodico: 'melodico' },
+  percorsoDi: { ritmico: 'Percorso ritmico', armonico: 'Percorso armonico', melodico: 'Percorso melodico' },
+  vistaScaletta: 'Scaletta',
+  vistaPercorsi: 'Per percorso',
+  vistePercorso: 'Come vedere i capitoli',
+  /** Sopra un Capitolo e i suoi Esercizi: i Prerequisiti, come link. */
+  prerequisitiCapitolo: 'Prima di questo capitolo:',
+  nessunPrerequisito: 'Nessun prerequisito: si può fare dal primo giorno.',
   introHome: {
     perChi: {
       titolo: 'Per chi è',
@@ -72,7 +104,7 @@ export const it = {
     },
     cosaNonFa: {
       titolo: 'Niente account',
-      testo: 'Non ti registri e non si salva niente: entri, studi ed esci.',
+      testo: 'Non ti registri: i tuoi progressi restano solo sul tuo dispositivo, e li puoi cancellare quando vuoi.',
     },
     comincia: 'Comincia dal capitolo 1',
     tuttiICapitoli: 'Tutti i capitoli',

@@ -3,13 +3,15 @@ import Base from '../../../../layouts/Base.astro';
 import Serie from '../../../../components/esercizi/Serie.svelte';
 import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli, vicini, type Capitolo } from '../../../../contenuti/capitoli';
+import Prerequisiti from '../../../../components/percorso/Prerequisiti.astro';
+import Blocco from '../../../../components/percorso/Blocco.astro';
 
 export async function getStaticPaths() {
   const pagine = [];
   for (const lang of LINGUE) {
     const percorso = await capitoli(lang);
     for (const capitolo of percorso) {
-      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, successivo: vicini(percorso, capitolo.id).successivo } });
+      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, tutti: percorso, successivo: vicini(percorso, capitolo.id).successivo } });
     }
   }
   return pagine;
@@ -17,9 +19,10 @@ export async function getStaticPaths() {
 
 interface Props {
   capitolo: Capitolo;
+  tutti: Capitolo[];
   successivo?: Capitolo;
 }
-const { capitolo, successivo } = Astro.props;
+const { capitolo, tutti, successivo } = Astro.props;
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
 const titolo = t.eserciziDi.replace('{titolo}', capitolo.titolo);
@@ -30,17 +33,22 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
   {capitolo.esercizi.length > 0 && <script is:inline>document.documentElement.setAttribute('data-serie', '')</script>}
   <p class="indietro"><a href={url(lingua, `capitoli/${capitolo.id}/`)}>{t.tornaAlCapitolo}</a></p>
   <h1>{titolo}</h1>
+  <Prerequisiti lingua={lingua} capitolo={capitolo} tutti={tutti} />
+  <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />
 
-  {capitolo.esercizi.length
-    ? <Serie
-        client:only="svelte"
-        lingua={lingua}
-        t={t.serie}
-        dichiarazioni={capitolo.esercizi}
-        successivo={successivoHref ? { href: successivoHref, etichetta: t.capitoloSuccessivo } : undefined}
-        capitolo={{ href: url(lingua, `capitoli/${capitolo.id}/`), etichetta: t.tornaAlCapitolo.replace(/^←\s*/, '') }}
-      />
-    : <p class="muted">{t.eserciziInPreparazione}</p>}
+  <div class="bloccabile">
+    {capitolo.esercizi.length
+      ? <Serie
+          client:only="svelte"
+          lingua={lingua}
+          t={t.serie}
+          dichiarazioni={capitolo.esercizi}
+          idCapitolo={capitolo.id}
+          successivo={successivoHref ? { href: successivoHref, etichetta: t.capitoloSuccessivo } : undefined}
+          capitolo={{ href: url(lingua, `capitoli/${capitolo.id}/`), etichetta: t.tornaAlCapitolo.replace(/^←\s*/, '') }}
+        />
+      : <p class="muted">{t.eserciziInPreparazione}</p>}
+  </div>
 
   {/* Sotto la Serie e non in alto: a 320 px ogni riga sopra il pentagramma lo spinge sotto il tastierino. */}
   {successivoHref && (
@@ -53,7 +61,8 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
 <style is:global>
   /*
    * Col dito, durante la Serie (Serie.svelte mette data-serie su <html>): la pagina è alta quanto lo schermo
-   * e non scorre. Restano l'intestazione del sito e la Serie; avviso, titolo, link e piè di pagina tornano nel riepilogo.
+   * e non scorre. Restano l'intestazione del sito e la Serie; avviso, titolo, Prerequisiti, link e piè di pagina tornano
+   * nel riepilogo.
    */
   @media not ((hover: hover) and (pointer: fine)) {
     html[data-serie] body { height: 100dvh; min-height: 0; overflow: hidden; }
@@ -61,9 +70,12 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
     html[data-serie] .piede,
     html[data-serie] main > h1,
     html[data-serie] main > .indietro,
+    html[data-serie] main > .prerequisiti,
     html[data-serie] main > .seguito { display: none; }
     /* Su uno schermo troppo basso scorre la Serie, non la pagina: "Avanti →" non va mai perso. */
     html[data-serie] main { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; padding-top: 4px; padding-bottom: 12px; }
+    /* Il contenitore che il blocco della Scaletta nasconde (ADR-0011) passa la colonna alla Serie. */
+    html[data-serie] main > .bloccabile { flex: 1; min-height: 0; display: flex; flex-direction: column; }
   }
 </style>
 

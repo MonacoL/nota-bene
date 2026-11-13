@@ -3,13 +3,16 @@ import { render } from 'astro:content';
 import Base from '../../../../layouts/Base.astro';
 import { LINGUE, testi, url, type Lingua } from '../../../../i18n';
 import { capitoli, vicini, type Capitolo } from '../../../../contenuti/capitoli';
+import Prerequisiti from '../../../../components/percorso/Prerequisiti.astro';
+import StatoCapitolo from '../../../../components/percorso/StatoCapitolo.astro';
+import Blocco from '../../../../components/percorso/Blocco.astro';
 
 export async function getStaticPaths() {
   const pagine = [];
   for (const lang of LINGUE) {
     const percorso = await capitoli(lang);
     for (const capitolo of percorso) {
-      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, ...vicini(percorso, capitolo.id) } });
+      pagine.push({ params: { lang, id: capitolo.id }, props: { capitolo, tutti: percorso, ...vicini(percorso, capitolo.id) } });
     }
   }
   return pagine;
@@ -17,10 +20,11 @@ export async function getStaticPaths() {
 
 interface Props {
   capitolo: Capitolo;
+  tutti: Capitolo[];
   precedente?: Capitolo;
   successivo?: Capitolo;
 }
-const { capitolo, precedente, successivo } = Astro.props;
+const { capitolo, tutti, precedente, successivo } = Astro.props;
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
 const testo = capitolo.testo;
@@ -30,15 +34,18 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
 <Base lingua={lingua} titolo={capitolo.titolo}>
   <p class="numero">{t.capitolo} {capitolo.numero}</p>
   <h1>{capitolo.titolo}</h1>
+  <Prerequisiti lingua={lingua} capitolo={capitolo} tutti={tutti} />
+  <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />
 
   {testo?.ripiego && <p class="avviso" role="note">{t.avvisoNonTradotto}</p>}
 
   {Contenuto
-    ? <article class="testo" lang={testo!.ripiego ? testo!.lingua : undefined} data-ascolta={t.ascoltaEsempio}><Contenuto /></article>
-    : <p class="muted">{t.capitoloInPreparazione}</p>}
+    ? <article class="testo bloccabile" lang={testo!.ripiego ? testo!.lingua : undefined} data-ascolta={t.ascoltaEsempio}><Contenuto /></article>
+    : <p class="muted bloccabile">{t.capitoloInPreparazione}</p>}
 
   <nav class="seguito" aria-label={t.navCapitoli}>
-    <p class="azioni">
+    <div class="bloccabile"><StatoCapitolo lingua={lingua} id={capitolo.id} /></div>
+    <p class="azioni bloccabile">
       <a class="pulsante" href={url(lingua, `capitoli/${capitolo.id}/esercizi/`)}>{t.esercizi}</a>
       {capitolo.provaLetture === 'letture' && <a class="pulsante secondario" href={url(lingua, 'letture/')}>{t.provaLetture}</a>}
       {capitolo.provaLetture === 'avanzate' && <a class="pulsante secondario" href={url(lingua, 'letture/#avanzate')}>{t.provaLettureAvanzate}</a>}

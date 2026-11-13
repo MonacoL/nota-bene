@@ -9,6 +9,14 @@ const PORTA = 4321;
 // Il sito con il catalogo d'esempio delle Letture (npm run build:esempio), per i test che lo chiedono con test.use.
 const PORTA_ESEMPIO = 4322;
 
+// I test partono in Studio libero (ADR-0011): quasi tutti aprono Capitoli, Esercizi e Letture che in Scaletta
+// sarebbero bloccati. Scaletta e blocchi li provano scaletta.spec.ts e chi riparte da un browser vuoto.
+const STUDIO_LIBERO = [{ name: 'nota-bene:progressi:v1', value: JSON.stringify({ serie: {}, segnati: [], modo: 'libero' }) }];
+export const IN_STUDIO_LIBERO = {
+  cookies: [],
+  origins: [PORTA, PORTA_ESEMPIO].map((p) => ({ origin: `http://127.0.0.1:${p}`, localStorage: STUDIO_LIBERO })),
+};
+
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
@@ -28,6 +36,7 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${PORTA}/nota-bene/`,
     trace: 'retain-on-failure',
     contextOptions: { reducedMotion: 'reduce' },
+    storageState: IN_STUDIO_LIBERO,
   },
   webServer: [
     {

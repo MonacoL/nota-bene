@@ -5,6 +5,7 @@ import Scritta from '../components/Scritta.astro';
 import CambioLingua from '../components/CambioLingua.svelte';
 import { IN_COSTRUZIONE } from '../config';
 import { PAGINE_SERVIZIO } from '../contenuti/pagine';
+import { capitoli } from '../contenuti/capitoli';
 import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
 
 interface Props {
@@ -16,6 +17,8 @@ const t = testi(lingua);
 const tAltra = testi(altraLingua(lingua));
 const titoloPagina = titolo ? `${titolo} / ${t.nomeSito}` : t.nomeSito;
 const base = import.meta.env.BASE_URL;
+// Per i Progressi (ADR-0011, src/progressi/sito.ts): i Capitoli con i tipi dei loro Esercizi e i Prerequisiti.
+const datiCapitoli = (await capitoli(lingua)).map((c) => ({ id: c.id, tipi: c.esercizi.map((e) => e.tipo), prerequisiti: c.prerequisiti }));
 // Le voci del menu: link nell'intestazione da 440 px in su, pulsante con le lineette sotto (ticket "Home introduttiva con menu verso Capitoli e Letture").
 const voci = [
   { href: url(lingua, 'capitoli/'), testo: t.navCapitoli },
@@ -31,6 +34,7 @@ const voci = [
     <meta name="description" content={t.descrizioneSito} />
     {IN_COSTRUZIONE && <meta name="robots" content="noindex" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <script type="application/json" id="nb-capitoli" set:html={JSON.stringify(datiCapitoli)} />
     <link rel="alternate" hreflang={altraLingua(lingua)} href={urlInAltraLingua(Astro.url.pathname, lingua)} />
   </head>
   <body>
@@ -41,6 +45,7 @@ const voci = [
         <a class="marchio" href={url(lingua)}><Segno /><Scritta /></a>
         <nav class="nav" aria-label={t.navPrincipale}>
           {voci.map((v) => <a href={v.href}>{v.testo}</a>)}
+          <button type="button" class="cambia-modo" aria-pressed="false" hidden>{t.progressi.studioLibero}</button>
         </nav>
         <CambioLingua
           client:load
@@ -56,6 +61,7 @@ const voci = [
           </summary>
           <nav aria-label={t.navPrincipale}>
             {voci.map((v) => <a href={v.href}>{v.testo}</a>)}
+            <button type="button" class="cambia-modo" aria-pressed="false" hidden>{t.progressi.studioLibero}</button>
           </nav>
         </details>
       </div>
@@ -73,6 +79,24 @@ const voci = [
         <p class="licenze">{t.piePagina.licenze}</p>
       </div>
     </footer>
+    <script>
+      // Studio libero sì o no (ADR-0011), dall'intestazione: senza JavaScript non c'è, perché i Progressi stanno nel browser.
+      import { annunciaCambio, progressiDelSito, seguiProgressi } from '../progressi/sito';
+
+      const pulsanti = [...document.querySelectorAll<HTMLButtonElement>('header .cambia-modo')];
+      for (const p of pulsanti) {
+        p.hidden = false;
+        p.addEventListener('click', () => {
+          const progressi = progressiDelSito();
+          progressi.scegliModo(progressi.modo() === 'scaletta' ? 'libero' : 'scaletta');
+          annunciaCambio();
+        });
+      }
+      seguiProgressi(() => {
+        const libero = progressiDelSito().modo() === 'libero';
+        for (const p of pulsanti) p.setAttribute('aria-pressed', String(libero));
+      });
+    </script>
     <script>
       // Il menu con le lineette si chiude con Esc o toccando fuori; senza JavaScript si apre e si chiude dal pulsante.
       const menu = document.querySelector<HTMLDetailsElement>('header .menu');
@@ -105,6 +129,15 @@ const voci = [
     font-family: var(--font-titoli); text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; color: var(--ink);
   }
   .nav a:hover { color: var(--accent); }
+  .cambia-modo {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; border: 0; background: none; cursor: pointer;
+    color: var(--muted); font-family: var(--font-titoli); font-size: inherit; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .cambia-modo:hover { color: var(--accent); }
+  .cambia-modo[aria-pressed='true'] { color: var(--accent); }
+  .cambia-modo[aria-pressed='true']::before { content: '✓\00a0'; }
+  /* Nella barra c'è posto solo da 640 px: sotto, il cambio sta nel menu con le lineette. */
+  @media (max-width: 639px) { .nav .cambia-modo { display: none; } }
   /* Marchio, link e lingua insieme chiedono circa 430 px: sotto i 440 i link passano nel pulsante con le lineette. */
   .menu { display: none; }
   @media (max-width: 439px) {
@@ -126,6 +159,7 @@ const voci = [
     position: absolute; z-index: 10; top: 100%; left: 0; right: 0;
     background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 6px 12px rgb(0 0 0 / 0.5);
   }
+  .menu nav .cambia-modo { width: 100%; padding: 0 16px; border-top: 1px solid var(--line); font-size: 1rem; }
   .menu nav a {
     display: flex; align-items: center; min-height: 48px; padding: 0 16px;
     border-top: 1px solid var(--line); text-decoration: none;
