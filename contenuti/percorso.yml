@@ -1,56 +1,79 @@
-# La scaletta del Percorso (ticket "Scaletta dei Capitoli"), nelle due lingue.
+# I Capitoli, la Scaletta e i tre Percorsi (ADR-0011), nelle due lingue.
 # L'id è lo slug dell'URL (/it/capitoli/<id>/): una volta pubblicato non cambia più.
-# Il numero dà l'ordine e si può cambiare senza rompere i link.
+# Il numero è la posizione nella Scaletta e si può cambiare senza rompere i link.
+# percorso: ritmico, armonico o melodico. prerequisiti: i Capitoli da completare prima, anche di un altro Percorso;
+# nella Scaletta devono venire prima (la build lo controlla).
+# PROVVISORIO: divisione, Scaletta e Prerequisiti sono da rivedere con il maestro Sabetta (#80).
 # Il testo di ogni Capitolo sta in contenuti/capitoli/<lingua>/<id>.md; finché manca, il Capitolo è "in preparazione".
 
 - id: note-toni-e-semitoni
   numero: 1
+  percorso: melodico
+  prerequisiti: []
   it: { titolo: "Note, toni e semitoni", riga: "Il pentagramma, i nomi delle note e le distanze più piccole fra loro." }
   en: { titolo: "Notes, whole steps, and half steps", riga: "The staff, the names of the notes, and the smallest distances between them." }
 
 - id: chiavi
   numero: 2
+  percorso: melodico
+  prerequisiti: [note-toni-e-semitoni]
   it: { titolo: "Chiavi", riga: "Violino, violino ottava bassa e basso: quale voce usa quale, e dove sta il Do4." }
   en: { titolo: "Clefs", riga: "Treble, octave treble, and bass: which voice part uses which, and where C4 sits." }
 
 - id: figure-e-pause
   numero: 3
+  percorso: ritmico
+  prerequisiti: []
   it: { titolo: "Figure e pause", riga: "Quanto dura una nota o un silenzio, dalla semibreve alla semicroma." }
   en: { titolo: "Note values and rests", riga: "How long a note or a silence lasts, from the whole note to the sixteenth note." }
 
 - id: tempi-semplici-e-composti
   numero: 4
+  percorso: ritmico
+  prerequisiti: [figure-e-pause]
   it: { titolo: "Tempi semplici e composti", riga: "Battute e pulsazioni: come si conta la musica." }
   en: { titolo: "Simple and compound time", riga: "Measures and beats: how music is counted." }
 
 - id: scala-maggiore
   numero: 5
+  percorso: armonico
+  prerequisiti: [note-toni-e-semitoni]
   it: { titolo: "Scala maggiore", riga: "Toni e semitoni in fila, la tonalità e la sua armatura." }
   en: { titolo: "The major scale", riga: "Whole and half steps in a row, the key, and its key signature." }
 
 - id: scala-minore
   numero: 6
+  percorso: armonico
+  prerequisiti: [scala-maggiore]
   it: { titolo: "Scala minore", riga: "La relativa minore e le sue tre forme: naturale, armonica e melodica." }
   en: { titolo: "The minor scale", riga: "The relative minor and its three forms: natural, harmonic, and melodic." }
 
 - id: modo-maggiore-e-minore
   numero: 7
+  percorso: armonico
+  prerequisiti: [scala-minore]
   it: { titolo: "Modo maggiore e minore", riga: "Trovare la tonica e capire se un passaggio è maggiore o minore." }
   en: { titolo: "Major and minor mode", riga: "Finding the tonic and telling whether a passage is major or minor." }
 
 - id: intervalli
   numero: 8
+  percorso: armonico
+  prerequisiti: [scala-maggiore]
   it: { titolo: "Intervalli", riga: "La distanza fra due note: prima il numero, poi la qualità." }
   en: { titolo: "Intervals", riga: "The distance between two notes: first the number, then the quality." }
 
 - id: do-mobile
   numero: 9
+  percorso: melodico
+  prerequisiti: [chiavi, modo-maggiore-e-minore]
   prova_letture: letture
   it: { titolo: "DO mobile", riga: "Le sillabe DO RE MI FA SOL LA TI, a partire dalla tonica." }
   en: { titolo: "Movable do", riga: "The syllables DO RE MI FA SOL LA TI, starting from the tonic." }
 
 - id: do-mobile-avanzato
   numero: 10
+  percorso: melodico
+  prerequisiti: [do-mobile, intervalli]
   prova_letture: avanzate
   it: { titolo: "DO mobile avanzato", riga: "Sillabe cromatiche e mutazione, quando la musica cambia tonalità." }
   en: { titolo: "Advanced movable do", riga: "Chromatic syllables and do shifts, for when the music changes key." }

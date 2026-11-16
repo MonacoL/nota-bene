@@ -1,6 +1,7 @@
 <script lang="ts">
   // La Serie: 10 Esercizi dello stesso tipo con barra di avanzamento, foglio di riscontro e riepilogo.
-  // Una scheda per tipo se il Capitolo ne ha più di uno; cambiare scheda fa ripartire la Serie. Non si salva niente.
+  // Una scheda per tipo se il Capitolo ne ha più di uno; cambiare scheda fa ripartire la Serie. La Serie non si salva,
+  // ma alla fine, con almeno SOGLIA_COMPLETATO giuste, conta per il Capitolo completato (ADR-0011).
   // Con ?seed=s nell'URL l'Esercizio n (da 0) della prima Serie usa il seed s + n: serve ai test.
   // "Riconosci l'intervallo" e "Trova Tonica e Modo" si possono ascoltare (ticket #35), col lettore delle Letture.
   import type { TuneObject } from 'abcjs';
@@ -20,6 +21,8 @@
   import TastierinoFigure from './TastierinoFigure.svelte';
   import SceltaTempo from './SceltaTempo.svelte';
   import Foglio from './Foglio.svelte';
+  import { SOGLIA_COMPLETATO } from '../../progressi';
+  import { annunciaCambio, progressiDelSito } from '../../progressi/sito';
 
   interface Props {
     lingua: Lingua;
@@ -28,8 +31,10 @@
     successivo?: { href: string; etichetta: string };
     /** Il link al capitolo, che col dito sta nella riga dell'avanzamento al posto di quello della pagina. */
     capitolo: { href: string; etichetta: string };
+    /** L'id del Capitolo, per i Progressi. */
+    idCapitolo: string;
   }
-  let { lingua, t, dichiarazioni, successivo, capitolo }: Props = $props();
+  let { lingua, t, dichiarazioni, successivo, capitolo, idCapitolo }: Props = $props();
 
   const LUNGHEZZA = 10;
   const seed = new URLSearchParams(window.location.search).get('seed');
@@ -55,6 +60,18 @@
   const esercizio = $derived<Esercizio | undefined>(
     finita ? undefined : genera(dichiarazione.tipo, dichiarazione, base + serieIniziate * LUNGHEZZA + n),
   );
+
+  /** Alla fine di ogni Serie, una volta sola: ha contato per il Capitolo completato? E il Capitolo ora lo è? */
+  let esito = $state<{ conta: boolean; completato: boolean } | undefined>();
+  let registrata = -1;
+  $effect(() => {
+    if (!finita || registrata === serieIniziate) return;
+    registrata = serieIniziate;
+    const progressi = progressiDelSito();
+    const conta = progressi.registraSerie(idCapitolo, dichiarazione.tipo, giuste);
+    esito = { conta, completato: progressi.completato(idCapitolo) };
+    if (conta) annunciaCambio();
+  });
 
   function nuovaSerie() {
     serieIniziate += 1;
@@ -163,6 +180,11 @@
   {:else}
     <section class="riepilogo" aria-labelledby="riepilogo">
       <p id="riepilogo" class="punteggio">{t.riepilogo.replace('{n}', String(giuste))}</p>
+      {#if esito}
+        <p class="conta" class:si={esito.conta}>
+          {esito.conta ? (esito.completato ? t.contaCompletato : t.contaManca) : t.nonConta.replace('{soglia}', String(SOGLIA_COMPLETATO))}
+        </p>
+      {/if}
       <p class="azioni">
         <button type="button" class="pulsante" onclick={nuovaSerie}>{t.altri}</button>
         {#if successivo}<a class="pulsante secondario" href={successivo.href}>{successivo.etichetta}</a>{/if}
@@ -210,7 +232,9 @@
     }
   }
   .riepilogo { padding: 16px 0; }
-  .punteggio { font-size: 1.3rem; font-weight: 700; }
+  .punteggio { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3em; }
+  .conta { color: var(--muted); }
+  .conta.si { color: var(--ok); font-weight: 700; }
   .azioni { display: flex; flex-wrap: wrap; gap: 12px; }
   button.pulsante { border: none; font: inherit; font-weight: 700; cursor: pointer; }
 </style>

@@ -1,8 +1,12 @@
 ---
-// Il Percorso: i 10 Capitoli in ordine, ciascuno con i suoi Esercizi (ticket "Home introduttiva con menu verso Capitoli e Letture").
+// I Capitoli in due viste (ADR-0011): la Scaletta, un elenco unico che alterna i tre Percorsi, e per Percorso, tre
+// colonne (tre sezioni una sotto l'altra su telefono). Senza JavaScript si vedono tutte e due; con JavaScript i due
+// link in alto scelgono quale, e l'indirizzo (#scaletta, #per-percorso) se lo ricorda.
 import Base from '../../../layouts/Base.astro';
+import EtichettaPercorso from '../../../components/percorso/EtichettaPercorso.astro';
 import { LINGUE, testi, url, type Lingua } from '../../../i18n';
 import { capitoli } from '../../../contenuti/capitoli';
+import { PERCORSI } from '../../../contenuti/schemi';
 
 export function getStaticPaths() {
   return LINGUE.map((lang) => ({ params: { lang } }));
@@ -10,24 +14,73 @@ export function getStaticPaths() {
 
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
-const percorso = await capitoli(lingua);
+const scaletta = await capitoli(lingua);
+const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
 ---
 <Base lingua={lingua} titolo={t.navCapitoli}>
   <h1>{t.navCapitoli}</h1>
   <p class="intro">{t.introCapitoli}</p>
 
-  <ol class="percorso">
-    {percorso.map((c) => (
-      <li>
-        <span class="numero" aria-hidden="true">{c.numero}</span>
-        <div>
-          <h2><a href={url(lingua, `capitoli/${c.id}/`)}>{c.titolo}</a></h2>
-          <p class="riga">{c.riga}</p>
-          <a class="esercizi" href={url(lingua, `capitoli/${c.id}/esercizi/`)} aria-label={t.eserciziDi.replace('{titolo}', c.titolo)}>{t.esercizi}</a>
-        </div>
-      </li>
-    ))}
-  </ol>
+  <div class="modo" hidden>
+    <button type="button" class="cambia-modo" aria-pressed="false">{t.progressi.studioLibero}</button>
+    <p class="descrizione" data-scaletta={t.progressi.modoScaletta} data-libero={t.progressi.modoLibero}></p>
+  </div>
+
+  <nav class="viste" aria-label={t.vistePercorso}>
+    <a href="#scaletta" data-vista="scaletta">{t.vistaScaletta}</a>
+    <a href="#per-percorso" data-vista="per-percorso">{t.vistaPercorsi}</a>
+  </nav>
+  {/* Prima del disegno, così non si vedono per un attimo tutte e due le viste. */}
+  <script is:inline>document.documentElement.dataset.vista = location.hash === '#per-percorso' ? 'per-percorso' : 'scaletta';</script>
+
+  <section id="scaletta" class="vista" aria-labelledby="titolo-scaletta">
+    <h2 id="titolo-scaletta" class="titolo-vista">{t.vistaScaletta}</h2>
+    <ol class="elenco">
+      {scaletta.map((c) => (
+        <li data-capitolo={c.id}>
+          <span class="numero" aria-hidden="true">{c.numero}</span>
+          <div>
+            <h3>
+              <a href={capitoloUrl(c.id)}>{c.titolo}</a>
+              <span class="lucchetto" hidden><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M6 9V6.5a4 4 0 0 1 8 0V9" fill="none" stroke="currentColor" stroke-width="2" /><rect x="4" y="9" width="12" height="9" rx="2" /></svg><span class="sr">{t.progressi.bloccato}</span></span>
+              <span class="fatto" hidden>{t.progressi.completato}</span>
+              <span class="prossimo" hidden>{t.progressi.prossimoPasso}</span>
+            </h3>
+            <EtichettaPercorso lingua={lingua} percorso={c.percorso} />
+            <p class="riga">{c.riga}</p>
+            <a class="esercizi" href={url(lingua, `capitoli/${c.id}/esercizi/`)} aria-label={t.eserciziDi.replace('{titolo}', c.titolo)}>{t.esercizi}</a>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="per-percorso" class="vista" aria-labelledby="titolo-per-percorso">
+    <h2 id="titolo-per-percorso" class="titolo-vista">{t.vistaPercorsi}</h2>
+    <div class="colonne">
+      {PERCORSI.map((p) => (
+        <section class="colonna" aria-labelledby={`percorso-${p}`}>
+          <h3 id={`percorso-${p}`}><EtichettaPercorso lingua={lingua} percorso={p} /> <span class="nome">{t.percorsoDi[p]}</span></h3>
+          <ol class="elenco breve">
+            {scaletta.filter((c) => c.percorso === p).map((c) => (
+              <li data-capitolo={c.id}>
+                <span class="numero" aria-hidden="true">{c.numero}</span>
+                <a href={capitoloUrl(c.id)}>{c.titolo}</a>
+                <span class="lucchetto" hidden><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M6 9V6.5a4 4 0 0 1 8 0V9" fill="none" stroke="currentColor" stroke-width="2" /><rect x="4" y="9" width="12" height="9" rx="2" /></svg><span class="sr">{t.progressi.bloccato}</span></span>
+                <span class="fatto" hidden>{t.progressi.completato}</span>
+                <span class="prossimo" hidden>{t.progressi.prossimoPasso}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <p class="cancella" hidden>
+    <button type="button" class="pulsante secondario" data-testo-conferma={t.progressi.conferma} data-testo-cancellati={t.progressi.cancellati}>{t.progressi.cancella}</button>
+    <span class="esito" role="status"></span>
+  </p>
 
   <section class="letture" aria-labelledby="titolo-letture">
     <h2 id="titolo-letture">{t.letture}</h2>
@@ -36,21 +89,150 @@ const percorso = await capitoli(lingua);
   </section>
 </Base>
 
+<script>
+  // Una vista alla volta: quella dell'indirizzo, altrimenti la Scaletta. La nasconde il CSS secondo data-vista su
+  // <html>; senza JavaScript restano tutte e due.
+  const link = [...document.querySelectorAll<HTMLAnchorElement>('.viste a')];
+  function mostra() {
+    const scelta = location.hash === '#per-percorso' ? 'per-percorso' : 'scaletta';
+    document.documentElement.dataset.vista = scelta;
+    for (const a of link) {
+      if (a.dataset.vista === scelta) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+  }
+  for (const a of link) {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      history.replaceState(null, '', a.hash);
+      mostra();
+    });
+  }
+  window.addEventListener('hashchange', mostra);
+  mostra();
+</script>
+
+<script>
+  // I Progressi (ADR-0011): il segno dei Capitoli completati e "Cancella i miei progressi", che chiede un secondo
+  // tocco invece di una finestra di conferma.
+  import { mancanti, prossimoPasso } from '../../../contenuti/percorso';
+  import { annunciaCambio, capitoliDelSito, progressiDelSito, seguiProgressi } from '../../../progressi/sito';
+
+  const pulsante = document.querySelector<HTMLButtonElement>('.cancella button')!;
+  const esito = document.querySelector<HTMLElement>('.cancella .esito')!;
+  const etichetta = pulsante.textContent!;
+  const { testoConferma, testoCancellati } = pulsante.dataset;
+  // Completati, e in Scaletta lucchetti e prossimo passo (ADR-0011). La Scaletta è l'ordine di #nb-capitoli.
+  const scaletta = capitoliDelSito();
+  const cambiaModo = document.querySelector<HTMLButtonElement>('.modo .cambia-modo')!;
+  const descrizione = document.querySelector<HTMLElement>('.modo .descrizione')!;
+  function segni() {
+    const progressi = progressiDelSito();
+    const completati = progressi.completati();
+    const inScaletta = progressi.modo() === 'scaletta';
+    const prossimo = inScaletta ? prossimoPasso(scaletta, completati) : undefined;
+    cambiaModo.setAttribute('aria-pressed', String(!inScaletta));
+    descrizione.textContent = inScaletta ? descrizione.dataset.scaletta! : descrizione.dataset.libero!;
+    for (const li of document.querySelectorAll<HTMLElement>('li[data-capitolo]')) {
+      const id = li.dataset.capitolo!;
+      const fatto = completati.has(id);
+      const prerequisiti = scaletta.find((c) => c.id === id)?.prerequisiti ?? [];
+      const bloccato = inScaletta && !fatto && mancanti(prerequisiti, completati).length > 0;
+      li.classList.toggle('completato', fatto);
+      li.classList.toggle('bloccato', bloccato);
+      li.classList.toggle('prossimo-passo', id === prossimo);
+      li.querySelector<HTMLElement>('.fatto')!.hidden = !fatto;
+      li.querySelector<HTMLElement>('.lucchetto')!.hidden = !bloccato;
+      li.querySelector<HTMLElement>('.prossimo')!.hidden = id !== prossimo;
+    }
+  }
+  cambiaModo.addEventListener('click', () => {
+    const progressi = progressiDelSito();
+    progressi.scegliModo(progressi.modo() === 'scaletta' ? 'libero' : 'scaletta');
+    annunciaCambio();
+  });
+  cambiaModo.closest<HTMLElement>('.modo')!.hidden = false;
+  pulsante.addEventListener('click', () => {
+    if (pulsante.dataset.conferma === undefined) {
+      pulsante.dataset.conferma = '';
+      pulsante.textContent = testoConferma!;
+      return;
+    }
+    progressiDelSito().cancella();
+    delete pulsante.dataset.conferma;
+    pulsante.textContent = etichetta;
+    esito.textContent = testoCancellati!;
+    annunciaCambio();
+  });
+  pulsante.closest<HTMLElement>('.cancella')!.hidden = false;
+  seguiProgressi(segni);
+</script>
+
 <style>
   .intro { margin: 0 0 0.6em; color: var(--muted); }
-  .percorso { list-style: none; margin: 0; padding: 0; }
-  .percorso li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-  .percorso li:last-child { border-bottom: 0; }
+  .viste { display: flex; gap: 8px; margin: 0 0 8px; }
+  .viste a {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px;
+    border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); text-decoration: none;
+    font-family: var(--font-titoli); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .viste a:hover { border-color: var(--accent); color: var(--accent); }
+  .viste a[aria-current='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  :global(html[data-vista='scaletta']) #per-percorso,
+  :global(html[data-vista='per-percorso']) #scaletta { display: none; }
+  /* Con JavaScript il titolo della vista lo dice già il link scelto; senza, separa le due viste. */
+  :global(html[data-vista]) .titolo-vista {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .elenco { list-style: none; margin: 0; padding: 0; }
+  .elenco > li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .elenco > li:last-child { border-bottom: 0; }
   .numero {
     flex: none; width: 2em; height: 2em; margin-top: 0.1em; border-radius: 50%;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--surface); border: 1px solid var(--line); font-weight: 700; color: var(--muted);
   }
-  .percorso h2 { margin: 0.15em 0 0.2em; font-size: 1.1rem; }
-  .percorso h2 a { color: var(--ink); text-decoration: none; }
-  .percorso h2 a:hover { text-decoration: underline; }
-  .riga { margin: 0; color: var(--muted); }
+  .elenco h3 { margin: 0.15em 0 0.35em; font-size: 1.1rem; }
+  .elenco h3 a { color: var(--ink); text-decoration: none; }
+  .elenco h3 a:hover { color: var(--accent); }
+  .riga { margin: 0.4em 0 0; color: var(--muted); }
   .esercizi { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; }
+  .colonne { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .colonna { padding: 4px 14px 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .colonna h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 4px; font-size: 1rem; }
+  /* Il nome lungo del Percorso, accanto all'etichetta: si legge su telefono, nelle colonne strette basta l'etichetta. */
+  .colonna .nome { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .breve > li { align-items: center; padding: 6px 0; }
+  .breve a { display: inline-flex; align-items: center; min-height: 48px; color: var(--ink); text-decoration: none; }
+  .breve a:hover { color: var(--accent); }
+  @media (max-width: 639px) {
+    .colonne { grid-template-columns: 1fr; }
+    .colonna .nome { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+  }
+  .modo { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0 0 12px; }
+  .modo .descrizione { margin: 0; color: var(--muted); flex: 1 1 16em; }
+  .cambia-modo {
+    min-height: 48px; padding: 0 16px; border: 1px solid var(--accent); border-radius: var(--radius);
+    background: transparent; color: var(--accent); font: inherit; font-weight: 700; font-size: 0.85rem;
+    text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+  }
+  .cambia-modo[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); }
+  .cambia-modo[aria-pressed='true']::before { content: '✓ '; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .lucchetto { display: inline-flex; vertical-align: -2px; margin-left: 4px; color: var(--muted); }
+  .lucchetto svg { fill: currentColor; }
+  .bloccato h3 a, li.bloccato > a { color: var(--muted); }
+  .prossimo {
+    display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 20px; vertical-align: 2px;
+    background: var(--accent); color: var(--accent-ink); font-family: var(--font); font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+  }
+  .prossimo-passo > .numero { border-color: var(--accent); color: var(--accent); }
+  .fatto { color: var(--ok); font-family: var(--font); font-size: 0.85rem; font-weight: 700; letter-spacing: 0; text-transform: none; white-space: nowrap; }
+  .breve .fatto { margin-left: auto; }
+  .cancella { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 1.2em 0 0; }
+  .cancella button { font: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+  .esito { color: var(--muted); }
   .letture { margin-top: 1.5em; padding: 4px 16px 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
   .letture h2 { margin-top: 0.8em; }
 </style>

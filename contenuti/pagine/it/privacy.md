@@ -1,7 +1,7 @@
 ---
 # Bozza di Claude dal ticket #14: nessuna revisione umana ancora. Chi la rivede scrive qui il suo nome e la data.
-revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-06 }
-aggiornata: 2026-11-06
+revisione: { da: "nessuno, bozza da rivedere", data: 2026-11-13 }
+aggiornata: 2026-11-13
 ---
 
 _Bozza in attesa di revisione._
@@ -10,7 +10,12 @@ Nota Bene non raccoglie dati personali. Non ci sono account, moduli, analytics n
 
 ## Cookie e memoria del browser
 
-Il sito non usa cookie e non usa `localStorage`. L'unica cosa che salva nel browser sono i campioni del pianoforte che servono al riferimento tonale e all'ascolto di verifica: li tiene nella cache del browser (`CacheStorage`) per non scaricarli ogni volta. Sono file audio del sito, uguali per tutti, e non dicono niente di chi li ascolta. Si cancellano svuotando i dati del sito nelle impostazioni del browser. Per questo non c'è un banner da accettare. La lingua sta nell'indirizzo della pagina, in `/it/` o `/en/`.
+Il sito non usa cookie. Nel browser salva due cose, e nessuna delle due esce dal tuo dispositivo:
+
+- **i tuoi progressi**, in `localStorage`: quali capitoli hai completato e se segui la scaletta o fai studio libero. Servono a sbloccare i capitoli quando hai fatto i loro prerequisiti. Non contengono niente su di te, non arrivano a nessun server e non passano da un dispositivo all'altro. Li cancelli con "Cancella i miei progressi" nella pagina dei capitoli, o svuotando i dati del sito nelle impostazioni del browser;
+- **i campioni del pianoforte** che servono al riferimento tonale e all'ascolto di verifica, nella cache del browser (`CacheStorage`), per non scaricarli ogni volta. Sono file audio del sito, uguali per tutti, e non dicono niente di chi li ascolta.
+
+Tutte e due servono solo a far funzionare quello che chiedi al sito: per questo non c'è un banner da accettare. La lingua sta nell'indirizzo della pagina, in `/it/` o `/en/`.
 
 ## Che cosa registra GitHub
 

@@ -2,14 +2,14 @@
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
 import { describe, expect, it } from 'vitest';
-import { avvisiTraduzione, controllaFile, ordina, scegliTesto, vicini } from '../../src/contenuti/percorso';
+import { avvisiTraduzione, controllaFile, mancanti, ordina, prossimoPasso, scegliTesto, vicini } from '../../src/contenuti/percorso';
 import { schemaCapitoloEn, schemaCapitoloIt, schemaVocePercorso, type VocePercorso } from '../../src/contenuti/schemi';
 import { htmlPentagramma, pentagrammi } from '../../src/markdown/pentagrammi';
 
 const data = (s: string) => new Date(`${s}T00:00:00Z`);
 
-function voce(id: string, numero: number): VocePercorso {
-  return { id, numero, it: { titolo: id, riga: id }, en: { titolo: id, riga: id } };
+function voce(id: string, numero: number, prerequisiti: string[] = [], percorso: VocePercorso['percorso'] = 'melodico'): VocePercorso {
+  return { id, numero, percorso, prerequisiti, it: { titolo: id, riga: id }, en: { titolo: id, riga: id } };
 }
 
 describe('frontmatter dei Capitoli', () => {
@@ -82,6 +82,40 @@ describe('scaletta del Percorso', () => {
     expect(ordina([voce('b', 2), voce('a', 1)]).map((v) => v.id)).toEqual(['a', 'b']);
     expect(() => ordina([voce('a', 1), voce('c', 3)])).toThrow(/numero 2/);
     expect(() => ordina([voce('a', 1), voce('a', 2)])).toThrow(/stesso id/);
+  });
+
+  it('rifiuta un Prerequisito che non è un Capitolo', () => {
+    expect(() => ordina([voce('a', 1), voce('b', 2, ['zeta'])])).toThrow(/"b".*"zeta", che non è un Capitolo/);
+  });
+
+  it('rifiuta un Capitolo che nella Scaletta viene prima di un suo Prerequisito, e quindi anche i cicli', () => {
+    expect(() => ordina([voce('a', 1, ['b']), voce('b', 2)])).toThrow(/"a".*"b", che nella Scaletta viene dopo/);
+    expect(() => ordina([voce('a', 1, ['b']), voce('b', 2, ['a'])])).toThrow(/viene dopo/);
+    expect(() => ordina([voce('a', 1, ['a'])])).toThrow(/viene dopo/);
+    expect(ordina([voce('a', 1), voce('b', 2, ['a'], 'ritmico')]).map((v) => v.id)).toEqual(['a', 'b']);
+  });
+});
+
+describe('Prerequisiti mancanti e prossimo passo', () => {
+  // a e b senza Prerequisiti; c richiede a e b; d richiede c.
+  const scaletta = [voce('a', 1), voce('b', 2, [], 'ritmico'), voce('c', 3, ['a', 'b']), voce('d', 4, ['c'])];
+
+  it('i Prerequisiti mancanti sono quelli non completati, nell\'ordine in cui sono scritti', () => {
+    expect(mancanti(['a', 'b'], new Set())).toEqual(['a', 'b']);
+    expect(mancanti(['a', 'b'], new Set(['b']))).toEqual(['a']);
+    expect(mancanti(['a', 'b'], new Set(['a', 'b']))).toEqual([]);
+    expect(mancanti([], new Set())).toEqual([]);
+  });
+
+  it('il prossimo passo è il primo Capitolo della Scaletta non completato e con i Prerequisiti completati', () => {
+    expect(prossimoPasso(scaletta, new Set())).toBe('a');
+    expect(prossimoPasso(scaletta, new Set(['a']))).toBe('b');
+    // Fuori ordine: b fatto prima di a. Il prossimo passo resta a, il primo della Scaletta.
+    expect(prossimoPasso(scaletta, new Set(['b']))).toBe('a');
+    expect(prossimoPasso(scaletta, new Set(['a', 'b']))).toBe('c');
+    // d segnato come già studiato senza c: il prossimo passo è c.
+    expect(prossimoPasso(scaletta, new Set(['a', 'b', 'd']))).toBe('c');
+    expect(prossimoPasso(scaletta, new Set(['a', 'b', 'c', 'd']))).toBeUndefined();
   });
 });
 
