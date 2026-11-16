@@ -56,7 +56,9 @@ export function disegnaACapo(
 /** Che cosa non va nel rigo disegnato numero `riga` (da 0): qualcosa esce dal bordo, o due segni si toccano. */
 function problema(contenitore: HTMLElement, riga: number, larghezza: number): string | undefined {
   // larghezza è quella della colonna; il rigo è disegnato a larghezza - 1 (vedi staffwidth) e tollera 1 px.
-  const bordo = contenitore.getBoundingClientRect().left + larghezza;
+  // Si parte dal bordo interno: il foglio color carta ha un margine (ADR-0010).
+  const sinistra = contenitore.getBoundingClientRect().left + contenitore.clientLeft + (parseFloat(getComputedStyle(contenitore).paddingLeft) || 0);
+  const bordo = sinistra + larghezza;
   const delRigo = [...contenitore.querySelectorAll(`.abcjs-l${riga}`)];
   const esce = delRigo.some(
     (e) => e.matches('.abcjs-note, .abcjs-bar, .abcjs-lyric, .abcjs-annotation') && e.getBoundingClientRect().right > bordo,

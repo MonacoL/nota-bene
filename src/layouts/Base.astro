@@ -100,7 +100,11 @@ const voci = [
     color: var(--ink); text-decoration: none;
   }
   .nav { margin-left: auto; }
-  .nav a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font-weight: 700; }
+  .nav a {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px;
+    font-family: var(--font-titoli); text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; color: var(--ink);
+  }
+  .nav a:hover { color: var(--accent); }
   /* Marchio, link e lingua insieme chiedono circa 430 px: sotto i 440 i link passano nel pulsante con le lineette. */
   .menu { display: none; }
   @media (max-width: 439px) {
@@ -120,11 +124,12 @@ const voci = [
   .menu[open] .chiudi { display: block; }
   .menu nav {
     position: absolute; z-index: 10; top: 100%; left: 0; right: 0;
-    background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 6px 12px rgb(0 0 0 / 0.08);
+    background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 6px 12px rgb(0 0 0 / 0.5);
   }
   .menu nav a {
     display: flex; align-items: center; min-height: 48px; padding: 0 16px;
-    border-top: 1px solid var(--line); font-weight: 700; text-decoration: none;
+    border-top: 1px solid var(--line); text-decoration: none;
+    font-family: var(--font-titoli); text-transform: uppercase; letter-spacing: 0.08em;
   }
   .piede { border-top: 1px solid var(--line); font-size: 0.9rem; color: var(--muted); padding: 16px 0 24px; }
   .piede ul { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 0 16px; }

@@ -50,13 +50,14 @@ export function segniCheSiToccano(contenitori: Locator, segni: string): Promise<
 }
 
 /**
- * Ciò che esce dal bordo destro della colonna: note, stanghette, annotazioni e ogni segno di Testo e Soluzione, con
+ * Ciò che esce dal bordo destro del foglio, dentro il suo margine: note, stanghette, annotazioni e ogni segno di Testo e Soluzione, con
  * il contenitore, il rigo e di quanti px. Una Battuta che da sola non sta nel rigo resta intera e sborda: qui si vede.
  */
 export function fuoriDalBordo(contenitori: Locator): Promise<string[]> {
   return contenitori.evaluateAll((tutti) =>
     tutti.flatMap((c, i) => {
-      const destra = c.parentElement!.getBoundingClientRect().right + 1;
+      // Dentro il margine del foglio color carta (ADR-0010), che è il bordo vero.
+      const destra = c.getBoundingClientRect().right - parseFloat(getComputedStyle(c).paddingRight) + 1;
       const elementi = [...c.querySelectorAll('.abcjs-note, .abcjs-bar, .abcjs-annotation, .abcjs-lyric tspan')];
       return elementi.flatMap((e) => {
         const fuori = e.getBoundingClientRect().right - destra;

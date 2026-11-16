@@ -55,7 +55,7 @@
   .invio button { min-height: 48px; }
   .cancella { min-width: 25%; font-size: 1.3rem; }
   button:disabled { opacity: 0.45; cursor: not-allowed; }
-  button[aria-pressed='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
   .verifica {
     min-width: 50%; padding: 0 24px; border: none; background: var(--accent); color: var(--accent-ink); font-weight: 700;
   }

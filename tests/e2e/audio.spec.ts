@@ -94,7 +94,8 @@ test("durante l'ascolto la nota che suona e la sua sillaba si illuminano", async
   // La prima nota, Fa4 in Fa maggiore, è un DO: nota e sillaba prendono il colore della nota che suona.
   await expect(suona.locator('.abcjs-notehead')).toHaveCount(1);
   await expect(suona.locator('.sillaba')).toHaveText('DO');
-  const colore = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--suona').trim());
+  // Sul foglio color carta --suona prende il valore della carta (ADR-0010).
+  const colore = await page.locator('.partitura').evaluate((p) => getComputedStyle(p).getPropertyValue('--suona').trim());
   const rgb = (hex: string) => `rgb(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ')})`;
   await expect(suona.locator('.sillaba')).toHaveCSS('fill', rgb(colore));
   await expect(suona.locator('.abcjs-notehead')).toHaveCSS('fill', rgb(colore));

@@ -1,5 +1,7 @@
 # Identità visiva: Atkinson Hyperlegible, carta e bordeaux, tema scuro automatico
 
+> **Sostituito** dall'[ADR-0010](0010-stile-vox-viva.md) (stile Vox Viva). Resta per la storia delle scelte; le parti su ♭ ♮ ♯ e sui pulsanti da 48 px valgono ancora, riprese dall'ADR-0010.
+
 Il sito usa un solo font, **Atkinson Hyperlegible Next** (OFL), in due pesi: 400 per il testo e 700 per i titoli. È disegnato perché le lettere simili non si confondano, il che aiuta chi legge da telefono e chi parte da zero. I colori sono quelli di una carta da musica: fondo avorio, inchiostro quasi nero, accento **bordeaux**. Il tema scuro c'è, e segue `prefers-color-scheme`. Il segno del nome sono due crome legate, una per parola, prima della scritta "Nota Bene": la prima e "Nota" hanno il colore dell'inchiostro, la seconda e "Bene" quello d'accento (prototipo `prototype/segno`, variante B; il segno potrà cambiare ancora). La scelta viene dal prototipo [Identità visiva](https://github.com/MonacoL/nota-bene/issues/20) (branch `prototype/identita-visiva`, variante E).
 
 ## Considered Options
