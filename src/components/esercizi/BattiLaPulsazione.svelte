@@ -3,7 +3,7 @@
   // toccando il pulsante grande. Si vede subito se il tocco è in tempo, e alla fine un riepilogo. Non è una Serie e
   // non conta per il Capitolo completato. I tocchi si misurano sull'orologio dell'audio, meno la latenza d'uscita.
   import { creaLettore } from '../../audio/lettore';
-  import { branoPerBattere, casuale, NOTE_BRANI, valutaBattiti, type Brano, type Tocco } from '../../esercizi';
+  import { branoPerBattere, casuale, metrica, NOTE_BRANI, valutaBattiti, type Brano, type Tocco } from '../../esercizi';
   import type { Dizionario } from '../../i18n/it';
 
   interface Props {
@@ -30,7 +30,10 @@
   });
   $effect(() => () => lettore.chiudi());
 
-  const punteggio = $derived(valutaBattiti(tocchi, brano.pulsazioni));
+  // La prima battuta è per ascoltare: si contano le pulsazioni dalla seconda, e i tocchi da mezza pulsazione prima.
+  const contate = $derived(brano.pulsazioni.slice(metrica(brano.indicazione).pulsazioni));
+  const daQui = $derived(contate[0]! - (contate[1]! - contate[0]!) / 2);
+  const punteggio = $derived(valutaBattiti(tocchi.filter((t) => t >= daQui), contate));
 
   function avvia() {
     tocchi = [];
@@ -49,8 +52,9 @@
     if (fase !== 'suona' || zero === undefined || !contesto) return;
     // Il suono arriva all'orecchio dopo la latenza d'uscita: il tocco si confronta con quello che si è sentito.
     const latenza = contesto.outputLatency || contesto.baseLatency || 0;
-    tocchi = [...tocchi, contesto.currentTime - zero - latenza];
-    ultimo = valutaBattiti(tocchi, brano.pulsazioni).tocchi.at(-1);
+    const t = contesto.currentTime - zero - latenza;
+    tocchi = [...tocchi, t];
+    ultimo = t >= daQui ? punteggio.tocchi.at(-1) : undefined;
   }
 
   function tasto(e: KeyboardEvent) {
@@ -67,13 +71,21 @@
 <section class="batti" aria-label={t.tipi['batti-la-pulsazione']}>
   <p class="spiegazione">{t.batti.spiegazione}</p>
   {#if fase === 'suona'}
-    <button type="button" class="tocco" onpointerdown={(e) => (e.preventDefault(), batti())}>{t.batti.batti}</button>
+    <!-- Il dito su pointerdown, subito; Invio da tastiera arriva come click senza puntatore (detail 0). -->
+    <button
+      type="button"
+      class="tocco"
+      onpointerdown={(e) => (e.preventDefault(), batti())}
+      onclick={(e) => {
+        if (e.detail === 0) batti();
+      }}>{t.batti.batti}</button
+    >
     <p class="esito" aria-live="polite">{ultimo ? t.batti[ESITI[ultimo.esito]] : ''}</p>
     <button type="button" class="secondario" onclick={ferma}>{t.batti.ferma}</button>
   {:else}
     {#if fase === 'fine'}
       <p class="riepilogo" aria-live="polite">
-        {t.batti.riepilogo.replace('{n}', String(punteggio.inTempo)).replace('{m}', String(brano.pulsazioni.length))}
+        {t.batti.riepilogo.replace('{n}', String(punteggio.inTempo)).replace('{m}', String(contate.length))}
       </p>
     {/if}
     <button

@@ -34,9 +34,9 @@ const ACCORDI = [
 /** Tutte le altezze che i brani di prova possono suonare: il lettore carica solo i loro campioni. */
 export const NOTE_BRANI = [...new Set(ACCORDI.flatMap((a) => [a.basso - 12, a.basso, ...a.arpeggio]))].sort((a, b) => a - b);
 
-export function branoDiProva(indicazione: IndicazioneBrano, caso: Casuale): Brano {
+export function branoDiProva(indicazione: IndicazioneBrano, caso: Casuale, battute = BATTUTE): Brano {
   const m = metrica(indicazione);
-  const perPulsazione = m.genere === 'semplice' ? 2 : 3;
+  const perPulsazione = m.perPulsazione;
   // Una pulsazione fra 0,6 e 0,85 secondi: da 70 a 100 battiti al minuto.
   const pulsazione = 0.6 + caso.intero(6) * 0.05;
   const suddivisione = pulsazione / perPulsazione;
@@ -44,8 +44,8 @@ export function branoDiProva(indicazione: IndicazioneBrano, caso: Casuale): Bran
   const arpeggio: NotaDelBrano[] = [];
   const pulsazioni: number[] = [];
   const suddivisioni: number[] = [];
-  for (let b = 0; b < BATTUTE; b++) {
-    const accordo = ACCORDI[b]!;
+  for (let b = 0; b < battute; b++) {
+    const accordo = ACCORDI[b % ACCORDI.length]!;
     for (let p = 0; p < m.pulsazioni; p++) {
       const inizio = (b * m.pulsazioni + p) * pulsazione;
       pulsazioni.push(inizio);
@@ -69,7 +69,7 @@ export function branoDiProva(indicazione: IndicazioneBrano, caso: Casuale): Bran
   };
 }
 
-/** Il brano di "Batti la pulsazione": uno qualunque dei brani di prova. */
+/** Il brano di "Batti la pulsazione": uno qualunque dei brani di prova, lungo il doppio. */
 export function branoPerBattere(caso: Casuale): Brano {
-  return branoDiProva(caso.scegli(BRANI_DI_PROVA), caso);
+  return branoDiProva(caso.scegli(BRANI_DI_PROVA), caso, 2 * BATTUTE);
 }

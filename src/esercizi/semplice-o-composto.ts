@@ -4,7 +4,7 @@ import { casuale } from './casuale';
 import { nomeGenere, type Genere } from './metrica';
 import type { Testi } from './testi';
 
-export type Parametri = { importanza: number };
+export type Parametri = { importanza: 1 | 2 | 3 };
 
 /** Un colpo di mani: quando, in secondi, e se è quello forte della pulsazione. */
 export type Battito = { inizio: number; forte: boolean };
@@ -19,8 +19,9 @@ export function genera(_parametri: Parametri, seed: number): Esercizio {
   const caso = casuale(seed);
   const genere = caso.scegli(['semplice', 'composto'] as const);
   const perPulsazione = genere === 'semplice' ? 2 : 3;
-  // Una pulsazione fra 0,55 e 0,9 secondi: da 67 a 109 battiti al minuto.
-  const passo = (0.55 + caso.intero(8) * 0.05) / perPulsazione;
+  // Fra un colpo e l'altro da 0,2 a 0,35 secondi, nei semplici come nei composti: la velocità dei colpi non
+  // tradisce la risposta, conta solo come si raggruppano.
+  const passo = 0.2 + caso.intero(4) * 0.05;
   const battiti = Array.from({ length: PULSAZIONI * perPulsazione }, (_, i) => ({ inizio: i * passo, forte: i % perPulsazione === 0 }));
   return { tipo: 'semplice-o-composto', genere, battiti };
 }

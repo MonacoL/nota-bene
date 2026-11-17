@@ -1,8 +1,11 @@
 // "Batti la pulsazione" (Pulsazione e suddivisione, #86): il punteggio dei tocchi del corista. Non conta per il
 // Capitolo completato (ADR-0012). I tocchi arrivano già corretti per la latenza dell'audio, in secondi dall'inizio.
 
-/** Entro quanto un tocco è in tempo: largo, perché telefoni e cuffie aggiungono ritardi che non si misurano. */
-export const FINESTRA = 0.08;
+/**
+ * Entro quanto un tocco è in tempo: 100 ms, largo, perché il tocco sullo schermo e le cuffie bluetooth aggiungono
+ * ritardi che il browser non dice. Da tarare provando su un telefono vero.
+ */
+export const FINESTRA = 0.1;
 
 export type Tocco = { scarto: number; esito: 'in tempo' | 'in anticipo' | 'in ritardo' | 'doppio' };
 

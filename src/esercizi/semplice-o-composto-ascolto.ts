@@ -5,7 +5,7 @@ import { casuale } from './casuale';
 import { metrica, nomeGenere, type Genere } from './metrica';
 import type { Testi } from './testi';
 
-export type Parametri = { importanza: number; indicazioni?: IndicazioneBrano[] };
+export type Parametri = { importanza: 1 | 2 | 3; indicazioni?: IndicazioneBrano[] };
 
 export type Esercizio = { tipo: 'semplice-o-composto-ascolto'; brano: Brano };
 
@@ -19,10 +19,9 @@ export function genera(parametri: Parametri, seed: number): Esercizio {
 export function valuta(es: Esercizio, risposta: Risposta) {
   const m = metrica(es.brano.indicazione);
   const giusto = risposta.genere === m.genere;
-  const parti = m.genere === 'semplice' ? 2 : 3;
   const spiegazione: Testi = {
-    it: `Il brano era in ${es.brano.indicazione}: ogni pulsazione si divide in ${parti}, e il tempo è ${m.genere}.`,
-    en: `The piece was in ${es.brano.indicazione}: each beat divides into ${parti}, so the meter is ${nomeGenere(m.genere).en}.`,
+    it: `Il brano era in ${es.brano.indicazione}: ogni pulsazione si divide in ${m.perPulsazione}, e il tempo è ${m.genere}.`,
+    en: `The piece was in ${es.brano.indicazione}: each beat divides into ${m.perPulsazione}, so the meter is ${nomeGenere(m.genere).en}.`,
   };
   return {
     esito: giusto ? ('giusto' as const) : ('sbagliato' as const),

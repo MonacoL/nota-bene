@@ -2,7 +2,7 @@
 // sintetizzato, i pallini e "Batti la pulsazione", con l'AudioContext finto (audio-finto.ts). Niente microfono.
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n; cambiare scheda fa avanzare i seed di 10.
 import { expect, test, type Page } from '@playwright/test';
-import { genera, metrica } from '../../src/esercizi';
+import { branoPerBattere, casuale, genera, metrica } from '../../src/esercizi';
 import { installaAudioFinto, registro } from './audio-finto';
 
 const PULSAZIONE = 'pulsazione-e-suddivisione';
@@ -62,13 +62,21 @@ test('"Semplice o composto all\'ascolto": il riscontro dice l\'indicazione metri
 
 test('"Batti la pulsazione": i tocchi e la barra spaziatrice si registrano, e alla fine c\'è il riepilogo', async ({ page }) => {
   await installaAudioFinto(page, { velocita: 4 });
-  await page.goto(`it/capitoli/${PULSAZIONE}/esercizi/`);
+  await page.goto(`it/capitoli/${PULSAZIONE}/esercizi/?seed=50`);
   await page.getByRole('tab', { name: /Batti la pulsazione/ }).click();
+  // Cambiare scheda fa ripartire la Serie: il brano usa il seed 51.
+  const brano = branoPerBattere(casuale(51));
+  const secondaBattuta = brano.pulsazioni[metrica(brano.indicazione).pulsazioni]!;
   await page.getByRole('button', { name: 'Ascolta e batti' }).click();
   const batti = page.getByRole('button', { name: 'Batti', exact: true });
   await expect(batti).toBeVisible();
-  // Si aspetta che il brano parta (i campioni finti arrivano subito), poi si batte due volte.
-  await expect.poll(async () => (await registro(page)).suoni.length).toBeGreaterThan(0);
+  // La prima battuta non si conta: si aspetta che l'orologio dell'audio arrivi alla seconda, poi si batte due volte.
+  await expect
+    .poll(async () => {
+      const r = await registro(page);
+      return r.suoni.length ? r.adesso - Math.min(...r.suoni.map((x) => x.inizio)) : 0;
+    }, { timeout: 10_000 })
+    .toBeGreaterThan(secondaBattuta);
   await batti.dispatchEvent('pointerdown');
   await page.keyboard.press('Space');
   await expect(page.locator('.batti .esito')).not.toBeEmpty();

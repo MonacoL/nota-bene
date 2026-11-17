@@ -12,7 +12,7 @@
   let { brano, attiva }: Props = $props();
 
   const m = $derived(metrica(brano.indicazione));
-  const perPulsazione = $derived(m.genere === 'semplice' ? 2 : 3);
+  const perPulsazione = $derived(m.perPulsazione);
   const perBattuta = $derived(m.pulsazioni * perPulsazione);
   const accesa = $derived(attiva < 0 ? -1 : attiva % perBattuta);
 </script>

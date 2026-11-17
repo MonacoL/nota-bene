@@ -45,16 +45,16 @@ export const it = {
     figure: { semibreve: 'semibreve', minima: 'minima', semiminima: 'semiminima', croma: 'croma', semicroma: 'semicroma' },
     /** "Riconosci il tempo": il numero di pulsazioni e la suddivisione (#85). */
     tempo: { numero: 'Quante pulsazioni?', genere: 'Come si suddividono?', binario: 'binario', ternario: 'ternario', quaternario: 'quaternario', quinario: 'quinario', misto: 'misto', semplice: 'semplice', composto: 'composto' },
-    /** "Scegli le figure": le tre caselle e la legatura fra le figure della battuta (#85). */
     /** L'Importanza degli Esercizi pratici (#86, ADR-0012). PROVVISORIE: le parole si scelgono vedendo la pagina. */
     importanza: { 1: 'approfondimento', 2: 'utile', 3: 'essenziale' },
     /** "Batti la pulsazione" (#86). */
     batti: {
-      spiegazione: 'Parte un brano: batti la pulsazione con la barra spaziatrice o toccando il pulsante grande.',
+      spiegazione: 'Parte un brano: batti la pulsazione con la barra spaziatrice o toccando il pulsante grande. La prima battuta è per ascoltare, si conta dalla seconda.',
       avvia: 'Ascolta e batti', batti: 'Batti', ferma: 'Ferma', ancora: 'Un altro brano',
       inTempo: '✓ in tempo', inAnticipo: 'in anticipo', inRitardo: 'in ritardo', doppio: 'due volte sulla stessa pulsazione',
       riepilogo: '{n} battiti in tempo su {m} pulsazioni',
     },
+    /** "Scegli le figure": le tre caselle e la legatura fra le figure della battuta (#85). */
     caselle: { suddivisione: 'Suddivisione', pulsazione: 'Pulsazione', battuta: 'Battuta', legata: 'legata a', vuota: 'scegli' },
     punto: 'punto',
     verifica: 'Verifica',

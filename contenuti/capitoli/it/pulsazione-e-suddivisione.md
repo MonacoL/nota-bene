@@ -62,7 +62,7 @@ Quando non è chiaro, prova a sovrapporre al brano due filastrocche di sillabe, 
 - "du-de, du-de, du-de…", che divide la pulsazione in due;
 - "du-da-di, du-da-di, du-da-di…", che la divide in tre.
 
-Una delle due combacia con la musica, l'altra inciampa. Se combacia "du-de" la pulsazione si divide in due, se combacia "du-da-di" si divide in tre. Il trucco viene dal metodo di Edwin Gordon.
+Se combacia "du-de" la pulsazione si divide in due, se combacia "du-da-di" si divide in tre; l'altra filastrocca inciampa.
 
 ## La battuta
 

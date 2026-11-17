@@ -6,7 +6,7 @@ import { casuale } from './casuale';
 import { metrica, nomeTempo, type Genere, type NumeroTempo } from './metrica';
 import type { Testi } from './testi';
 
-export type Parametri = { importanza: number; indicazioni?: IndicazioneBrano[] };
+export type Parametri = { importanza: 1 | 2 | 3; indicazioni?: IndicazioneBrano[] };
 
 export type Esercizio = { tipo: 'pallini'; brano: Brano };
 
@@ -21,10 +21,9 @@ export function valuta(es: Esercizio, risposta: Risposta) {
   const m = metrica(es.brano.indicazione);
   const giusto = risposta.numero === m.numero && risposta.genere === m.genere;
   const tempo = nomeTempo(m.numero, m.genere);
-  const gruppo = m.genere === 'semplice' ? 2 : 3;
   const spiegazione: Testi = {
-    it: `Ogni battuta ha ${m.pulsazioni} pallini grandi, cioè ${m.pulsazioni} pulsazioni, e ognuno apre un gruppo di ${gruppo} pallini: è un tempo ${tempo.it}.`,
-    en: `Each measure has ${m.pulsazioni} big dots, that is ${m.pulsazioni} beats, and each one starts a group of ${gruppo} dots: it is ${tempo.en} meter.`,
+    it: `Ogni battuta ha ${m.pulsazioni} pallini grandi, cioè ${m.pulsazioni} pulsazioni, e ognuno apre un gruppo di ${m.perPulsazione} pallini: è un tempo ${tempo.it}.`,
+    en: `Each measure has ${m.pulsazioni} big dots, that is ${m.pulsazioni} beats, and each one starts a group of ${m.perPulsazione} dots: it is ${tempo.en} meter.`,
   };
   return {
     esito: giusto ? ('giusto' as const) : ('sbagliato' as const),

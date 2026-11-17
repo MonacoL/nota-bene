@@ -47,7 +47,7 @@ export const en: Dizionario = {
     tempo: { numero: 'How many beats?', genere: 'How are they divided?', binario: 'duple', ternario: 'triple', quaternario: 'quadruple', quinario: 'quintuple', misto: 'septuple', semplice: 'simple', composto: 'compound' },
     importanza: { 1: 'extra practice', 2: 'useful', 3: 'essential' },
     batti: {
-      spiegazione: 'A piece starts: tap the beat with the space bar or the big button.',
+      spiegazione: 'A piece starts: tap the beat with the space bar or the big button. The first measure is for listening; counting starts with the second.',
       avvia: 'Listen and tap', batti: 'Tap', ferma: 'Stop', ancora: 'Another piece',
       inTempo: '✓ on the beat', inAnticipo: 'early', inRitardo: 'late', doppio: 'twice on the same beat',
       riepilogo: '{n} taps on the beat out of {m} beats',

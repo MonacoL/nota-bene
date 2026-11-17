@@ -25,6 +25,8 @@ export type Metrica = {
   sotto: number;
   genere: Genere;
   pulsazioni: number;
+  /** Quante suddivisioni in una pulsazione: 2 nei tempi semplici, 3 nei composti. */
+  perPulsazione: 2 | 3;
   numero: NumeroTempo;
   /** In semicrome. */
   suddivisione: number;
@@ -36,11 +38,11 @@ export function metrica(nome: NomeIndicazione): Metrica {
   const [sopra, sotto] = nome.split('/').map(Number) as [number, number];
   const figuraSotto = 16 / sotto;
   if (SEMPLICI.includes(sopra)) {
-    return { sopra, sotto, genere: 'semplice', pulsazioni: sopra, numero: PER_PULSAZIONI[sopra]!, suddivisione: figuraSotto / 2, pulsazione: figuraSotto, battuta: sopra * figuraSotto };
+    return { sopra, sotto, genere: 'semplice', pulsazioni: sopra, perPulsazione: 2, numero: PER_PULSAZIONI[sopra]!, suddivisione: figuraSotto / 2, pulsazione: figuraSotto, battuta: sopra * figuraSotto };
   }
   if (!COMPOSTI.includes(sopra)) throw new Error(`Indicazione metrica senza Tempo tradizionale: ${nome}`);
   const pulsazioni = sopra / 3;
-  return { sopra, sotto, genere: 'composto', pulsazioni, numero: PER_PULSAZIONI[pulsazioni]!, suddivisione: figuraSotto, pulsazione: 3 * figuraSotto, battuta: sopra * figuraSotto };
+  return { sopra, sotto, genere: 'composto', pulsazioni, perPulsazione: 3, numero: PER_PULSAZIONI[pulsazioni]!, suddivisione: figuraSotto, pulsazione: 3 * figuraSotto, battuta: sopra * figuraSotto };
 }
 
 /** "binario composto" / "compound duple". */

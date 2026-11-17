@@ -66,7 +66,7 @@
   /** "Batti la pulsazione" non è una Serie: ha il suo componente, e nessun Esercizio da generare (#86). */
   const battere = $derived(dichiarazione.tipo === 'batti-la-pulsazione');
   const esercizio = $derived<Esercizio | undefined>(
-    finita || dichiarazione.tipo === 'batti-la-pulsazione'
+    finita || battere
       ? undefined
       : genera(dichiarazione.tipo, dichiarazione as never, base + serieIniziate * LUNGHEZZA + n),
   );
@@ -75,7 +75,7 @@
   let esito = $state<{ conta: boolean; completato: boolean } | undefined>();
   let registrata = -1;
   $effect(() => {
-    if (!finita || registrata === serieIniziate || dichiarazione.tipo === 'batti-la-pulsazione') return;
+    if (!finita || registrata === serieIniziate || battere) return;
     registrata = serieIniziate;
     const progressi = progressiDelSito();
     const conta = progressi.registraSerie(idCapitolo, dichiarazione.tipo, giuste);
@@ -93,6 +93,7 @@
 
   function scegliScheda(i: number) {
     if (i === scheda) return;
+    lettore.ferma();
     scheda = i;
     nuovaSerie();
   }
