@@ -7,19 +7,19 @@ import { telefono } from './menu';
 // Un browser vuoto, come chi entra la prima volta: in Scaletta (gli altri test partono in Studio libero).
 test.use({ storageState: { cookies: [], origins: [] } });
 
-const PRIMO = CAPITOLI[0]!; // Pulsazione e suddivisione, in preparazione
-const FIGURE = 'figure-e-pause'; // richiede solo il primo, che è in preparazione: non è bloccato
-const NOTE = 'note-toni-e-semitoni'; // richiede solo Capitoli in preparazione, a catena
+const PRIMO = CAPITOLI[0]!; // Pulsazione e suddivisione: pronto, senza Prerequisiti
+const FIGURE = 'figure-e-pause'; // richiede il primo, non completato: è bloccato
+const NOTE = 'note-toni-e-semitoni'; // richiede solo Capitoli in preparazione, a catena: non è bloccato
 const CHIAVI = 'chiavi'; // richiede Note, toni e semitoni
 
-test('si parte in Scaletta: il primo Capitolo pronto è il prossimo passo, Chiavi è bloccato', async ({ page }) => {
+test('si parte in Scaletta: il primo Capitolo è il prossimo passo, Figure e pause e Chiavi sono bloccati', async ({ page }) => {
   await page.goto('it/capitoli/');
   await expect(page.locator('.modo .cambia-modo')).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('.modo .descrizione')).toContainText('Segui la scaletta');
   const voce = (id: string) => page.locator(`#scaletta li[data-capitolo="${id}"]`);
-  await expect(voce(FIGURE).locator('.prossimo')).toHaveText('Prossimo passo');
-  await expect(voce(FIGURE).locator('.lucchetto')).toBeHidden();
-  await expect(voce(PRIMO).locator('.prossimo')).toBeHidden();
+  await expect(voce(PRIMO).locator('.prossimo')).toHaveText('Prossimo passo');
+  await expect(voce(PRIMO).locator('.lucchetto')).toBeHidden();
+  await expect(voce(FIGURE).locator('.lucchetto')).toBeVisible();
   await expect(voce(NOTE).locator('.lucchetto')).toBeHidden();
   await expect(voce(CHIAVI).locator('.lucchetto')).toBeVisible();
   await expect(page.locator('#scaletta .prossimo:visible')).toHaveCount(1);
@@ -48,26 +48,25 @@ test('un Capitolo bloccato mostra il riquadro, e si sblocca segnando il Prerequi
 });
 
 test('un Prerequisito in preparazione non blocca: al suo posto contano i suoi Prerequisiti', async ({ page }) => {
-  await page.goto(`it/capitoli/${FIGURE}/`);
+  await page.goto(`it/capitoli/${NOTE}/`);
   await expect(page.locator('article.testo')).toBeVisible();
   await expect(page.locator('.blocco')).toBeHidden();
 
-  // DO mobile richiede DO e SOL e Indicazioni metriche, in preparazione: il riquadro chiede i Capitoli che ci stanno dietro.
+  // DO mobile richiede DO e SOL, in preparazione e senza Prerequisiti pronti dietro: il riquadro chiede gli altri.
   await page.goto('it/capitoli/do-mobile/');
   const blocco = page.locator('.blocco');
   await expect(blocco).toBeVisible();
-  await expect(blocco.locator('li[data-capitolo]')).toHaveText([/Figure e pause/, /Tempi semplici e composti/, /Chiavi/, /Modo maggiore e minore/]);
+  await expect(blocco.locator('li[data-capitolo]')).toHaveText([/Indicazioni metriche/, /Chiavi/, /Modo maggiore e minore/]);
 });
 
 test('un Capitolo in preparazione non è mai bloccato, anche se i suoi Prerequisiti mancano', async ({ page }) => {
-  // Indicazioni metriche richiede Figure e pause e Tempi semplici e composti, non completati.
-  for (const pagina of ['it/capitoli/indicazioni-metriche/', 'it/capitoli/indicazioni-metriche/esercizi/']) {
+  // Battimenti richiede Unisono e Intervalli, non completati.
+  for (const pagina of ['it/capitoli/battimenti/', 'it/capitoli/battimenti/esercizi/']) {
     await page.goto(pagina);
     await expect(page.locator('.blocco')).toBeHidden();
     await expect(page.getByText(/^(Questo capitolo|Gli esercizi di questo capitolo) (è|sono) in preparazione\.$/)).toBeVisible();
   }
   await page.goto('it/capitoli/');
-  await expect(page.locator('#scaletta li[data-capitolo="indicazioni-metriche"] .lucchetto')).toBeHidden();
   await expect(page.locator('#scaletta li[data-capitolo="battimenti"] .lucchetto')).toBeHidden();
 });
 

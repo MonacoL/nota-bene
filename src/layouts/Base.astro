@@ -6,6 +6,7 @@ import CambioLingua from '../components/CambioLingua.svelte';
 import { IN_COSTRUZIONE } from '../config';
 import { PAGINE_SERVIZIO } from '../contenuti/pagine';
 import { capitoli } from '../contenuti/capitoli';
+import { tipiCheContano } from '../esercizi';
 import { testi, url, urlInAltraLingua, altraLingua, type Lingua } from '../i18n';
 
 interface Props {
@@ -21,7 +22,8 @@ const base = import.meta.env.BASE_URL;
 // bloccano e se sono in preparazione (#84).
 const datiCapitoli = (await capitoli(lingua)).map((c) => ({
   id: c.id,
-  tipi: c.esercizi.map((e) => e.tipo),
+  // Solo i tipi che contano: quelli in cui si batte o si canta non hanno una risposta giusta (ADR-0012).
+  tipi: tipiCheContano(c.esercizi),
   prerequisiti: c.prerequisitiEffettivi,
   ...(c.inPreparazione ? { inPreparazione: true } : {}),
 }));

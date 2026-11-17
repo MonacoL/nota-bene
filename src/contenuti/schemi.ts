@@ -1,6 +1,6 @@
 // Schemi dei contenuti (ADR-0006). Stanno qui, fuori da content.config.ts, così i test unitari li usano senza Astro.
 import { z } from 'astro/zod';
-import { CHIAVI, FORME, TEMPI } from '../esercizi';
+import { CHIAVI, FORME, INDICAZIONI, INDICAZIONI_FIGURE, INDICAZIONI_BATTUTA } from '../esercizi';
 
 /** La revisione umana che la pagina "Uso dell'intelligenza artificiale" dichiara: senza, la build fallisce. */
 const revisione = z.object({
@@ -8,17 +8,28 @@ const revisione = z.object({
   data: z.coerce.date(),
 });
 
-/** Un tipo di Esercizio con i suoi parametri: discriminato su `tipo`, uno schema per tipo. */
+/** Quanto il maestro ritiene necessario un Esercizio pratico, da 1 a 3 (ADR-0012, Importanza nel glossario). */
+const importanza = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+
+/**
+ * Un tipo di Esercizio con i suoi parametri: discriminato su `tipo`, uno schema per tipo. Gli Esercizi pratici
+ * (#86) hanno l'Importanza, quelli di teoria no.
+ */
 const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('nomina-la-nota'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('nomina-la-sillaba'), chiavi: z.array(z.enum(CHIAVI)).nonempty(), cromatiche: z.boolean() }).strict(),
   z.object({ tipo: z.literal('costruisci-la-scala'), forme: z.array(z.enum(FORME)).nonempty() }).strict(),
   z.object({ tipo: z.literal('trova-la-tonalita'), modi: z.array(z.enum(['maggiore', 'minore'])).nonempty() }).strict(),
   z.object({ tipo: z.literal('trova-tonica-e-modo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
-  z.object({ tipo: z.literal('completa-la-battuta'), tempi: z.array(z.enum(TEMPI)).nonempty() }).strict(),
-  z.object({ tipo: z.literal('riconosci-il-tempo'), tempi: z.array(z.enum(TEMPI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('completa-la-battuta'), indicazioni: z.array(z.enum(INDICAZIONI_BATTUTA)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('riconosci-il-tempo'), indicazioni: z.array(z.enum(INDICAZIONI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('scegli-le-figure'), indicazioni: z.array(z.enum(INDICAZIONI_FIGURE)).nonempty() }).strict(),
   z.object({ tipo: z.literal('riconosci-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('rivolta-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('batti-la-pulsazione'), importanza }).strict(),
+  z.object({ tipo: z.literal('semplice-o-composto'), importanza }).strict(),
+  z.object({ tipo: z.literal('pallini'), importanza }).strict(),
+  z.object({ tipo: z.literal('semplice-o-composto-ascolto'), importanza }).strict(),
 ]);
 
 /** Gli Esercizi del Capitolo, una scheda per tipo: un tipo non si dichiara due volte. */

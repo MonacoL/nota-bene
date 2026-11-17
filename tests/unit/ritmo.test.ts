@@ -1,4 +1,4 @@
-// Figure e Tempi (Capitoli 3 e 4): quanto durano, in semicrome. I valori sono quelli dei libri di teoria.
+// Figure e battute (Figure e pause, Indicazioni metriche): quanto durano, in semicrome. I valori sono quelli dei libri di teoria.
 import { describe, expect, it } from 'vitest';
 import { durata, durataBattuta, semplice, type Figura } from '../../src/esercizi/ritmo';
 
@@ -26,7 +26,8 @@ describe('durataBattuta', () => {
     ['4/4', 16, true],
     ['3/4', 12, true],
     ['2/4', 8, true],
-    ['3/8', 6, false],
+    // Il numero sopra decide (#85, lezione del maestro Sabetta): 3 è semplice, con la Pulsazione di croma.
+    ['3/8', 6, true],
     ['6/8', 12, false],
     ['9/8', 18, false],
     ['12/8', 24, false],

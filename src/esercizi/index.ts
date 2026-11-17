@@ -5,6 +5,10 @@ import * as costruisciLaScala from './costruisci-la-scala';
 import * as nominaLaNota from './nomina-la-nota';
 import * as nominaLaSillaba from './nomina-la-sillaba';
 import * as riconosciIlTempo from './riconosci-il-tempo';
+import * as scegliLeFigure from './scegli-le-figure';
+import * as sempliceOComposto from './semplice-o-composto';
+import * as sempliceOCompostoAscolto from './semplice-o-composto-ascolto';
+import * as pallini from './pallini';
 import * as riconosciIntervallo from './riconosci-intervallo';
 import * as rivoltaIntervallo from './rivolta-intervallo';
 import * as trovaLaTonalita from './trova-la-tonalita';
@@ -18,7 +22,16 @@ export type EsercizioNominaLaNota = nominaLaNota.Esercizio;
 export type EsercizioCostruisciLaScala = costruisciLaScala.Esercizio;
 export type EsercizioCompletaLaBattuta = completaLaBattuta.Esercizio;
 export type EsercizioRiconosciIlTempo = riconosciIlTempo.Esercizio;
-export { TEMPI, FIGURE, abcBattute, durata, type Figura, type NomeTempo } from './ritmo';
+export type EsercizioScegliLeFigure = scegliLeFigure.Esercizio;
+export { INDICAZIONI_FIGURE, FIGURE_METRICA } from './scegli-le-figure';
+export type EsercizioSempliceOComposto = sempliceOComposto.Esercizio;
+export type EsercizioPallini = pallini.Esercizio;
+export type EsercizioSempliceOCompostoAscolto = sempliceOCompostoAscolto.Esercizio;
+export { BRANI_DI_PROVA, NOTE_BRANI, branoPerBattere, type Brano, type IndicazioneBrano } from './brani';
+export { casuale } from './casuale';
+export { valutaBattiti, FINESTRA, type Tocco } from './battiti';
+export { INDICAZIONI_BATTUTA, FIGURE, abcBattute, durata, nomeFigura, type Figura, type NomeFigura, type IndicazioneBattuta } from './ritmo';
+export { INDICAZIONI, NUMERI_TEMPO, GENERI, metrica, type NomeIndicazione, type NumeroTempo, type Genere } from './metrica';
 export type EsercizioTrovaLaTonalita = trovaLaTonalita.Esercizio;
 export type { Modo } from './trova-la-tonalita';
 export type EsercizioTrovaTonicaEModo = trovaTonicaEModo.Esercizio;
@@ -41,6 +54,10 @@ type Tipi = {
   'trova-tonica-e-modo': { parametri: trovaTonicaEModo.Parametri; esercizio: trovaTonicaEModo.Esercizio; risposta: trovaTonicaEModo.Risposta };
   'completa-la-battuta': { parametri: completaLaBattuta.Parametri; esercizio: completaLaBattuta.Esercizio; risposta: completaLaBattuta.Risposta };
   'riconosci-il-tempo': { parametri: riconosciIlTempo.Parametri; esercizio: riconosciIlTempo.Esercizio; risposta: riconosciIlTempo.Risposta };
+  'scegli-le-figure': { parametri: scegliLeFigure.Parametri; esercizio: scegliLeFigure.Esercizio; risposta: scegliLeFigure.Risposta };
+  'semplice-o-composto': { parametri: sempliceOComposto.Parametri; esercizio: sempliceOComposto.Esercizio; risposta: sempliceOComposto.Risposta };
+  pallini: { parametri: pallini.Parametri; esercizio: pallini.Esercizio; risposta: pallini.Risposta };
+  'semplice-o-composto-ascolto': { parametri: sempliceOCompostoAscolto.Parametri; esercizio: sempliceOCompostoAscolto.Esercizio; risposta: sempliceOCompostoAscolto.Risposta };
 };
 export type Tipo = keyof Tipi;
 export type Parametri<T extends Tipo = Tipo> = Tipi[T]['parametri'];
@@ -72,6 +89,14 @@ export function genera<T extends Tipo>(tipo: T, parametri: Parametri<T>, seed: n
       return completaLaBattuta.genera(parametri as Parametri<'completa-la-battuta'>, seed) as Esercizio<T>;
     case 'riconosci-il-tempo':
       return riconosciIlTempo.genera(parametri as Parametri<'riconosci-il-tempo'>, seed) as Esercizio<T>;
+    case 'scegli-le-figure':
+      return scegliLeFigure.genera(parametri as Parametri<'scegli-le-figure'>, seed) as Esercizio<T>;
+    case 'semplice-o-composto':
+      return sempliceOComposto.genera(parametri as Parametri<'semplice-o-composto'>, seed) as Esercizio<T>;
+    case 'pallini':
+      return pallini.genera(parametri as Parametri<'pallini'>, seed) as Esercizio<T>;
+    case 'semplice-o-composto-ascolto':
+      return sempliceOCompostoAscolto.genera(parametri as Parametri<'semplice-o-composto-ascolto'>, seed) as Esercizio<T>;
     case 'riconosci-intervallo':
       return riconosciIntervallo.genera(parametri as Parametri<'riconosci-intervallo'>, seed) as Esercizio<T>;
     case 'rivolta-intervallo':
@@ -95,9 +120,26 @@ export function valuta<T extends Tipo>(esercizio: Esercizio<T>, risposta: Rispos
       return completaLaBattuta.valuta(esercizio, risposta as Risposta<'completa-la-battuta'>);
     case 'riconosci-il-tempo':
       return riconosciIlTempo.valuta(esercizio, risposta as Risposta<'riconosci-il-tempo'>);
+    case 'scegli-le-figure':
+      return scegliLeFigure.valuta(esercizio, risposta as Risposta<'scegli-le-figure'>);
+    case 'semplice-o-composto':
+      return sempliceOComposto.valuta(esercizio, risposta as Risposta<'semplice-o-composto'>);
+    case 'pallini':
+      return pallini.valuta(esercizio, risposta as Risposta<'pallini'>);
+    case 'semplice-o-composto-ascolto':
+      return sempliceOCompostoAscolto.valuta(esercizio, risposta as Risposta<'semplice-o-composto-ascolto'>);
     case 'riconosci-intervallo':
       return riconosciIntervallo.valuta(esercizio, risposta as Risposta<'riconosci-intervallo'>);
     case 'rivolta-intervallo':
       return rivoltaIntervallo.valuta(esercizio, risposta as Risposta<'rivolta-intervallo'>);
   }
+}
+
+/** Gli Esercizi pratici in cui si batte o si canta: si fanno, ma non hanno una risposta giusta (ADR-0012). */
+export const NON_CONTANO = ['batti-la-pulsazione'] as const;
+export type TipoCheNonConta = (typeof NON_CONTANO)[number];
+
+/** I tipi dichiarati in un Capitolo che contano per il Capitolo completato, nell'ordine della dichiarazione. */
+export function tipiCheContano<D extends { tipo: Tipo | TipoCheNonConta }>(dichiarazioni: readonly D[]): Tipo[] {
+  return dichiarazioni.map((d) => d.tipo).filter((t): t is Tipo => !(NON_CONTANO as readonly string[]).includes(t));
 }

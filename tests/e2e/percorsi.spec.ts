@@ -54,9 +54,9 @@ test.describe('senza JavaScript', () => {
 });
 
 test('un Capitolo e i suoi Esercizi mostrano Percorso e Prerequisiti, anche di un altro Percorso', async ({ page }) => {
-  // DO mobile (melodico) dichiara DO e SOL e Indicazioni metriche, in preparazione: si mostrano i Prerequisiti che ci
-  // stanno dietro (#84), fra cui due ritmici, cioè incroci fra Percorsi.
-  const effettivi = ['figure-e-pause', 'tempi-semplici-e-composti', 'chiavi', 'modo-maggiore-e-minore'];
+  // DO mobile (melodico) dichiara DO e SOL, in preparazione e senza Prerequisiti pronti dietro (#84), che non si
+  // mostra; Indicazioni metriche è ritmico, cioè un incrocio fra Percorsi.
+  const effettivi = ['indicazioni-metriche', 'chiavi', 'modo-maggiore-e-minore'];
   for (const pagina of ['it/capitoli/do-mobile/', 'it/capitoli/do-mobile/esercizi/']) {
     await page.goto(pagina);
     const riquadro = page.locator('main > .prerequisiti');
@@ -67,7 +67,7 @@ test('un Capitolo e i suoi Esercizi mostrano Percorso e Prerequisiti, anche di u
     for (const [i, id] of effettivi.entries()) {
       await expect(link.nth(i)).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/`);
     }
-    await expect(riquadro.locator('.etichetta', { hasText: 'ritmico' })).toHaveCount(2);
+    await expect(riquadro.locator('.etichetta', { hasText: 'ritmico' })).toHaveCount(1);
   }
   // Il primo Capitolo non ha Prerequisiti, in inglese anche.
   await page.goto('en/capitoli/pulsazione-e-suddivisione/');

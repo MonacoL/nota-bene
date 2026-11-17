@@ -8,7 +8,7 @@
   import { ascoltoIlluminato } from '../../audio/ascolto';
   import { creaLettore } from '../../audio/lettore';
   import { noteDelleChiavi } from '../../audio/note';
-  import { genera, valuta, type Esercizio, type Riscontro, type Tipo } from '../../esercizi';
+  import { genera, valuta, NOTE_BRANI, type Esercizio, type Riscontro, type Tipo, type TipoCheNonConta } from '../../esercizi';
   import type { DichiarazioneEsercizio } from '../../contenuti/schemi';
   import type { Lingua } from '../../i18n';
   import type { Dizionario } from '../../i18n/it';
@@ -20,6 +20,12 @@
   import TastierinoScala from './TastierinoScala.svelte';
   import TastierinoFigure from './TastierinoFigure.svelte';
   import SceltaTempo from './SceltaTempo.svelte';
+  import TastierinoScegliFigure from './TastierinoScegliFigure.svelte';
+  import IndicazioneMetrica from './IndicazioneMetrica.svelte';
+  import Pallini from './Pallini.svelte';
+  import SceltaGenere from './SceltaGenere.svelte';
+  import BattiLaPulsazione from './BattiLaPulsazione.svelte';
+  import Importanza from './Importanza.svelte';
   import Foglio from './Foglio.svelte';
   import { SOGLIA_COMPLETATO } from '../../progressi';
   import { annunciaCambio, progressiDelSito } from '../../progressi/sito';
@@ -57,15 +63,19 @@
 
   const dichiarazione = $derived(dichiarazioni[scheda]!);
   const finita = $derived(n >= LUNGHEZZA);
+  /** "Batti la pulsazione" non è una Serie: ha il suo componente, e nessun Esercizio da generare (#86). */
+  const battere = $derived(dichiarazione.tipo === 'batti-la-pulsazione');
   const esercizio = $derived<Esercizio | undefined>(
-    finita ? undefined : genera(dichiarazione.tipo, dichiarazione, base + serieIniziate * LUNGHEZZA + n),
+    finita || battere
+      ? undefined
+      : genera(dichiarazione.tipo, dichiarazione as never, base + serieIniziate * LUNGHEZZA + n),
   );
 
   /** Alla fine di ogni Serie, una volta sola: ha contato per il Capitolo completato? E il Capitolo ora lo è? */
   let esito = $state<{ conta: boolean; completato: boolean } | undefined>();
   let registrata = -1;
   $effect(() => {
-    if (!finita || registrata === serieIniziate) return;
+    if (!finita || registrata === serieIniziate || battere) return;
     registrata = serieIniziate;
     const progressi = progressiDelSito();
     const conta = progressi.registraSerie(idCapitolo, dichiarazione.tipo, giuste);
@@ -83,6 +93,7 @@
 
   function scegliScheda(i: number) {
     if (i === scheda) return;
+    lettore.ferma();
     scheda = i;
     nuovaSerie();
   }
@@ -93,24 +104,38 @@
   }
 
   function avanti() {
+    lettore.ferma();
     riscontro = undefined;
     bozza = undefined;
     n += 1;
   }
 
-  const titoloTipo = (tipo: Tipo) => t.tipi[tipo];
+  const titoloTipo = (tipo: Tipo | TipoCheNonConta) => t.tipi[tipo];
 
-  /** I tipi che si possono ascoltare; le loro dichiarazioni hanno tutte le Chiavi. */
+  /** I tipi che si possono ascoltare dal pentagramma; le loro dichiarazioni hanno tutte le Chiavi. */
   const DA_ASCOLTARE: Tipo[] = ['riconosci-intervallo', 'trova-tonica-e-modo'];
-  const chiaviDaAscoltare = dichiarazioni.flatMap((d) => (DA_ASCOLTARE.includes(d.tipo) && 'chiavi' in d ? d.chiavi : []));
+  /** Gli Esercizi pratici di ascolto (#86): si ascolta senza pentagramma. */
+  const SENZA_PENTAGRAMMA: Tipo[] = ['semplice-o-composto', 'pallini', 'semplice-o-composto-ascolto'];
+  const chiaviDaAscoltare = dichiarazioni.flatMap((d) => (DA_ASCOLTARE.includes(d.tipo as Tipo) && 'chiavi' in d ? d.chiavi : []));
+  const conBrani = dichiarazioni.some((d) => d.tipo === 'pallini' || d.tipo === 'semplice-o-composto-ascolto');
   let suona = $state(false);
+  /** La suddivisione che suona nei Pallini, -1 a riposo. */
+  let attiva = $state(-1);
   let disegno: TuneObject | undefined;
   const lettore = creaLettore<'esercizio'>({
     campioni: `${import.meta.env.BASE_URL}audio/pianoforte/`,
-    note: noteDelleChiavi(chiaviDaAscoltare),
-    cambio: (f) => (suona = f !== null),
+    note: [...new Set([...noteDelleChiavi(chiaviDaAscoltare), ...(conBrani ? NOTE_BRANI : [])])],
+    cambio: (f) => {
+      suona = f !== null;
+      if (f === null) attiva = -1;
+    },
   });
   function ascolta() {
+    if (esercizio?.tipo === 'semplice-o-composto') return lettore.toccaBattiti('esercizio', esercizio.battiti);
+    if (esercizio?.tipo === 'pallini' || esercizio?.tipo === 'semplice-o-composto-ascolto') {
+      const brano = esercizio.brano;
+      return lettore.tocca('esercizio', () => brano.note, (i) => (attiva = brano.indiceSuddivisione.indexOf(i)));
+    }
     if (!disegno) return;
     const a = ascoltoIlluminato(disegno);
     lettore.tocca('esercizio', a.note, a.evidenzia);
@@ -127,12 +152,17 @@
   {#if dichiarazioni.length > 1}
     <div class="schede" class:risposto={riscontro} role="tablist" aria-label={t.schede}>
       {#each dichiarazioni as d, i (d.tipo)}
-        <button type="button" role="tab" aria-selected={i === scheda} onclick={() => scegliScheda(i)}>{titoloTipo(d.tipo)}</button>
+        <button type="button" role="tab" aria-selected={i === scheda} onclick={() => scegliScheda(i)}>
+          {titoloTipo(d.tipo)}
+          {#if 'importanza' in d}<span class="sotto"><Importanza grado={d.importanza} parola={t.importanza[d.importanza]} /></span>{/if}
+        </button>
       {/each}
     </div>
   {/if}
 
-  {#if esercizio}
+  {#if battere}
+    <BattiLaPulsazione {t} seed={base + serieIniziate} />
+  {:else if esercizio}
     {@const numero = n + 1}
     <div class="avanzamento">
       <a class="torna" href={capitolo.href} aria-label={capitolo.etichetta}>←</a>
@@ -144,12 +174,18 @@
 
     <div class="esercizio" class:risposto={riscontro}>
       <p class="domanda">{'domanda' in esercizio ? esercizio.domanda[lingua] : t.domande[esercizio.tipo]}</p>
-      {#if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'riconosci-il-tempo' || esercizio.tipo === 'trova-tonica-e-modo'}
+      {#if esercizio.tipo === 'riconosci-il-tempo' || esercizio.tipo === 'scegli-le-figure'}
+        <IndicazioneMetrica indicazione={esercizio.indicazione} />
+      {:else if esercizio.tipo === 'pallini'}
+        <Pallini brano={esercizio.brano} {attiva} />
+      {:else if SENZA_PENTAGRAMMA.includes(esercizio.tipo)}
+        <!-- Solo l'ascolto: niente da guardare. -->
+      {:else if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'trova-tonica-e-modo'}
         <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={esercizio.tipo === 'costruisci-la-scala' ? 1.2 : 1.1} ondisegno={nuovoDisegno} />
       {:else}
         <Pentagramma abc={bozza ?? esercizio.abc} ondisegno={nuovoDisegno} />
       {/if}
-      {#if DA_ASCOLTARE.includes(esercizio.tipo)}
+      {#if DA_ASCOLTARE.includes(esercizio.tipo) || SENZA_PENTAGRAMMA.includes(esercizio.tipo)}
         <p class="ascolto"><button type="button" class="ascolta" aria-pressed={suona} onclick={ascolta}>{t.ascolta}</button></p>
       {/if}
     </div>
@@ -162,9 +198,15 @@
           {#if dichiarazione.tipo === 'nomina-la-sillaba'}
             <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'completa-la-battuta'}
-            <TastierinoFigure {t} tempo={esercizio.tempo} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
+            <TastierinoFigure {t} indicazione={esercizio.indicazione} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'riconosci-il-tempo'}
-            <SceltaTempo {t} scelte={esercizio.scelte} onrisposta={rispondi} />
+            <SceltaTempo {t} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'pallini'}
+            <SceltaTempo {t} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'semplice-o-composto' || esercizio.tipo === 'semplice-o-composto-ascolto'}
+            <SceltaGenere {t} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'scegli-le-figure'}
+            <TastierinoScegliFigure {t} {lingua} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'costruisci-la-scala'}
             <TastierinoScala {t} tonica={esercizio.tonica} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'trova-tonica-e-modo'}
@@ -200,6 +242,8 @@
     background: var(--surface); color: var(--ink); font: inherit; cursor: pointer;
   }
   .schede button[aria-selected='true'] { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  /* L'Importanza degli Esercizi pratici (#86), sotto il nome: le parole sono provvisorie. */
+  .sotto { display: block; }
   .avanzamento { display: flex; align-items: center; gap: 12px; color: var(--muted); margin-bottom: 12px; }
   .barra { flex: 1; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
   .barra div { height: 100%; background: var(--accent); }

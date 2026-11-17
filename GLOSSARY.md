@@ -217,7 +217,7 @@ _In inglese_: Subdivision
 **Tempo**:
 Come sono organizzate le Pulsazioni di una Battuta: binario, ternario, quaternario, quinario o misto per il loro numero, semplice o composto per la Suddivisione (es. "binario composto").
 _Avoid_: metro, ritmo; non usarlo per la velocità (Andamento), per il singolo battito (Pulsazione) né per il segno scritto (Indicazione metrica)
-_In inglese_: Meter: duple, triple, quadruple; simple/compound _(evitare: tempo, che in inglese è l'Andamento)_
+_In inglese_: Meter: duple, triple, quadruple, quintuple, septuple (il misto a 7 Pulsazioni); simple/compound, nell'ordine "compound duple" _(evitare: tempo, che in inglese è l'Andamento; mixed meter, che in inglese è un'altra cosa)_
 
 **Indicazione metrica**:
 Il segno all'inizio del brano (es. 3/4, 6/8) che dice il Tempo. Non è una frazione: il numero sopra conta le Pulsazioni nei Tempi semplici e le Suddivisioni nei composti, quello sotto dice quale Figura le rappresenta.
