@@ -40,7 +40,7 @@ for (const { nome, percorso } of SCHERMATE) {
   }
 }
 
-// Il foglio di riscontro, giusto e sbagliato, sul primo Esercizio del Capitolo 9 con seed fisso.
+// Il foglio di riscontro, giusto e sbagliato, sul primo Esercizio di Chiavi con seed fisso.
 // Lo screenshot è della finestra e non della pagina intera, perché il foglio è fisso in basso.
 for (const esito of ['giusto', 'sbagliato'] as const) {
   for (const lingua of LINGUE) {

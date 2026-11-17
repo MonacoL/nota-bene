@@ -1,4 +1,4 @@
-// Esercizi su scale e Tonalità nei Capitoli 10 e 11 (ticket "Esercizi su scale e Tonalità").
+// Esercizi su scale e Tonalità in Scala maggiore e Scala minore (ticket "Esercizi su scale e Tonalità").
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, type Forma, type Nota } from '../../src/esercizi';
@@ -39,7 +39,7 @@ test('"Costruisci la scala": ogni nota compare sul rigo, ⌫ cancella l\'ultima,
   await expect(page.getByRole('region', { name: 'Riscontro' })).toContainText('✓ Giusto');
 });
 
-test('una Serie di "Costruisci la scala" nel Capitolo 11, con le scale minori', async ({ page }) => {
+test('una Serie di "Costruisci la scala" in Scala minore, con le scale minori', async ({ page }) => {
   // Dieci scale da sette note sono circa 170 azioni: da solo il test dura 10-18 secondi, con la suite
   // completa in locale supera i 30 di default (issue #59). Non manca un'attesa, è lungo davvero.
   test.slow();
@@ -68,7 +68,7 @@ const MAGGIORI: Record<number, Pick<Nota, 'lettera' | 'alterazione'>> = {
   2: { lettera: 'D', alterazione: 0 }, 3: { lettera: 'A', alterazione: 0 }, 4: { lettera: 'E', alterazione: 0 },
 };
 
-test('una Serie di "Trova la tonalità" nel Capitolo 11: la relativa è sbagliata e la spiegazione la nomina', async ({ page }) => {
+test('una Serie di "Trova la tonalità" in Scala minore: la relativa è sbagliata e la spiegazione la nomina', async ({ page }) => {
   await page.goto(`it/capitoli/${MINORE}/esercizi/?seed=90`);
   // Cambiare scheda fa ripartire la Serie: i seed vanno avanti di 10.
   await page.getByRole('tab', { name: 'Trova la tonalità' }).click();
@@ -93,7 +93,7 @@ test('una Serie di "Trova la tonalità" nel Capitolo 11: la relativa è sbagliat
   await expect(page.getByText('9 su 10 giuste al primo colpo')).toBeVisible();
 });
 
-test('nel Capitolo 10 "Trova la tonalità" chiede solo tonalità maggiori', async ({ page }) => {
+test('in Scala maggiore "Trova la tonalità" chiede solo tonalità maggiori', async ({ page }) => {
   await page.goto(`it/capitoli/${MAGGIORE}/esercizi/?seed=5`);
   await page.getByRole('tab', { name: 'Trova la tonalità' }).click();
   await expect(page.locator('.domanda')).toHaveText('Quale tonalità maggiore ha questa armatura?');

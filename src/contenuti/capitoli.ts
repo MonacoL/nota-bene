@@ -55,13 +55,13 @@ export function stampaAvvisiTraduzione(avvisi: readonly AvvisoTraduzione[]): voi
 export async function capitoli(lingua: Lingua): Promise<Capitolo[]> {
   const { percorso, it, en } = await carica();
   const scaletta = percorso.map((v) => ({ id: v.id, prerequisiti: v.prerequisiti, inPreparazione: !it.has(v.id) }));
-  return percorso.map((v) => ({
+  return percorso.map((v, i) => ({
     id: v.id,
     numero: v.numero,
     percorso: v.percorso,
     prerequisiti: v.prerequisiti,
     prerequisitiEffettivi: prerequisitiEffettivi(v.prerequisiti, scaletta),
-    inPreparazione: !it.has(v.id),
+    inPreparazione: scaletta[i]!.inPreparazione,
     titolo: v[lingua].titolo,
     riga: v[lingua].riga,
     provaLetture: v.prova_letture,

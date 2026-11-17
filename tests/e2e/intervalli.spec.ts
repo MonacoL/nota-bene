@@ -1,4 +1,4 @@
-// Esercizi sugli intervalli nel Capitolo 14 (ticket "Esercizi sugli intervalli"): numero, poi qualità, poi Verifica.
+// Esercizi sugli intervalli nel Capitolo Intervalli (ticket "Esercizi sugli intervalli"): numero, poi qualità, poi Verifica.
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, type Chiave, type Intervallo } from '../../src/esercizi';

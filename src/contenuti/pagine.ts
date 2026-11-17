@@ -6,7 +6,7 @@ export type PaginaServizio = (typeof PAGINE_SERVIZIO)[number];
 
 /**
  * Le pagine che spiegano come si studia (#84): stanno in contenuti/pagine/ come quelle di servizio, ma non sono nel
- * piè di pagina e, come i Capitoli, in inglese ripiegano sull'italiano finché la traduzione non c'è (ADR-0012).
+ * piè di pagina e, come i Capitoli, in inglese ripiegano sull'italiano finché la traduzione non c'è (ADR-0006).
  */
 export const PAGINE_GUIDA = ['come-si-studia'] as const;
 export type PaginaGuida = (typeof PAGINE_GUIDA)[number];

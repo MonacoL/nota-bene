@@ -1,4 +1,4 @@
-// "Nomina la sillaba" nei Capitoli 13 e 16 (ticket "Modulo Sillabe e «Nomina la sillaba»").
+// "Nomina la sillaba" in DO mobile e DO mobile avanzato (ticket "Modulo Sillabe e «Nomina la sillaba»").
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la Sillaba.
 import { expect, test } from '@playwright/test';
 import { genera, type Chiave } from '../../src/esercizi';
@@ -9,7 +9,7 @@ const DIATONICHE = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'TI'];
 const CROMATICHE = ['DI', 'RI', 'FI', 'SI', 'LI', 'RA', 'ME', 'SE', 'LE', 'TE'];
 const CHIAVI: Chiave[] = ['violino', 'violino-ottava-bassa', 'basso'];
 
-test('una Serie di "Nomina la sillaba" nel Capitolo 13: un tocco e niente Verifica', async ({ page }) => {
+test('una Serie di "Nomina la sillaba" in DO mobile: un tocco e niente Verifica', async ({ page }) => {
   await page.goto(`it/capitoli/${DO_MOBILE}/esercizi/?seed=500`);
   const tastierino = page.getByRole('group', { name: 'Risposta' });
   await expect(tastierino.getByRole('button')).toHaveText(DIATONICHE);
@@ -31,7 +31,7 @@ test('una Serie di "Nomina la sillaba" nel Capitolo 13: un tocco e niente Verifi
   await expect(page.getByText('7 su 10 giuste al primo colpo')).toBeVisible();
 });
 
-test('nel Capitolo 16 il tastierino ha anche le Sillabe cromatiche', async ({ page }) => {
+test('in DO mobile avanzato il tastierino ha anche le Sillabe cromatiche', async ({ page }) => {
   await page.goto(`it/capitoli/${AVANZATO}/esercizi/?seed=0`);
   const tastierino = page.getByRole('group', { name: 'Risposta' });
   await expect(tastierino.getByRole('button')).toHaveText([...DIATONICHE, ...CROMATICHE]);

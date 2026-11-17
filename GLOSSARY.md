@@ -14,7 +14,7 @@ _Avoid_: corso, programma, ramo, binario
 _In inglese_: Path: Rhythm path, Harmony path, Melody path
 
 **Scaletta**:
-L'ordine di studio consigliato dal maestro, una sola sequenza che alterna Capitoli dei tre Percorsi. Seguire la Scaletta è il modo di studio di partenza: ciò di cui mancano dei Prerequisiti resta bloccato finché non sono Capitoli completati.
+L'ordine di studio consigliato dal maestro, una sola sequenza che alterna Capitoli del ritmico e del melodico; quelli dell'armonico vengono più avanti. Seguire la Scaletta è il modo di studio di partenza: ciò di cui mancano dei Prerequisiti resta bloccato finché non sono Capitoli completati.
 _Avoid_: programma, piano di studio, sequenza
 _In inglese_: Sequence; "follow the sequence"
 

@@ -1,6 +1,6 @@
 // L'Ascolto dell'esempio nei Capitoli (ticket #35, ADR-0008), con un AudioContext finto (audio-finto.ts): ogni
 // esempio ha il suo pulsante, suona con il pianoforte delle Letture e, senza Q:, a 80 semiminime al minuto.
-// Capitolo 12, primo esempio: "C E G E | F D B, D | E D C2 |]" in 4/4, L:1/4.
+// Modo maggiore e minore, primo esempio: "C E G E | F D B, D | E D C2 |]" in 4/4, L:1/4.
 import { expect, test, type Page } from '@playwright/test';
 import { altezza, installaAudioFinto, registro, type Suono } from './audio-finto';
 

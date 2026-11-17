@@ -75,7 +75,7 @@ test('lo stesso tasto con un altro nome è sbagliato, e la spiegazione lo dice',
   await expect(foglio).toContainText('stesso tasto');
 });
 
-test('nel Capitolo 9 compaiono tutte e tre le Chiavi', async ({ page }) => {
+test('in Chiavi compaiono tutte e tre le Chiavi', async ({ page }) => {
   await page.goto(`it/capitoli/${SECONDO}/esercizi/?seed=0`);
   const chiavi = new Set<string>();
   const foglio = page.getByRole('region', { name: 'Riscontro' });

@@ -1,4 +1,4 @@
-// Esercizi di ritmo nei Capitoli 3 e 4 (ticket "Esercizi di ritmo").
+// Esercizi di ritmo in Figure e pause e Tempi semplici e composti (ticket "Esercizi di ritmo").
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, TEMPI, type NomeTempo } from '../../src/esercizi';
@@ -23,7 +23,7 @@ async function completa(page: Page, mancano: number, conCrome: boolean) {
   await t.getByRole('button', { name: nome, exact: true }).click();
 }
 
-test('una Serie di "Completa la battuta" nel Capitolo 3, in 4/4: conta la somma, non le Figure', async ({ page }) => {
+test('una Serie di "Completa la battuta" in Figure e pause, in 4/4: conta la somma, non le Figure', async ({ page }) => {
   await page.goto(`it/capitoli/${FIGURE}/esercizi/?seed=30`);
   const foglio = page.getByRole('region', { name: 'Riscontro' });
   const verifica = tastierino(page).getByRole('button', { name: 'Verifica' });
@@ -53,7 +53,7 @@ test('una Serie di "Completa la battuta" nel Capitolo 3, in 4/4: conta la somma,
   await expect(page.getByText('9 su 10 giuste al primo colpo')).toBeVisible();
 });
 
-test('una Serie di "Completa la battuta" nel Capitolo 5, con gli altri Tempi', async ({ page }) => {
+test('una Serie di "Completa la battuta" in Tempi semplici e composti, con gli altri Tempi', async ({ page }) => {
   await page.goto(`it/capitoli/${TEMPI_CAP}/esercizi/?seed=60`);
   const foglio = page.getByRole('region', { name: 'Riscontro' });
   for (let n = 0; n < 10; n++) {
