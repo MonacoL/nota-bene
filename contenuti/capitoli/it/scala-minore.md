@@ -22,7 +22,7 @@ Do maggiore e La minore hanno le stesse note e la stessa armatura, senza alteraz
 
 Ogni tonalità maggiore ha la sua relativa minore, e la sua tonica sta sempre una terza minore sotto, cioè tre semitoni più in basso. Contando i nomi delle note, si scende di due: da Do a La, da Sol a Mi, da Fa a Re, da Re a Si.
 
-Per trovare la tonalità minore da un'armatura, quindi, si trova prima la maggiore con le regole del capitolo 5 e poi si scende di tre semitoni. Con un diesis la maggiore è Sol, e la minore è Mi; con due bemolle la maggiore è Si♭, e la minore è Sol.
+Per trovare la tonalità minore da un'armatura, quindi, si trova prima la maggiore con le regole del capitolo “Scala maggiore” e poi si scende di tre semitoni. Con un diesis la maggiore è Sol, e la minore è Mi; con due bemolle la maggiore è Si♭, e la minore è Sol.
 
 ## La minore naturale
 
@@ -48,7 +48,7 @@ K:Am
 A B c d | e f ^g a |]
 ```
 
-Questa è la forma che si incontra più spesso. Il 7° grado alzato non entra nell'armatura: si scrive come alterazione nel corso del brano, ogni volta che serve. Un Sol♯ che torna spesso in un brano senza alterazioni in armatura è quindi un forte indizio che il brano sia in La minore, non in Do maggiore. Nel capitolo 7 questo indizio diventa un metodo.
+Questa è la forma che si incontra più spesso. Il 7° grado alzato non entra nell'armatura: si scrive come alterazione nel corso del brano, ogni volta che serve. Un Sol♯ che torna spesso in un brano senza alterazioni in armatura è quindi un forte indizio che il brano sia in La minore, non in Do maggiore. Nel capitolo “Modo maggiore e minore” questo indizio diventa un metodo.
 
 Fra il 6° e il 7° grado della minore armonica, in La minore fra Fa e Sol♯, c'è un tono e mezzo, tre semitoni. È un salto caratteristico, e cantandolo è facile calare sul Sol♯: conviene pensarlo alto.
 

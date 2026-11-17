@@ -53,7 +53,7 @@ Conviene imparare prima tre intervalli, in quest'ordine: la quinta, la terza e l
 
 La quinta giusta è la distanza fra il 1° e il 5° grado della scala, fra tonica e dominante. Suona piena e stabile, ed è il salto che molti brani usano per partire.
 
-La terza è la distanza fra il 1° e il 3° grado. Maggiore o minore, è la terza a decidere il modo, come hai visto nel capitolo 7. Tonica, terza e quinta insieme formano l'accordo su cui si regge una tonalità.
+La terza è la distanza fra il 1° e il 3° grado. Maggiore o minore, è la terza a decidere il modo, come hai visto nel capitolo “Modo maggiore e minore”. Tonica, terza e quinta insieme formano l'accordo su cui si regge una tonalità.
 
 La quarta giusta è la distanza fra il 5° grado e la tonica sopra. È il salto tipico di un attacco in levare che arriva sulla tonica.
 

@@ -1,6 +1,7 @@
 ---
 // I Prerequisiti di un Capitolo, come link, sopra il Capitolo e i suoi Esercizi (ADR-0011). Un Prerequisito di un
-// altro Percorso porta la sua etichetta: è un incrocio fra Percorsi.
+// altro Percorso porta la sua etichetta: è un incrocio fra Percorsi. Sono quelli effettivi, come nel riquadro di
+// blocco: uno in preparazione lascia il posto ai suoi (#84).
 import type { Capitolo } from '../../contenuti/capitoli';
 import { testi, url, type Lingua } from '../../i18n';
 import EtichettaPercorso from './EtichettaPercorso.astro';
@@ -12,9 +13,9 @@ interface Props {
 }
 const { lingua, capitolo, tutti } = Astro.props;
 const t = testi(lingua);
-const prerequisiti = capitolo.prerequisiti.map((id) => tutti.find((c) => c.id === id)!);
+const prerequisiti = capitolo.prerequisitiEffettivi.map((id) => tutti.find((c) => c.id === id)!);
 ---
-<aside class="prerequisiti" data-capitolo={capitolo.id} data-prerequisiti={capitolo.prerequisiti.join(' ')}>
+<aside class="prerequisiti" data-capitolo={capitolo.id} data-prerequisiti={capitolo.prerequisitiEffettivi.join(' ')}>
   <EtichettaPercorso lingua={lingua} percorso={capitolo.percorso} />
   {prerequisiti.length
     ? (

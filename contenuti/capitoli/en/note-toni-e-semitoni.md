@@ -37,7 +37,7 @@ Since the names repeat, in Nota Bene every note also carries a number, the numbe
 
 Some keyboards and music programs call middle C "C3". Nota Bene uses the most widespread international numbering, with C4 in the middle, and always sticks to it.
 
-The examples in this chapter are in treble clef, the one sopranos and altos read; the other clefs come in chapter 2. In treble clef, C4 sits on the ledger line just below the staff.
+The examples in this chapter are in treble clef, the one sopranos and altos read; the other clefs come in the chapter “Clefs”. In treble clef, C4 sits on the ledger line just below the staff.
 
 ```abc
 X:3
@@ -88,4 +88,4 @@ In the first measure the third note is still F♯4, even without a sign, because
 
 The black key between F and G can be called F♯ or G♭: it is the same key and the same sound, with two names. Notes like these are called enharmonic. It happens with white keys too: E♯ is the key of F, C♭ the key of B.
 
-Which of the two names is written depends on the key of the piece, which you will meet in chapter 5. For now it is enough to know that whether you sing F♯ or G♭, you produce the same sound.
+Which of the two names is written depends on the key of the piece, which you will meet in the chapter “The major scale”. For now it is enough to know that whether you sing F♯ or G♭, you produce the same sound.

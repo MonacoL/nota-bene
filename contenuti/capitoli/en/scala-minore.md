@@ -20,7 +20,7 @@ C major and A minor have the same notes and the same key signature, with no acci
 
 Every major key has its relative minor, and its tonic is always a minor third below, that is three half steps lower. Counting note names, you go down two: from C to A, from G to E, from F to D, from D to B.
 
-So to find the minor key from a key signature, you first find the major key with the rules from chapter 5 and then go down three half steps. With one sharp the major key is G, and the minor key is E; with two flats the major key is B♭, and the minor key is G.
+So to find the minor key from a key signature, you first find the major key with the rules from the chapter “The major scale” and then go down three half steps. With one sharp the major key is G, and the minor key is E; with two flats the major key is B♭, and the minor key is G.
 
 ## Natural minor
 
@@ -46,7 +46,7 @@ K:Am
 A B c d | e f ^g a |]
 ```
 
-This is the form you meet most often. The raised seventh degree doesn't go into the key signature: it is written as an accidental during the piece, every time it is needed. A G♯ that keeps coming back in a piece with no accidentals in the key signature is therefore a strong clue that the piece is in A minor, not in C major. In chapter 7 this clue becomes a method.
+This is the form you meet most often. The raised seventh degree doesn't go into the key signature: it is written as an accidental during the piece, every time it is needed. A G♯ that keeps coming back in a piece with no accidentals in the key signature is therefore a strong clue that the piece is in A minor, not in C major. In the chapter “Major and minor mode” this clue becomes a method.
 
 Between the sixth and seventh degrees of harmonic minor, in A minor between F and G♯, there is a step and a half, three half steps. It is a distinctive leap, and when singing it, it is easy to go flat on the G♯: think of it as high.
 

@@ -39,7 +39,7 @@ The first stays around C4, dwells on C, E, and G, and ends on C4: it is in C maj
 
 Faced with a new passage, it pays to always follow the same steps:
 
-1. Look at the key signature and find the two possible keys, the major one and its relative minor (chapters 5 and 6).
+1. Look at the key signature and find the two possible keys, the major one and its relative minor (the chapters “The major scale” and “The minor scale”).
 2. Look at the first note and, above all, the last one: which of the two tonics do they point to?
 3. Look for an accidental that keeps coming back, a half step below the minor tonic. In A minor it is G♯, in E minor D♯, in D minor C♯. It is the raised seventh degree of harmonic minor, and if it is there, the passage is almost certainly in minor.
 4. Look at which notes the melody lingers on and where it ends its phrases.
@@ -52,7 +52,7 @@ Many Renaissance and Baroque pieces in minor end on a major chord: the basses' l
 
 An excerpt of a few measures, moreover, doesn't always end on the tonic: sometimes it stops in the middle of a phrase, perhaps on the fifth degree. In that case the accidentals and the notes the melody dwells on count for more.
 
-Finally, a long piece can change key, and one section can be in A minor and another in C major. Chapter 10 explains how to recognize this change and what it means for those who sing with movable do.
+Finally, a long piece can change key, and one section can be in A minor and another in C major. The chapter “Advanced movable do” explains how to recognize this change and what it means for those who sing with movable do.
 
 ## Why it matters
 

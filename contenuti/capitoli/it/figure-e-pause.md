@@ -32,7 +32,7 @@ B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 |]
 
 Le battute qui sopra durano tutte uguale: una semibreve, poi due minime, quattro semiminime, otto crome e sedici semicrome.
 
-Le figure non dicono quanti secondi dura una nota, solo quanto dura rispetto alle altre. Quanto vada veloce il brano lo decide l'andamento, di cui si parla nel capitolo 4.
+Le figure non dicono quanti secondi dura una nota, solo quanto dura rispetto alle altre. Quanto vada veloce il brano lo decide l'andamento, di cui si parla nel capitolo “Tempi semplici e composti”.
 
 ## Le pause
 

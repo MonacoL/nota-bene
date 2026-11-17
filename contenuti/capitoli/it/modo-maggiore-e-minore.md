@@ -40,7 +40,7 @@ La prima sta attorno al Do4, insiste su Do, Mi e Sol e finisce sul Do4: è in Do
 
 Davanti a un passaggio nuovo conviene seguire sempre gli stessi passi:
 
-1. Guarda l'armatura e trova le due tonalità possibili, la maggiore e la sua relativa minore (capitoli 5 e 6).
+1. Guarda l'armatura e trova le due tonalità possibili, la maggiore e la sua relativa minore (capitoli “Scala maggiore” e “Scala minore”).
 2. Guarda la prima nota e, soprattutto, l'ultima: quale delle due toniche ricordano?
 3. Cerca un'alterazione che torna più volte, un semitono sotto la tonica minore. In La minore è il Sol♯, in Mi minore il Re♯, in Re minore il Do♯. È il 7° grado alzato della minore armonica, e se c'è il passaggio è quasi certamente in minore.
 4. Guarda su quali note la melodia si ferma più a lungo e dove chiude le frasi.
@@ -53,7 +53,7 @@ Molti brani in minore del Rinascimento e del Barocco finiscono con un accordo ma
 
 Un estratto di poche battute, poi, non sempre finisce sulla tonica: a volte si ferma a metà di una frase, magari sul 5° grado. In quel caso pesano di più le alterazioni e le note su cui la melodia insiste.
 
-Infine, un brano lungo può cambiare tonalità, e una parte può essere in La minore e un'altra in Do maggiore. Il capitolo 10 spiega come si riconosce questo passaggio e che cosa cambia per chi canta con il DO mobile.
+Infine, un brano lungo può cambiare tonalità, e una parte può essere in La minore e un'altra in Do maggiore. Il capitolo “DO mobile avanzato” spiega come si riconosce questo passaggio e che cosa cambia per chi canta con il DO mobile.
 
 ## Perché serve
 

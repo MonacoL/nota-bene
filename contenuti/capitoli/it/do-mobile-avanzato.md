@@ -12,7 +12,7 @@ Quando una nota è alterata fuori dall'armatura, la sua sillaba cambia vocale. S
 
 Se è abbassata di un semitono, la vocale diventa e: MI diventa ME, e così SOL diventa SE, LA diventa LE, TI diventa TE. Fa eccezione RE, che abbassato diventa RA.
 
-Il SI della minore armonica, che hai visto nel capitolo 9, è una di queste sillabe: è il SOL alzato.
+Il SI della minore armonica, che hai visto nel capitolo “DO mobile”, è una di queste sillabe: è il SOL alzato.
 
 ```abc
 X:1
@@ -73,7 +73,7 @@ La mutazione si fa di solito su una nota che appartiene a tutte e due le tonalit
 
 ## Riconoscere una modulazione
 
-Gli indizi sono quelli che usi per trovare la tonica nel capitolo 7, applicati a un pezzo di brano:
+Gli indizi sono quelli che usi per trovare la tonica nel capitolo “Modo maggiore e minore”, applicati a un pezzo di brano:
 
 - un'alterazione nuova torna più volte, e spesso sta un semitono sotto una nota su cui la melodia poi si appoggia, come il Fa♯ sotto il Sol;
 - una frase si chiude su una nota diversa dalla tonica iniziale;
