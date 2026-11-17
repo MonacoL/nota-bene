@@ -3,9 +3,9 @@ import { expect, test } from '@playwright/test';
 import { CAPITOLI } from './pagine';
 import { vociDelMenu } from './menu';
 
-const PRIMO = CAPITOLI[0]!; // Pulsazione e suddivisione, in preparazione (#84)
+const PRIMO = CAPITOLI[0]!; // Pulsazione e suddivisione, con il testo da #85
 /** Il primo Capitolo della Scaletta con un testo: la home porta qui. */
-const PRIMO_PRONTO = 'figure-e-pause';
+const PRIMO_PRONTO = PRIMO;
 /** Il Capitolo con gli esempi abc che i test guardano. */
 const NOTE = 'note-toni-e-semitoni';
 
@@ -47,14 +47,14 @@ test('dalla home si apre il primo Capitolo pronto', async ({ page }) => {
   await page.goto('it/');
   await page.getByRole('link', { name: 'Comincia a studiare' }).click();
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO_PRONTO}/$`));
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Figure e pause');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pulsazione e suddivisione');
   await expect(page.locator('article.testo')).toBeVisible();
 });
 
-test('il Capitolo 1 è in preparazione, e si va avanti e indietro', async ({ page }) => {
+test('dal Capitolo 1 si va avanti e indietro', async ({ page }) => {
   await page.goto(`it/capitoli/${PRIMO}/`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pulsazione e suddivisione');
-  await expect(page.getByText('Questo capitolo è in preparazione.')).toBeVisible();
+  await expect(page.locator('article.testo')).toBeVisible();
 
   const seguito = page.locator('nav.seguito');
   await expect(seguito.getByRole('link', { name: 'Esercizi' })).toHaveAttribute('href', `/nota-bene/it/capitoli/${PRIMO}/esercizi/`);

@@ -22,6 +22,14 @@ type Dati = { serie: Record<string, Tipo[]>; segnati: string[]; modo?: Modo };
 
 const CHIAVE = 'nota-bene:progressi:v1';
 
+/**
+ * I Capitoli i cui Esercizi sono passati a un altro Capitolo: chi aveva già riuscito le vecchie Serie lo ritrova
+ * completato. In #85 "Tempi semplici e composti" cede i suoi due tipi a "Indicazioni metriche".
+ */
+const COMPLETATI_PRIMA: Record<string, readonly Tipo[]> = {
+  'tempi-semplici-e-composti': ['completa-la-battuta', 'riconosci-il-tempo'],
+};
+
 const vuoti = (): Dati => ({ serie: {}, segnati: [] });
 
 const elencoDiStringhe = (x: unknown): x is string[] => Array.isArray(x) && x.every((e) => typeof e === 'string');
@@ -70,6 +78,8 @@ export function creaProgressi(archivio: Archivio, capitoli: readonly CapitoloDaC
   function completato(id: string): boolean {
     if (dati.segnati.includes(id)) return true;
     const riusciti = dati.serie[id] ?? [];
+    const prima = COMPLETATI_PRIMA[id];
+    if (prima && prima.every((t) => riusciti.includes(t))) return true;
     const daFare = tipi.get(id) ?? [];
     return daFare.length > 0 && daFare.every((t) => riusciti.includes(t));
   }

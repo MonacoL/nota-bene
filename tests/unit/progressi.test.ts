@@ -109,3 +109,23 @@ describe('Scaletta o Studio libero', () => {
     expect(creaProgressi({ getItem: errore, setItem: errore, removeItem: errore }, CAPITOLI).modo()).toBe('libero');
   });
 });
+
+describe('Progressi salvati prima che gli Esercizi cambiassero Capitolo (#85)', () => {
+  // Fino a #85 "Tempi semplici e composti" si completava con due Serie; poi i due tipi passano a "Indicazioni metriche".
+  const VECCHIO = JSON.stringify({ serie: { 'tempi-semplici-e-composti': ['completa-la-battuta', 'riconosci-il-tempo'] }, segnati: [] });
+  const ORA = [
+    { id: 'tempi-semplici-e-composti', tipi: [] },
+    { id: 'indicazioni-metriche', tipi: ['completa-la-battuta' as const, 'riconosci-il-tempo' as const] },
+  ];
+
+  it('il Capitolo completato con le vecchie Serie resta completato, anche se non ha più Esercizi di teoria', () => {
+    const progressi = creaProgressi(inMemoria({ 'nota-bene:progressi:v1': VECCHIO }), ORA);
+    expect(progressi.completato('tempi-semplici-e-composti')).toBe(true);
+    expect(progressi.completato('indicazioni-metriche')).toBe(false);
+  });
+
+  it('una sola delle due vecchie Serie non basta, come prima', () => {
+    const una = JSON.stringify({ serie: { 'tempi-semplici-e-composti': ['riconosci-il-tempo'] }, segnati: [] });
+    expect(creaProgressi(inMemoria({ 'nota-bene:progressi:v1': una }), ORA).completato('tempi-semplici-e-composti')).toBe(false);
+  });
+});

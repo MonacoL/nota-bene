@@ -21,7 +21,7 @@ export const en: Dizionario = {
   ascoltaEsempio: 'Listen to the example',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the time signature' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the meter', 'scegli-le-figure': 'Choose the note values' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
     domande: {
@@ -30,7 +30,8 @@ export const en: Dizionario = {
       'riconosci-intervallo': 'What interval is this?',
       'rivolta-intervallo': 'What is the inversion of this interval?',
       'completa-la-battuta': 'Which note values complete the measure?',
-      'riconosci-il-tempo': 'What time signature are these measures in?',
+      'riconosci-il-tempo': 'What meter does this time signature show?',
+      'scegli-le-figure': 'Which note values are the subdivision, the beat, and the measure?',
       'trova-tonica-e-modo': 'What key is this melody in?',
     },
     risposta: 'Answer',
@@ -39,7 +40,9 @@ export const en: Dizionario = {
     numeri: { 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 8: '8th' },
     qualita: { minore: 'minor', maggiore: 'major', giusta: 'perfect', aumentata: 'augmented', diminuita: 'diminished' },
     cancella: 'Delete the last note',
-    figure: { semibreve: 'whole note', minima: 'half note', semiminima: 'quarter note', croma: 'eighth note' },
+    figure: { semibreve: 'whole note', minima: 'half note', semiminima: 'quarter note', croma: 'eighth note', semicroma: 'sixteenth note' },
+    tempo: { numero: 'How many beats?', genere: 'How are they divided?', binario: 'duple', ternario: 'triple', quaternario: 'quadruple', quinario: 'quintuple', misto: 'septuple', semplice: 'simple', composto: 'compound' },
+    caselle: { suddivisione: 'Subdivision', pulsazione: 'Beat', battuta: 'Measure', legata: 'tied to', vuota: 'choose' },
     punto: 'dot',
     verifica: 'Check',
     /** Il pulsante dell'Ascolto negli Esercizi che si possono sentire (ticket #35). */

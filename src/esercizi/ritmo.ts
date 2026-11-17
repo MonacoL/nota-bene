@@ -1,13 +1,16 @@
-// Figure e Tempi (Capitoli 3 e 4). Le durate si contano in semicrome, così anche la croma col punto è un intero.
+// Figure e battute (Figure e pause, Indicazioni metriche). Le durate si contano in semicrome, così anche la croma col punto è un intero.
 // Niente gruppi irregolari (terzine e simili): il Percorso non li insegna (ADR-0003).
+import { metrica, type NomeIndicazione } from './metrica';
 
+/** La tavolozza di "Completa la battuta". "Scegli le figure" aggiunge la semicroma (metrica.ts). */
 export const FIGURE = ['semibreve', 'minima', 'semiminima', 'croma'] as const;
-export type Figura = { figura: (typeof FIGURE)[number]; punto: boolean };
+export type NomeFigura = (typeof FIGURE)[number] | 'semicroma';
+export type Figura = { figura: NomeFigura; punto: boolean };
 
 /** Un Tempo come 6/8: battiti sopra, unità sotto. */
 export type Tempo = { battiti: number; unita: 4 | 8 };
 
-const VALORI: Record<Figura['figura'], number> = { semibreve: 16, minima: 8, semiminima: 4, croma: 2 };
+const VALORI: Record<NomeFigura, number> = { semibreve: 16, minima: 8, semiminima: 4, croma: 2, semicroma: 1 };
 
 /** La durata di una o più Figure, in semicrome: il punto aggiunge metà del valore. */
 export function durata(figure: Figura[]): number {
@@ -18,12 +21,16 @@ export function durataBattuta(tempo: Tempo): number {
   return (tempo.battiti * 16) / tempo.unita;
 }
 
-/** I Tempi in ottavi sono composti (3/8, 6/8, 9/8, 12/8): la Pulsazione è una semiminima col punto. */
+/** Semplice o composto lo decide il numero sopra, come per ogni Indicazione metrica (metrica.ts). */
 export function semplice(tempo: Tempo): boolean {
-  return tempo.unita === 4;
+  return metrica(`${tempo.battiti}/${tempo.unita}` as NomeIndicazione).genere === 'semplice';
 }
 
-export const TEMPI = ['2/4', '3/4', '4/4', '3/8', '6/8', '9/8', '12/8'] as const;
+/**
+ * Le Indicazioni metriche di "Completa la battuta": Pulsazione di semiminima nei semplici, di semiminima col punto
+ * nei composti. Il 3/8 non c'è: è semplice, con la Pulsazione di croma, e la tavolozza non ha la semicroma.
+ */
+export const TEMPI = ['2/4', '3/4', '4/4', '6/8', '9/8', '12/8'] as const;
 export type NomeTempo = (typeof TEMPI)[number];
 
 export function tempo(nome: NomeTempo): Tempo {
@@ -62,11 +69,12 @@ export function abcBattute(nome: NomeTempo | undefined, battute: number[][][], {
   return `X:1\nM:${nome ?? 'none'}\nL:1/16\nK:C clef=treble\n${corpo} |]\n`;
 }
 
-const NOMI_FIGURE: Record<Figura['figura'], { it: string; en: string }> = {
+const NOMI_FIGURE: Record<NomeFigura, { it: string; en: string }> = {
   semibreve: { it: 'semibreve', en: 'whole note' },
   minima: { it: 'minima', en: 'half note' },
   semiminima: { it: 'semiminima', en: 'quarter note' },
   croma: { it: 'croma', en: 'eighth note' },
+  semicroma: { it: 'semicroma', en: 'sixteenth note' },
 };
 
 /** "semiminima col punto" / "dotted quarter note". */

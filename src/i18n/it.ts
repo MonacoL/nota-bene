@@ -20,7 +20,7 @@ export const it = {
   ascoltaEsempio: "Ascolta l'esempio",
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'trova-tonica-e-modo': 'Trova tonica e modo', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo' },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'trova-tonica-e-modo': 'Trova tonica e modo', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo', 'scegli-le-figure': 'Scegli le figure' },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
     domande: {
@@ -29,7 +29,8 @@ export const it = {
       'riconosci-intervallo': 'Che intervallo è?',
       'rivolta-intervallo': 'Qual è il rivolto di questo intervallo?',
       'completa-la-battuta': 'Quali figure completano la battuta?',
-      'riconosci-il-tempo': 'In che tempo sono queste battute?',
+      'riconosci-il-tempo': 'Che tempo indica questa indicazione metrica?',
+      'scegli-le-figure': 'Quali figure sono suddivisione, pulsazione e battuta?',
       'trova-tonica-e-modo': 'Qual è la tonalità di questa melodia?',
     },
     risposta: 'Risposta',
@@ -38,7 +39,11 @@ export const it = {
     numeri: { 2: '2ª', 3: '3ª', 4: '4ª', 5: '5ª', 6: '6ª', 7: '7ª', 8: '8ª' },
     qualita: { minore: 'minore', maggiore: 'maggiore', giusta: 'giusta', aumentata: 'aumentata', diminuita: 'diminuita' },
     cancella: "Cancella l'ultima nota",
-    figure: { semibreve: 'semibreve', minima: 'minima', semiminima: 'semiminima', croma: 'croma' },
+    figure: { semibreve: 'semibreve', minima: 'minima', semiminima: 'semiminima', croma: 'croma', semicroma: 'semicroma' },
+    /** "Riconosci il tempo": il numero di pulsazioni e la suddivisione (#85). */
+    tempo: { numero: 'Quante pulsazioni?', genere: 'Come si suddividono?', binario: 'binario', ternario: 'ternario', quaternario: 'quaternario', quinario: 'quinario', misto: 'misto', semplice: 'semplice', composto: 'composto' },
+    /** "Scegli le figure": le tre caselle e la legatura fra le figure della battuta (#85). */
+    caselle: { suddivisione: 'Suddivisione', pulsazione: 'Pulsazione', battuta: 'Battuta', legata: 'legata a', vuota: 'scegli' },
     punto: 'punto',
     verifica: 'Verifica',
     /** Il pulsante dell'Ascolto negli Esercizi che si possono sentire (ticket #35). */

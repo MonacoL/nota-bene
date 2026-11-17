@@ -20,6 +20,8 @@
   import TastierinoScala from './TastierinoScala.svelte';
   import TastierinoFigure from './TastierinoFigure.svelte';
   import SceltaTempo from './SceltaTempo.svelte';
+  import TastierinoScegliFigure from './TastierinoScegliFigure.svelte';
+  import IndicazioneMetrica from './IndicazioneMetrica.svelte';
   import Foglio from './Foglio.svelte';
   import { SOGLIA_COMPLETATO } from '../../progressi';
   import { annunciaCambio, progressiDelSito } from '../../progressi/sito';
@@ -144,7 +146,9 @@
 
     <div class="esercizio" class:risposto={riscontro}>
       <p class="domanda">{'domanda' in esercizio ? esercizio.domanda[lingua] : t.domande[esercizio.tipo]}</p>
-      {#if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'riconosci-il-tempo' || esercizio.tipo === 'trova-tonica-e-modo'}
+      {#if esercizio.tipo === 'riconosci-il-tempo' || esercizio.tipo === 'scegli-le-figure'}
+        <IndicazioneMetrica indicazione={esercizio.indicazione} />
+      {:else if esercizio.tipo === 'costruisci-la-scala' || esercizio.tipo === 'completa-la-battuta' || esercizio.tipo === 'trova-tonica-e-modo'}
         <Pentagramma abc={bozza ?? esercizio.abc} larghezzaMassima={520} scala={esercizio.tipo === 'costruisci-la-scala' ? 1.2 : 1.1} ondisegno={nuovoDisegno} />
       {:else}
         <Pentagramma abc={bozza ?? esercizio.abc} ondisegno={nuovoDisegno} />
@@ -164,7 +168,9 @@
           {:else if esercizio.tipo === 'completa-la-battuta'}
             <TastierinoFigure {t} tempo={esercizio.tempo} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'riconosci-il-tempo'}
-            <SceltaTempo {t} scelte={esercizio.scelte} onrisposta={rispondi} />
+            <SceltaTempo {t} onrisposta={rispondi} />
+          {:else if esercizio.tipo === 'scegli-le-figure'}
+            <TastierinoScegliFigure {t} {lingua} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'costruisci-la-scala'}
             <TastierinoScala {t} tonica={esercizio.tonica} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'trova-tonica-e-modo'}

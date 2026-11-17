@@ -5,6 +5,7 @@ import * as costruisciLaScala from './costruisci-la-scala';
 import * as nominaLaNota from './nomina-la-nota';
 import * as nominaLaSillaba from './nomina-la-sillaba';
 import * as riconosciIlTempo from './riconosci-il-tempo';
+import * as scegliLeFigure from './scegli-le-figure';
 import * as riconosciIntervallo from './riconosci-intervallo';
 import * as rivoltaIntervallo from './rivolta-intervallo';
 import * as trovaLaTonalita from './trova-la-tonalita';
@@ -18,7 +19,10 @@ export type EsercizioNominaLaNota = nominaLaNota.Esercizio;
 export type EsercizioCostruisciLaScala = costruisciLaScala.Esercizio;
 export type EsercizioCompletaLaBattuta = completaLaBattuta.Esercizio;
 export type EsercizioRiconosciIlTempo = riconosciIlTempo.Esercizio;
-export { TEMPI, FIGURE, abcBattute, durata, type Figura, type NomeTempo } from './ritmo';
+export type EsercizioScegliLeFigure = scegliLeFigure.Esercizio;
+export { INDICAZIONI_FIGURE, FIGURE_METRICA } from './scegli-le-figure';
+export { TEMPI, FIGURE, abcBattute, durata, nomeFigura, type Figura, type NomeFigura, type NomeTempo } from './ritmo';
+export { INDICAZIONI, NUMERI_TEMPO, GENERI, metrica, type NomeIndicazione, type NumeroTempo, type Genere } from './metrica';
 export type EsercizioTrovaLaTonalita = trovaLaTonalita.Esercizio;
 export type { Modo } from './trova-la-tonalita';
 export type EsercizioTrovaTonicaEModo = trovaTonicaEModo.Esercizio;
@@ -41,6 +45,7 @@ type Tipi = {
   'trova-tonica-e-modo': { parametri: trovaTonicaEModo.Parametri; esercizio: trovaTonicaEModo.Esercizio; risposta: trovaTonicaEModo.Risposta };
   'completa-la-battuta': { parametri: completaLaBattuta.Parametri; esercizio: completaLaBattuta.Esercizio; risposta: completaLaBattuta.Risposta };
   'riconosci-il-tempo': { parametri: riconosciIlTempo.Parametri; esercizio: riconosciIlTempo.Esercizio; risposta: riconosciIlTempo.Risposta };
+  'scegli-le-figure': { parametri: scegliLeFigure.Parametri; esercizio: scegliLeFigure.Esercizio; risposta: scegliLeFigure.Risposta };
 };
 export type Tipo = keyof Tipi;
 export type Parametri<T extends Tipo = Tipo> = Tipi[T]['parametri'];
@@ -72,6 +77,8 @@ export function genera<T extends Tipo>(tipo: T, parametri: Parametri<T>, seed: n
       return completaLaBattuta.genera(parametri as Parametri<'completa-la-battuta'>, seed) as Esercizio<T>;
     case 'riconosci-il-tempo':
       return riconosciIlTempo.genera(parametri as Parametri<'riconosci-il-tempo'>, seed) as Esercizio<T>;
+    case 'scegli-le-figure':
+      return scegliLeFigure.genera(parametri as Parametri<'scegli-le-figure'>, seed) as Esercizio<T>;
     case 'riconosci-intervallo':
       return riconosciIntervallo.genera(parametri as Parametri<'riconosci-intervallo'>, seed) as Esercizio<T>;
     case 'rivolta-intervallo':
@@ -95,6 +102,8 @@ export function valuta<T extends Tipo>(esercizio: Esercizio<T>, risposta: Rispos
       return completaLaBattuta.valuta(esercizio, risposta as Risposta<'completa-la-battuta'>);
     case 'riconosci-il-tempo':
       return riconosciIlTempo.valuta(esercizio, risposta as Risposta<'riconosci-il-tempo'>);
+    case 'scegli-le-figure':
+      return scegliLeFigure.valuta(esercizio, risposta as Risposta<'scegli-le-figure'>);
     case 'riconosci-intervallo':
       return riconosciIntervallo.valuta(esercizio, risposta as Risposta<'riconosci-intervallo'>);
     case 'rivolta-intervallo':

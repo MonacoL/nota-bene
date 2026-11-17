@@ -1,7 +1,7 @@
-// "Completa la battuta" e "Riconosci il tempo" (Capitoli 3 e 4). L'ABC si legge con abcjs, indipendente dal modulo.
+// "Completa la battuta" (Figure e pause, Indicazioni metriche) e "Riconosci il tempo" (Indicazioni metriche, #85). L'ABC si legge con abcjs, indipendente dal modulo.
 import abcjs from 'abcjs';
 import { describe, expect, it } from 'vitest';
-import { genera, valuta, TEMPI, type EsercizioCompletaLaBattuta, type EsercizioRiconosciIlTempo, type Figura } from '../../src/esercizi';
+import { genera, valuta, INDICAZIONI, TEMPI, type EsercizioCompletaLaBattuta, type EsercizioRiconosciIlTempo, type Figura, type NomeIndicazione } from '../../src/esercizi';
 
 const SEED = Array.from({ length: 300 }, (_, i) => i * 7919 + 17);
 
@@ -24,8 +24,8 @@ function letto(abc: string) {
   return { tempo: m ? `${m.num}/${m.den}` : undefined, battute: battute.filter((b) => b.length) };
 }
 
-const BATTUTA: Record<string, number> = { '2/4': 8, '3/4': 12, '4/4': 16, '3/8': 6, '6/8': 12, '9/8': 18, '12/8': 24 };
-const PULSAZIONE: Record<string, number> = { '2/4': 4, '3/4': 4, '4/4': 4, '3/8': 6, '6/8': 6, '9/8': 6, '12/8': 6 };
+const BATTUTA: Record<string, number> = { '2/4': 8, '3/4': 12, '4/4': 16, '6/8': 12, '9/8': 18, '12/8': 24 };
+const PULSAZIONE: Record<string, number> = { '2/4': 4, '3/4': 4, '4/4': 4, '6/8': 6, '9/8': 6, '12/8': 6 };
 const somma = (b: { durata: number }[]) => b.reduce((s, x) => s + x.durata, 0);
 
 /** Ogni gruppo con la trave comincia su una Pulsazione e ci sta dentro. */
@@ -46,7 +46,7 @@ function travePerPulsazione(battuta: { durata: number; trave?: string }[], pulsa
 }
 
 describe('Completa la battuta: genera', () => {
-  it('nel Capitolo 3 solo 4/4; alla Battuta scritta mancano almeno una croma e mai più di metà', () => {
+  it('in Figure e pause solo 4/4; alla Battuta scritta mancano almeno una croma e mai più di metà', () => {
     for (const s of SEED) {
       const es = genera('completa-la-battuta', { tempi: ['4/4'] }, s);
       const l = letto(es.abc);
@@ -60,7 +60,7 @@ describe('Completa la battuta: genera', () => {
     }
   });
 
-  it('nel Capitolo 4 tutti i Tempi, semplici e composti, e la Battuta ha la durata giusta', () => {
+  it('in Indicazioni metriche semplici e composti, e la Battuta ha la durata giusta', () => {
     const visti = new Set<string>();
     for (const s of SEED) {
       const es = genera('completa-la-battuta', { tempi: [...TEMPI] }, s);
@@ -68,26 +68,6 @@ describe('Completa la battuta: genera', () => {
       visti.add(l.tempo!);
       expect(somma(l.battute[0]!) + es.mancano).toBe(BATTUTA[l.tempo!]);
       travePerPulsazione(l.battute[0]!, PULSAZIONE[l.tempo!]!);
-    }
-    expect([...visti].sort()).toEqual(Object.keys(BATTUTA).sort());
-  });
-});
-
-describe('Riconosci il tempo: genera', () => {
-  it('due Battute senza Tempo scritto, ognuna lunga quanto il Tempo, con le travi per Pulsazione', () => {
-    const visti = new Set<string>();
-    for (const s of SEED) {
-      const es = genera('riconosci-il-tempo', { tempi: [...TEMPI] }, s);
-      visti.add(es.tempo);
-      const l = letto(es.abc);
-      expect(l.tempo).toBeUndefined();
-      expect(l.battute).toHaveLength(2);
-      for (const b of l.battute) {
-        expect(somma(b)).toBe(BATTUTA[es.tempo]);
-        travePerPulsazione(b, PULSAZIONE[es.tempo]!);
-        // Ogni Figura sta dentro una Pulsazione: niente minime che coprono due battiti, così 3/4 e 6/8 non si confondono.
-        expect(Math.max(...b.map((n) => n.durata))).toBeLessThanOrEqual(PULSAZIONE[es.tempo]!);
-      }
     }
     expect([...visti].sort()).toEqual(Object.keys(BATTUTA).sort());
   });
@@ -143,30 +123,63 @@ describe('Completa la battuta: valuta', () => {
   });
 });
 
-const riconosci = (tempo: EsercizioRiconosciIlTempo['tempo'], battute: number[][][]): EsercizioRiconosciIlTempo =>
-  ({ tipo: 'riconosci-il-tempo', tempo, battute, scelte: [...TEMPI], abc: '' });
+// Il Tempo di ogni Indicazione metrica, dalla lezione del maestro Sabetta (ADR-0012): il numero sopra decide.
+// Semplici 2 3 4 5 7 (contano le Pulsazioni), composti 6 9 12 15 21 (contano le Suddivisioni).
+const TEMPO_ATTESO: Record<NomeIndicazione, [string, string]> = {
+  '2/2': ['binario', 'semplice'],
+  '2/4': ['binario', 'semplice'],
+  '3/4': ['ternario', 'semplice'],
+  '4/4': ['quaternario', 'semplice'],
+  '5/4': ['quinario', 'semplice'],
+  '7/4': ['misto', 'semplice'],
+  '3/8': ['ternario', 'semplice'],
+  '6/4': ['binario', 'composto'],
+  '6/8': ['binario', 'composto'],
+  '9/8': ['ternario', 'composto'],
+  '12/8': ['quaternario', 'composto'],
+  '15/8': ['quinario', 'composto'],
+  '21/8': ['misto', 'composto'],
+};
+
+const riconosci = (indicazione: NomeIndicazione): EsercizioRiconosciIlTempo => ({ tipo: 'riconosci-il-tempo', indicazione });
+
+describe('Riconosci il tempo: genera', () => {
+  it("propone solo le Indicazioni metriche dichiarate nel Capitolo, e prima o poi tutte", () => {
+    const visti = new Set<string>();
+    for (const s of SEED) visti.add(genera('riconosci-il-tempo', { indicazioni: [...INDICAZIONI] }, s).indicazione);
+    expect([...visti].sort()).toEqual(Object.keys(TEMPO_ATTESO).sort());
+    for (const s of SEED.slice(0, 50)) expect(['6/8', '3/4']).toContain(genera('riconosci-il-tempo', { indicazioni: ['6/8', '3/4'] }, s).indicazione);
+  });
+});
 
 describe('Riconosci il tempo: valuta', () => {
-  it('composto: pulsazioni di semiminima col punto, crome a gruppi di 3', () => {
-    const r = valuta(riconosci('6/8', [[[2, 2, 2], [6]], [[4, 2], [6]]]), { tempo: '6/8' });
+  it.each(Object.entries(TEMPO_ATTESO).map(([i, [n, g]]) => [i, n, g]))('%s è %s %s', (indicazione, numero, genere) => {
+    const r = valuta(riconosci(indicazione as NomeIndicazione), { numero, genere } as never);
     expect(r.esito).toBe('giusto');
-    expect(r.giusta).toEqual({ it: '6/8', en: '6/8' });
-    expect(r.spiegazione.it).toBe('Ogni battuta ha 2 pulsazioni di semiminima col punto, e le crome vanno a gruppi di 3: è un tempo composto, 6/8.');
-    expect(r.spiegazione.en).toBe('Each measure has 2 beats of a dotted quarter note, and the eighth notes go in groups of 3: it is compound time, 6/8.');
+    expect(r.giusta.it).toBe(`${numero} ${genere}`);
   });
 
-  it('semplice: pulsazioni di semiminima, crome a gruppi di 2', () => {
-    const r = valuta(riconosci('3/4', [[[4], [2, 2], [4]], [[4], [4], [4]]]), { tempo: '3/4' });
-    expect(r.spiegazione.it).toBe('Ogni battuta ha 3 pulsazioni di semiminima, e le crome vanno a gruppi di 2: è un tempo semplice, 3/4.');
-    expect(r.spiegazione.en).toBe('Each measure has 3 beats of a quarter note, and the eighth notes go in groups of 2: it is simple time, 3/4.');
-    expect(valuta(riconosci('3/8', [[[6]], [[2, 2, 2]]]), { tempo: '3/8' }).spiegazione.it).toContain('Ogni battuta ha 1 pulsazione di semiminima col punto');
-  });
-
-  it('3/4 al posto di 6/8 è sbagliato: stessa durata, ma le crome andrebbero a gruppi di 2', () => {
-    const r = valuta(riconosci('6/8', [[[2, 2, 2], [6]], [[6], [6]]]), { tempo: '3/4' });
+  it('il 3/8 è semplice: il 3 sopra conta le Pulsazioni, anche se sotto c\'è 8', () => {
+    const r = valuta(riconosci('3/8'), { numero: 'binario', genere: 'composto' });
     expect(r.esito).toBe('sbagliato');
-    expect(r.spiegazione.it).toContain('Il 3/4 dura lo stesso, ma le sue crome andrebbero a gruppi di 2.');
-    expect(r.spiegazione.en).toContain('3/4 lasts the same, but its eighth notes would go in groups of 2.');
-    expect(valuta(riconosci('12/8', [[[6], [6], [6], [6]], [[6], [6], [6], [6]]]), { tempo: '2/4' }).spiegazione.it).not.toContain('dura lo stesso');
+    expect(r.data).toEqual({ it: 'binario composto', en: 'compound duple' });
+    expect(r.giusta).toEqual({ it: 'ternario semplice', en: 'simple triple' });
+    expect(r.spiegazione.it).toBe('Il 3 sopra è uno dei numeri dei tempi semplici (2, 3, 4, 5, 7) e conta le pulsazioni: 3 pulsazioni, ognuna divisa in 2 suddivisioni. È un tempo ternario semplice.');
+    expect(r.spiegazione.en).toBe('The top 3 is one of the simple-meter numbers (2, 3, 4, 5, 7) and counts the beats: 3 beats, each divided into 2 subdivisions. It is simple triple meter.');
+  });
+
+  it('nei composti il numero sopra conta le Suddivisioni, a gruppi di 3', () => {
+    const r = valuta(riconosci('12/8'), { numero: 'quaternario', genere: 'composto' });
+    expect(r.esito).toBe('giusto');
+    expect(r.giusta).toEqual({ it: 'quaternario composto', en: 'compound quadruple' });
+    expect(r.spiegazione.it).toBe('Il 12 sopra è uno dei numeri dei tempi composti (6, 9, 12, 15, 21) e conta le suddivisioni: 12 suddivisioni a gruppi di 3 fanno 4 pulsazioni. È un tempo quaternario composto.');
+    expect(r.spiegazione.en).toBe('The top 12 is one of the compound-meter numbers (6, 9, 12, 15, 21) and counts the subdivisions: 12 subdivisions in groups of 3 make 4 beats. It is compound quadruple meter.');
+  });
+
+  it('va indovinato tutto: il numero di Pulsazioni giusto con la Suddivisione sbagliata è un errore', () => {
+    expect(valuta(riconosci('6/8'), { numero: 'binario', genere: 'semplice' }).esito).toBe('sbagliato');
+    expect(valuta(riconosci('6/8'), { numero: 'ternario', genere: 'composto' }).esito).toBe('sbagliato');
+    expect(valuta(riconosci('21/8'), { numero: 'misto', genere: 'composto' }).giusta.en).toBe('compound septuple');
+    expect(valuta(riconosci('5/4'), { numero: 'quinario', genere: 'semplice' }).giusta.en).toBe('simple quintuple');
   });
 });
