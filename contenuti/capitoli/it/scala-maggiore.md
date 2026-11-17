@@ -83,7 +83,7 @@ Restano fuori due casi da ricordare a memoria: senza alterazioni è Do maggiore,
 
 ## Il circolo delle quinte
 
-Ogni diesis in più sposta la tonica cinque note più in alto, contando anche la nota di partenza: Do, Sol, Re, La, Mi, Si, Fa♯, Do♯. Ogni bemolle in più la sposta cinque note più in basso: Do, Fa, Si♭, Mi♭, La♭, Re♭, Sol♭, Do♭. Questa distanza si chiama quinta, e la ritroverai nel capitolo 8.
+Ogni diesis in più sposta la tonica cinque note più in alto, contando anche la nota di partenza: Do, Sol, Re, La, Mi, Si, Fa♯, Do♯. Ogni bemolle in più la sposta cinque note più in basso: Do, Fa, Si♭, Mi♭, La♭, Re♭, Sol♭, Do♭. Questa distanza si chiama quinta, e la ritroverai nel capitolo “Intervalli”.
 
 Disposte in cerchio, con il Do in alto, i diesis da un lato e i bemolle dall'altro, le tonalità formano il circolo delle quinte. In basso i due lati si incontrano: Fa♯ maggiore, con sei diesis, e Sol♭ maggiore, con sei bemolle, suonano uguali e sono due nomi della stessa tonalità.
 

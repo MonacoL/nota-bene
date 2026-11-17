@@ -39,7 +39,7 @@ Here the key is G major, and D5 is SOL. F♯5, from the key signature, is TI.
 
 ## Finding DO from the key signature
 
-DO is the tonic of the major key that has that key signature, and you find it with the rules from chapter 5: with sharps it is a half step above the last sharp, with flats it is the second-to-last flat. With no accidentals DO is C, with one flat it is F.
+DO is the tonic of the major key that has that key signature, and you find it with the rules from the chapter “The major scale”: with sharps it is a half step above the last sharp, with flats it is the second-to-last flat. With no accidentals DO is C, with one flat it is F.
 
 Then, on the staff, it pays to look for where DO sits: on which line or in which space. From there you count the other syllables up and down, one line or space at a time, without going through the note names. It works the same way in all three clefs: only the position of DO on the staff changes.
 
@@ -57,11 +57,11 @@ w: LA TI DO RE MI FA SOL LA
 
 E minor has one sharp, like G major, and DO is G. The tonic E is sung LA.
 
-So the procedure stays the same for every piece: from the key signature you find DO, then with chapter 7 you work out whether the passage is major or minor. In major the tonic is DO, in minor it is LA.
+So the procedure stays the same for every piece: from the key signature you find DO, then with the chapter “Major and minor mode” you work out whether the passage is major or minor. In major the tonic is DO, in minor it is LA.
 
 ## SI in harmonic minor
 
-In harmonic minor the seventh degree is raised a half step, as you saw in chapter 6. In A minor, G becomes G♯. The syllable SOL, raised, becomes SI.
+In harmonic minor the seventh degree is raised a half step, as you saw in the chapter “The minor scale”. In A minor, G becomes G♯. The syllable SOL, raised, becomes SI.
 
 ```abc
 X:4
@@ -71,7 +71,7 @@ A B c d | e f ^g a |]
 w: LA TI DO RE MI FA SI LA
 ```
 
-SI is the first chromatic syllable you meet, that is a syllable for a note altered outside the key signature. The others come in chapter 10, but this one turns up in almost every piece in minor, and that is why you learn it right away. When you see SI, you know that LA almost always comes right after.
+SI is the first chromatic syllable you meet, that is a syllable for a note altered outside the key signature. The others come in the chapter “Advanced movable do”, but this one turns up in almost every piece in minor, and that is why you learn it right away. When you see SI, you know that LA almost always comes right after.
 
 ## Before a reading
 

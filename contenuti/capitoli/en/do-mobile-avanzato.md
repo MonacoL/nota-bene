@@ -11,7 +11,7 @@ When a note is altered outside the key signature, its syllable changes vowel. If
 
 If it is lowered a half step, the vowel becomes e: MI becomes ME, and likewise SOL becomes SE, LA becomes LE, TI becomes TE. The exception is RE, which lowered becomes RA.
 
-The SI of harmonic minor, which you saw in chapter 9, is one of these syllables: it is SOL raised.
+The SI of harmonic minor, which you saw in the chapter “Movable do”, is one of these syllables: it is SOL raised.
 
 ```abc
 X:1
@@ -72,7 +72,7 @@ The do shift is usually made on a note that belongs to both keys, like the G abo
 
 ## Recognizing a modulation
 
-The clues are the ones you use to find the tonic in chapter 7, applied to a stretch of the piece:
+The clues are the ones you use to find the tonic in the chapter “Major and minor mode”, applied to a stretch of the piece:
 
 - a new accidental keeps coming back, and it often sits a half step below a note the melody then leans on, like F♯ below G;
 - a phrase ends on a note other than the starting tonic;

@@ -81,7 +81,7 @@ Two cases are left out and are worth learning by heart: with no accidentals it i
 
 ## The circle of fifths
 
-Each extra sharp moves the tonic five notes higher, counting the starting note too: C, G, D, A, E, B, F♯, C♯. Each extra flat moves it five notes lower: C, F, B♭, E♭, A♭, D♭, G♭, C♭. This distance is called a fifth, and you will meet it again in chapter 8.
+Each extra sharp moves the tonic five notes higher, counting the starting note too: C, G, D, A, E, B, F♯, C♯. Each extra flat moves it five notes lower: C, F, B♭, E♭, A♭, D♭, G♭, C♭. This distance is called a fifth, and you will meet it again in the chapter “Intervals”.
 
 Arranged in a circle, with C at the top, the sharps on one side and the flats on the other, the keys form the circle of fifths. At the bottom the two sides meet: F♯ major, with six sharps, and G♭ major, with six flats, sound the same and are two names for the same key.
 

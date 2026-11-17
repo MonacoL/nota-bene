@@ -40,7 +40,7 @@ Qui la tonalità è Sol maggiore, e il Re5 è SOL. Il Fa♯5, nell'armatura, è 
 
 ## Trovare il DO dall'armatura
 
-Il DO è la tonica della tonalità maggiore che ha quell'armatura, e si trova con le regole del capitolo 5: con i diesis sta un semitono sopra l'ultimo diesis, con i bemolle è il penultimo bemolle. Senza alterazioni il DO è il Do, con un bemolle è il Fa.
+Il DO è la tonica della tonalità maggiore che ha quell'armatura, e si trova con le regole del capitolo “Scala maggiore”: con i diesis sta un semitono sopra l'ultimo diesis, con i bemolle è il penultimo bemolle. Senza alterazioni il DO è il Do, con un bemolle è il Fa.
 
 Sul pentagramma conviene poi cercare dove sta il DO: su quale riga o in quale spazio. Da lì si contano le altre sillabe salendo e scendendo, una riga o uno spazio alla volta, senza passare dal nome delle note. Funziona allo stesso modo in tutte e tre le chiavi: cambia solo la posizione del DO sul rigo.
 
@@ -58,11 +58,11 @@ w: LA TI DO RE MI FA SOL LA
 
 Mi minore ha un diesis, come Sol maggiore, e il DO è il Sol. La tonica Mi si canta LA.
 
-Il procedimento resta quindi lo stesso per ogni brano: dall'armatura trovi il DO, poi dal capitolo 7 capisci se il passaggio è maggiore o minore. In maggiore la tonica è DO, in minore è LA.
+Il procedimento resta quindi lo stesso per ogni brano: dall'armatura trovi il DO, poi dal capitolo “Modo maggiore e minore” capisci se il passaggio è maggiore o minore. In maggiore la tonica è DO, in minore è LA.
 
 ## Il SI della minore armonica
 
-Nella minore armonica il 7° grado è alzato di un semitono, come hai visto nel capitolo 6. In La minore il Sol diventa Sol♯. La sillaba SOL alzata diventa SI.
+Nella minore armonica il 7° grado è alzato di un semitono, come hai visto nel capitolo “Scala minore”. In La minore il Sol diventa Sol♯. La sillaba SOL alzata diventa SI.
 
 ```abc
 X:4
@@ -72,7 +72,7 @@ A B c d | e f ^g a |]
 w: LA TI DO RE MI FA SI LA
 ```
 
-SI è la prima sillaba cromatica che incontri, cioè una sillaba per una nota alterata fuori dall'armatura. Le altre arrivano nel capitolo 10, ma questa si trova in quasi ogni brano in minore, e per questo si impara subito. Quando vedi SI, sai che subito dopo arriva quasi sempre LA.
+SI è la prima sillaba cromatica che incontri, cioè una sillaba per una nota alterata fuori dall'armatura. Le altre arrivano nel capitolo “DO mobile avanzato”, ma questa si trova in quasi ogni brano in minore, e per questo si impara subito. Quando vedi SI, sai che subito dopo arriva quasi sempre LA.
 
 ## Prima di una lettura
 

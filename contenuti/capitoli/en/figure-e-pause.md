@@ -31,7 +31,7 @@ B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 B/4B/4B/4B/4 |]
 
 The measures above all last the same: one whole note, then two half notes, four quarter notes, eight eighth notes, and sixteen sixteenth notes.
 
-Note values don't say how many seconds a note lasts, only how long it lasts compared with the others. How fast the piece goes is decided by the tempo, which chapter 4 covers.
+Note values don't say how many seconds a note lasts, only how long it lasts compared with the others. How fast the piece goes is decided by the tempo, which the chapter “Simple and compound time” covers.
 
 ## Rests
 

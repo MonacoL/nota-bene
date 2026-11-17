@@ -51,7 +51,7 @@ It pays to learn three intervals first, in this order: the fifth, the third, and
 
 The perfect fifth is the distance between the first and fifth degrees of the scale, between tonic and dominant. It sounds full and stable, and it is the leap many pieces use to set off.
 
-The third is the distance between the first and third degrees. Major or minor, it is the third that decides the mode, as you saw in chapter 7. Tonic, third, and fifth together form the chord a key rests on.
+The third is the distance between the first and third degrees. Major or minor, it is the third that decides the mode, as you saw in the chapter “Major and minor mode”. Tonic, third, and fifth together form the chord a key rests on.
 
 The perfect fourth is the distance between the fifth degree and the tonic above it. It is the typical leap of a pickup that lands on the tonic.
 

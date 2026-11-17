@@ -38,7 +38,7 @@ Siccome i nomi si ripetono, in Nota Bene ogni nota porta anche un numero, quello
 
 Alcuni libri italiani chiamano il do centrale Do3. Nota Bene usa la numerazione internazionale più diffusa, con il Do4 al centro, e la usa sempre.
 
-Gli esempi di questo capitolo sono in chiave di violino, quella di soprani e contralti; le altre chiavi arrivano nel capitolo 2. In chiave di violino il Do4 sta sul taglio addizionale subito sotto il pentagramma.
+Gli esempi di questo capitolo sono in chiave di violino, quella di soprani e contralti; le altre chiavi arrivano nel capitolo “Chiavi”. In chiave di violino il Do4 sta sul taglio addizionale subito sotto il pentagramma.
 
 ```abc
 X:3
@@ -89,4 +89,4 @@ Nella prima battuta la terza nota è ancora Fa♯4, anche se non ha segni, perch
 
 Il tasto nero fra Fa e Sol si può chiamare Fa♯ oppure Sol♭: è lo stesso tasto e lo stesso suono, con due nomi. Note così si dicono enarmoniche. Succede anche con i tasti bianchi: Mi♯ è il tasto del Fa, Do♭ quello del Si.
 
-Quale dei due nomi si scrive dipende dalla tonalità del brano, che vedrai nel capitolo 5. Per ora basta sapere che cantando Fa♯ o Sol♭ produci lo stesso suono.
+Quale dei due nomi si scrive dipende dalla tonalità del brano, che vedrai nel capitolo “Scala maggiore”. Per ora basta sapere che cantando Fa♯ o Sol♭ produci lo stesso suono.
