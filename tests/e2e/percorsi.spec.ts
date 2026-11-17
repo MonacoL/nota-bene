@@ -54,20 +54,20 @@ test.describe('senza JavaScript', () => {
 });
 
 test('un Capitolo e i suoi Esercizi mostrano Percorso e Prerequisiti, anche di un altro Percorso', async ({ page }) => {
-  // DO mobile (melodico) ha fra i Prerequisiti Indicazioni metriche, ritmico: un incrocio. Il riquadro mostra i
-  // Prerequisiti scritti in percorso.yml, anche quelli in preparazione.
-  const voce = VOCI.find((v) => v.id === 'do-mobile')!;
+  // DO mobile (melodico) dichiara DO e SOL e Indicazioni metriche, in preparazione: si mostrano i Prerequisiti che ci
+  // stanno dietro (#84), fra cui due ritmici, cioè incroci fra Percorsi.
+  const effettivi = ['figure-e-pause', 'tempi-semplici-e-composti', 'chiavi', 'modo-maggiore-e-minore'];
   for (const pagina of ['it/capitoli/do-mobile/', 'it/capitoli/do-mobile/esercizi/']) {
     await page.goto(pagina);
     const riquadro = page.locator('main > .prerequisiti');
     await expect(riquadro.locator('.etichetta').first()).toHaveText('melodico');
     // Col dito, durante la Serie, i Prerequisiti si nascondono (tornano nel riepilogo): si contano nel DOM.
     const link = riquadro.locator('a');
-    await expect(link).toHaveCount(voce.prerequisiti.length);
-    for (const [i, id] of voce.prerequisiti.entries()) {
+    await expect(link).toHaveCount(effettivi.length);
+    for (const [i, id] of effettivi.entries()) {
       await expect(link.nth(i)).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/`);
     }
-    await expect(riquadro.locator('.etichetta', { hasText: 'ritmico' })).toHaveCount(1);
+    await expect(riquadro.locator('.etichetta', { hasText: 'ritmico' })).toHaveCount(2);
   }
   // Il primo Capitolo non ha Prerequisiti, in inglese anche.
   await page.goto('en/capitoli/pulsazione-e-suddivisione/');
