@@ -35,7 +35,8 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
   <p class="numero">{t.capitolo} {capitolo.numero}</p>
   <h1>{capitolo.titolo}</h1>
   <Prerequisiti lingua={lingua} capitolo={capitolo} tutti={tutti} />
-  <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />
+  {/* Un Capitolo in preparazione non si blocca mai: c'è solo l'avviso (#84). */}
+  {!capitolo.inPreparazione && <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />}
 
   {testo?.ripiego && <p class="avviso" role="note">{t.avvisoNonTradotto}</p>}
 

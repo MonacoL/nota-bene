@@ -59,6 +59,18 @@ test('un Prerequisito in preparazione non blocca: al suo posto contano i suoi Pr
   await expect(blocco.locator('li[data-capitolo]')).toHaveText([/Figure e pause/, /Tempi semplici e composti/, /Chiavi/, /Modo maggiore e minore/]);
 });
 
+test('un Capitolo in preparazione non è mai bloccato, anche se i suoi Prerequisiti mancano', async ({ page }) => {
+  // Indicazioni metriche richiede Figure e pause e Tempi semplici e composti, non completati.
+  for (const pagina of ['it/capitoli/indicazioni-metriche/', 'it/capitoli/indicazioni-metriche/esercizi/']) {
+    await page.goto(pagina);
+    await expect(page.locator('.blocco')).toBeHidden();
+    await expect(page.getByText(/^(Questo capitolo|Gli esercizi di questo capitolo) (è|sono) in preparazione\.$/)).toBeVisible();
+  }
+  await page.goto('it/capitoli/');
+  await expect(page.locator('#scaletta li[data-capitolo="indicazioni-metriche"] .lucchetto')).toBeHidden();
+  await expect(page.locator('#scaletta li[data-capitolo="battimenti"] .lucchetto')).toBeHidden();
+});
+
 test('dalla pagina dei Capitoli si apre "Come si studia qui"', async ({ page }) => {
   await page.goto('it/capitoli/');
   await page.getByRole('link', { name: 'Come si studia qui' }).click();

@@ -138,8 +138,9 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
     for (const li of document.querySelectorAll<HTMLElement>('li[data-capitolo]')) {
       const id = li.dataset.capitolo!;
       const fatto = completati.has(id);
-      const prerequisiti = scaletta.find((c) => c.id === id)?.prerequisiti ?? [];
-      const bloccato = inScaletta && !fatto && mancanti(prerequisiti, completati).length > 0;
+      const voce = scaletta.find((c) => c.id === id);
+      // Un Capitolo in preparazione non ha il lucchetto (#84).
+      const bloccato = inScaletta && !fatto && !voce?.inPreparazione && mancanti(voce?.prerequisiti ?? [], completati).length > 0;
       li.classList.toggle('completato', fatto);
       li.classList.toggle('bloccato', bloccato);
       li.classList.toggle('prossimo-passo', id === prossimo);
