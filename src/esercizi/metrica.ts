@@ -47,3 +47,8 @@ export function metrica(nome: NomeIndicazione): Metrica {
 export function nomeTempo(numero: NumeroTempo, genere: Genere): Testi {
   return { it: `${numero} ${genere}`, en: `${GENERI_EN[genere]} ${NUMERI_EN[numero]}` };
 }
+
+/** "composto" / "compound". */
+export function nomeGenere(genere: Genere): Testi {
+  return { it: genere, en: GENERI_EN[genere] };
+}

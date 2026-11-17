@@ -110,7 +110,13 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
    * Il tocco su un pulsante: ferma l'altra funzione, e se questa stava suonando la ferma e basta. Va chiamata nel
    * gestore del click, prima di ogni await.
    */
-  function tocca(funzione: F, note: () => NotaDaSuonare[], evidenzia?: (indice: number) => void) {
+  function tocca(
+    funzione: F,
+    note: () => NotaDaSuonare[],
+    evidenzia?: (indice: number) => void,
+    /** Quando le note sono programmate: l'istante della prima, sull'orologio del contesto ("Batti la pulsazione", #86). */
+    partito?: (zero: number, ctx: AudioContext) => void,
+  ) {
     const ctx = sblocca();
     const eraQuesta = inCorso?.funzione === funzione;
     ferma();
@@ -140,7 +146,29 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
       azioni.push(segui(ctx, zero, daSuonare, fine, evidenzia, () => {
         if (inCorso === esecuzione) ferma();
       }));
+      partito?.(zero, ctx);
     });
+  }
+
+  /**
+   * Il battito di mani sintetizzato di "Semplice o composto" (#86): forte sulla pulsazione, debole sulle
+   * suddivisioni. Come tocca(), va chiamata nel gestore del click; non aspetta i campioni.
+   */
+  function toccaBattiti(funzione: F, battiti: readonly { inizio: number; forte: boolean }[]) {
+    const ctx = sblocca();
+    const eraQuesta = inCorso?.funzione === funzione;
+    ferma();
+    if (eraQuesta) return;
+    const azioni: (() => void)[] = [];
+    const esecuzione: Esecuzione<F> = { funzione, ferma: () => azioni.forEach((a) => a()) };
+    inCorso = esecuzione;
+    opzioni.cambio(funzione);
+    const zero = ctx.currentTime + ANTICIPO;
+    for (const b of battiti) azioni.push(suonaBattito(ctx, zero + b.inizio, b.forte));
+    const fine = Math.max(0, ...battiti.map((b) => b.inizio)) + 0.3;
+    azioni.push(segui(ctx, zero, [], fine, undefined, () => {
+      if (inCorso === esecuzione) ferma();
+    }));
   }
 
   function suonaPiano(midi: number, quando: number, durata: number): () => void {
@@ -150,6 +178,7 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
 
   return {
     tocca,
+    toccaBattiti,
     ferma,
     /** La funzione che sta suonando, o che aspetta i campioni per farlo. */
     inCorso: (): F | null => inCorso?.funzione ?? null,
@@ -159,6 +188,32 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
       void ctx?.close();
     },
   };
+}
+
+/** Il rumore bianco del battito di mani, uno per contesto. */
+const rumori = new WeakMap<AudioContext, AudioBuffer>();
+
+/** Un battito di mani: rumore filtrato attorno ai 1200 Hz, che si spegne in 80 ms. Il debole è un terzo del forte. */
+function suonaBattito(ctx: AudioContext, quando: number, forte: boolean): () => void {
+  let rumore = rumori.get(ctx);
+  if (!rumore) {
+    rumore = ctx.createBuffer(1, Math.round(ctx.sampleRate * 0.1), ctx.sampleRate);
+    const dati = rumore.getChannelData(0);
+    for (let i = 0; i < dati.length; i++) dati[i] = Math.random() * 2 - 1;
+    rumori.set(ctx, rumore);
+  }
+  const sorgente = ctx.createBufferSource();
+  sorgente.buffer = rumore;
+  const filtro = ctx.createBiquadFilter();
+  filtro.type = 'bandpass';
+  filtro.frequency.value = 1200;
+  const volume = ctx.createGain();
+  volume.gain.setValueAtTime(forte ? 0.9 : 0.3, quando);
+  volume.gain.exponentialRampToValueAtTime(0.001, quando + 0.08);
+  sorgente.connect(filtro).connect(volume).connect(ctx.destination);
+  sorgente.start(quando);
+  sorgente.stop(quando + 0.1);
+  return () => sorgente.stop();
 }
 
 /** L'oscillatore a triangolo, con un inviluppo breve per non fare click. */

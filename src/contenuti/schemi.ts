@@ -8,7 +8,13 @@ const revisione = z.object({
   data: z.coerce.date(),
 });
 
-/** Un tipo di Esercizio con i suoi parametri: discriminato su `tipo`, uno schema per tipo. */
+/** Quanto il maestro ritiene necessario un Esercizio pratico, da 1 a 3 (ADR-0012, Importanza nel glossario). */
+const importanza = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+
+/**
+ * Un tipo di Esercizio con i suoi parametri: discriminato su `tipo`, uno schema per tipo. Gli Esercizi pratici
+ * (#86) hanno l'Importanza, quelli di teoria no.
+ */
 const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('nomina-la-nota'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('nomina-la-sillaba'), chiavi: z.array(z.enum(CHIAVI)).nonempty(), cromatiche: z.boolean() }).strict(),
@@ -20,6 +26,10 @@ const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('scegli-le-figure'), indicazioni: z.array(z.enum(INDICAZIONI_FIGURE)).nonempty() }).strict(),
   z.object({ tipo: z.literal('riconosci-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('rivolta-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
+  z.object({ tipo: z.literal('batti-la-pulsazione'), importanza }).strict(),
+  z.object({ tipo: z.literal('semplice-o-composto'), importanza }).strict(),
+  z.object({ tipo: z.literal('pallini'), importanza }).strict(),
+  z.object({ tipo: z.literal('semplice-o-composto-ascolto'), importanza }).strict(),
 ]);
 
 /** Gli Esercizi del Capitolo, una scheda per tipo: un tipo non si dichiara due volte. */
