@@ -1,6 +1,7 @@
 // Il lettore dell'audio di una Lettura (ADR-0008), nel browser: Riferimento tonale e Ascolto di verifica con lo
 // SplendidGrandPiano di smplr, un oscillatore a triangolo di ripiego se i campioni non arrivano, una funzione alla
 // volta. Le note si programmano tutte sull'orologio dell'AudioContext; l'evidenziazione segue lo stesso orologio.
+// Fuori dalle Letture suona anche il battito di mani (#86) e i suoni tenuti dell'organo sintetizzato (#90, ADR-0012).
 //
 // iOS (ricerca #4): tocca() va chiamata in modo sincrono nel gestore del click. Prima di ogni await imposta
 // navigator.audioSession.type = "playback" (senza, l'interruttore silenzioso zittisce la Web Audio API) e

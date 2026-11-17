@@ -68,3 +68,10 @@ test('"Trova l\'unisono" non ha una Serie: niente avanzamento né risposte', asy
   await expect(page.getByRole('progressbar')).toHaveCount(0);
   await expect(page.getByRole('group', { name: 'Risposta' })).toHaveCount(0);
 });
+
+test('in inglese, finché manca la traduzione, il Capitolo mostra il testo italiano con l\'avviso e gli esempi', async ({ page }) => {
+  await page.goto('en/capitoli/battimenti/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Beating');
+  await expect(page.getByText('This chapter has not been translated yet, so it is shown in Italian.')).toBeVisible();
+  await expect(page.locator('.battimenti').getByRole('button', { name: 'Listen to the example' })).toHaveCount(3);
+});

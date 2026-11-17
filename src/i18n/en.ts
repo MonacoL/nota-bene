@@ -54,9 +54,9 @@ export const en: Dizionario = {
       nota: 'The note: {nota}',
       tieni: 'Hold the note', ferma: 'Stop the note', esempio: 'Listen to the example', altra: 'Another note', volume: 'Note volume',
       passi: [
-        'Listen to the example: a second voice comes in just above the note and slides down slowly until the beating disappears, then does the same from below.',
+        'Listen to the example: a second sound comes in just above the note and slides down slowly until the beating disappears, then does the same from below.',
         'Start the note and sing on "ah" or "oh", a little higher.',
-        'Slide down slowly until the wobble slows down and disappears. That is the unison: stay there for a few seconds.',
+        'Slide down slowly until the beating slows down and disappears. That is the unison: stay there for a few seconds.',
         'Now start a little lower and slide up, until the beating disappears again.',
       ],
     },

@@ -1,7 +1,7 @@
 // I battimenti (#90): le frequenze degli esempi del Capitolo e dell'esempio di "Trova l'unisono". Senza audio: si
 // controlla che cosa si suonerebbe e quanto batterebbe, con le armoniche dell'organo del sito.
 import { describe, expect, it } from 'vitest';
-import { battimenti, esempio, esempioUnisono, seconda } from '../../src/audio/battimenti';
+import { battimenti, esempio, esempioUnisono, notaSopra } from '../../src/audio/battimenti';
 import { nomeNota, noteNaturali, VOCI } from '../../src/audio/voci';
 
 describe('battimenti: le pulsazioni fra due suoni con le loro armoniche', () => {
@@ -34,17 +34,17 @@ describe('battimenti: le pulsazioni fra due suoni con le loro armoniche', () => 
   });
 });
 
-describe('seconda: la nota sopra che batte quanto si chiede', () => {
+describe('notaSopra: la nota sopra che batte quanto si chiede', () => {
   it('stonata di 3 battiti al secondo: 223 Hz sull\'unisono, 443 sull\'ottava, 331,5 sulla quinta', () => {
-    expect(seconda('unisono', 220, 3)).toBeCloseTo(223);
-    expect(seconda('ottava', 220, 3)).toBeCloseTo(443);
-    expect(seconda('quinta', 220, 3)).toBeCloseTo(331.5);
+    expect(notaSopra('unisono', 220, 3)).toBeCloseTo(223);
+    expect(notaSopra('ottava', 220, 3)).toBeCloseTo(443);
+    expect(notaSopra('quinta', 220, 3)).toBeCloseTo(331.5);
   });
 
   it('intonata: rapporti giusti, 1:1, 2:1 e 3:2', () => {
-    expect(seconda('unisono', 220, 0)).toBe(220);
-    expect(seconda('ottava', 220, 0)).toBe(440);
-    expect(seconda('quinta', 220, 0)).toBe(330);
+    expect(notaSopra('unisono', 220, 0)).toBe(220);
+    expect(notaSopra('ottava', 220, 0)).toBe(440);
+    expect(notaSopra('quinta', 220, 0)).toBe(330);
   });
 });
 
@@ -58,7 +58,7 @@ describe("esempio: la prima nota da sola, poi la seconda entra stonata e scivola
       expect(sopra!.fine).toBe(prima!.fine);
       const [primoPunto, ultimo] = [sopra!.punti[0]!, sopra!.punti.at(-1)!];
       expect(battimenti(220, primoPunto[1])[0]).toBeCloseTo(3);
-      expect(ultimo[1]).toBe(seconda(intervallo, 220, 0));
+      expect(ultimo[1]).toBe(notaSopra(intervallo, 220, 0));
       // Dopo il glissando resta ferma sull'intervallo giusto almeno due secondi, senza battimenti.
       expect(sopra!.fine - ultimo[0]).toBeGreaterThanOrEqual(2);
     });

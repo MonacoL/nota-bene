@@ -1,5 +1,6 @@
 // Le Voci del corista e il registro della nota tenuta negli Esercizi pratici in cui si canta (#90). Le estensioni
 // vengono dal prototipo dell'accordatore (#88) e il maestro le deve ancora confermare.
+import type { Lingua } from '../i18n';
 
 export type Voce = 'basso' | 'tenore' | 'contralto' | 'soprano';
 export const NOMI_VOCI: readonly Voce[] = ['basso', 'tenore', 'contralto', 'soprano'];
@@ -12,7 +13,7 @@ export const VOCI: Record<Voce, { da: number; a: number; base: number }> = {
   soprano: { da: 60, a: 72, base: 67 }, // Do4–Do5, Sol4
 };
 
-const NATURALI: Record<number, { it: string; en: string }> = {
+const NATURALI: Record<number, Record<Lingua, string>> = {
   0: { it: 'Do', en: 'C' }, 2: { it: 'Re', en: 'D' }, 4: { it: 'Mi', en: 'E' }, 5: { it: 'Fa', en: 'F' },
   7: { it: 'Sol', en: 'G' }, 9: { it: 'La', en: 'A' }, 11: { it: 'Si', en: 'B' },
 };
@@ -24,7 +25,7 @@ export function noteNaturali(voce: Voce): number[] {
 }
 
 /** Il nome di una nota naturale con l'ottava, come lo scrive il sito: Do4 è il Do centrale (C4 in inglese). */
-export function nomeNota(midi: number, lingua: 'it' | 'en'): string {
+export function nomeNota(midi: number, lingua: Lingua): string {
   const nome = NATURALI[midi % 12];
   if (!nome) throw new Error(`${midi} non è una nota naturale`);
   return `${nome[lingua]}${Math.floor(midi / 12) - 1}`;

@@ -36,7 +36,7 @@ export function battimenti(prima: number, seconda: number, armoniche: number = A
  * l'intervallo giusto. I battimenti più lenti stanno fra l'armonica `sopra` della prima e l'armonica `sotto` della
  * seconda.
  */
-export function seconda(intervallo: Intervallo, prima: number, battito: number): number {
+export function notaSopra(intervallo: Intervallo, prima: number, battito: number): number {
   const [sopra, sotto] = RAPPORTI[intervallo];
   return (sopra * prima + battito) / sotto;
 }
@@ -56,8 +56,8 @@ const BATTITO = 3;
  * all'intervallo giusto e lì resta, ferma, senza battimenti.
  */
 export function esempio(intervallo: Intervallo, prima: number): [SuonoTenuto, SuonoTenuto] {
-  const stonata = seconda(intervallo, prima, BATTITO);
-  const giusta = seconda(intervallo, prima, 0);
+  const stonata = notaSopra(intervallo, prima, BATTITO);
+  const giusta = notaSopra(intervallo, prima, 0);
   const t1 = ENTRATA + STONATA;
   const t2 = t1 + GLISSANDO;
   const fine = t2 + FERMA;
@@ -76,12 +76,17 @@ const SCOSTAMENTO = 4;
  */
 export function esempioUnisono(nota: number): [SuonoTenuto, SuonoTenuto] {
   const [sopra, sotto] = [nota + SCOSTAMENTO, nota - SCOSTAMENTO];
-  const punti: [number, number][] = [
-    [1.5, sopra], [3.5, sopra], [7.5, nota], [9.5, nota], [10.5, sotto], [12.5, sotto], [16.5, nota],
-  ];
-  const fine = 19;
+  // Entra sopra e batte, scivola all'unisono e ci resta; cala in fretta, batte, risale piano e resta.
+  const a = ENTRATA;
+  const b = a + 2;
+  const c = b + GLISSANDO;
+  const d = c + 2;
+  const e = d + 1;
+  const f = e + 2;
+  const g = f + GLISSANDO;
+  const fine = g + FERMA;
   return [
     { inizio: 0, fine, punti: [[0, nota]] },
-    { inizio: 1.5, fine, punti },
+    { inizio: a, fine, punti: [[a, sopra], [b, sopra], [c, nota], [d, nota], [e, sotto], [f, sotto], [g, nota]] },
   ];
 }

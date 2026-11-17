@@ -4,7 +4,7 @@ esercizi:
   - { tipo: trova-l-unisono, importanza: 1 }
 ---
 
-Quando due voci cantano quasi la stessa nota, ma non proprio la stessa, si sente un tremolio, un'onda che va e viene. È il segnale che l'intonazione non è ancora a posto, e quando l'intonazione è giusta sparisce. Questo capitolo spiega che cosa sono i **battimenti** e come usarli per intonare.
+Quando due voci cantano quasi la stessa nota, ma non proprio la stessa, si sente un'onda che va e viene, un suono che pulsa. È il segnale che l'intonazione non è ancora a posto, e quando l'intonazione è giusta sparisce. Questo capitolo spiega che cosa sono i **battimenti** e come usarli per intonare.
 
 ## Che cosa sono i battimenti
 
@@ -40,18 +40,18 @@ Nella quinta giusta il rapporto fra le frequenze è 3 a 2: la terza armonica del
 quinta
 ```
 
-Unisono, ottava e quinta hanno rapporti semplici, 1 a 1, 2 a 1 e 3 a 2: molte delle loro armoniche coincidono, e quando sono intonati non battono. Gli intervalli con rapporti più complicati, come le seconde, battono di più, e l'orecchio li sente più aspri. Il capitolo "Intervalli" spiega come si chiamano e come si contano.
+Unisono, ottava e quinta hanno rapporti semplici, 1 a 1, 2 a 1 e 3 a 2: molte delle loro armoniche coincidono, e quando sono intonati non battono. Gli intervalli con rapporti più complicati, come le seconde, battono così in fretta che i battimenti non si contano più, e l'orecchio li sente aspri. Il capitolo "Intervalli" spiega come si chiamano e come si contano.
 
 Il pianoforte è accordato in modo che ogni quinta sia appena più stretta di quella giusta, e le sue quinte battono lentamente: nel registro centrale, circa una volta al secondo. Un coro invece può cantare la quinta giusta, senza battimenti.
 
 ## Perché servono in coro
 
-La voce non ha un'intonazione fissa come i tasti di un pianoforte: ogni nota va cercata e tenuta. I battimenti sono lo strumento per farlo. Quando canti con un'altra voce o con uno strumento e senti il tremolio, sai che non sei ancora alla stessa altezza; quando sparisce, ci sei.
+La voce non ha un'intonazione fissa come i tasti di un pianoforte: ogni nota va cercata e tenuta. I battimenti sono lo strumento per farlo. Quando canti con un'altra voce o con uno strumento e senti i battimenti, sai che non sei ancora alla stessa altezza; quando sparisce, ci sei.
 
 Questa ricerca si fa con l'orecchio. Si parte da un'intonazione vicina e si scivola con la voce, con un glissando, finché i battimenti spariscono. È un lavoro di fino, sulla **microintonazione**: gli spostamenti sono molto più piccoli di un semitono.
 
 ## Negli esercizi
 
-In "Trova l'unisono" scegli la tua voce e il sito tiene una nota con l'organo, a volume regolabile. Parti un poco sopra la nota e scendi piano finché i battimenti spariscono; poi parti un poco sotto e sali. Prima puoi ascoltare l'esempio, in cui una seconda voce fa lo stesso. Non serve il microfono: ascolti e giudichi tu.
+In "Trova l'unisono" scegli la tua voce e il sito tiene una nota con l'organo, a volume regolabile. Parti un poco sopra la nota e scendi piano finché i battimenti spariscono; poi parti un poco sotto e sali. Prima puoi ascoltare l'esempio, in cui un secondo suono fa lo stesso. Non serve il microfono: ascolti e giudichi tu.
 
 È un esercizio di approfondimento e non conta per completare il capitolo. Quando l'argomento ti è chiaro, puoi segnarlo come già studiato.

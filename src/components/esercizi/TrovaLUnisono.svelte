@@ -31,6 +31,9 @@
   $effect(() => () => lettore.chiudi());
   $effect(() => lettore.volume(volume));
 
+  /** La nota tenuta: suona finché non si ferma. */
+  const tieni = () => lettore.toccaTenuti('tieni', [{ inizio: 0, fine: Infinity, punti: [[0, frequenza(nota)]] }]);
+
   function scegliVoce(v: Voce) {
     lettore.ferma();
     voce = v;
@@ -41,7 +44,7 @@
   function altraNota() {
     const note = noteNaturali(voce!).filter((m) => m !== nota);
     nota = casuale(seed + ++giro).scegli(note);
-    if (suona === 'tieni') lettore.toccaTenuti('tieni', [{ inizio: 0, fine: Infinity, punti: [[0, frequenza(nota)]] }]);
+    if (suona === 'tieni') tieni();
     else lettore.ferma();
   }
 </script>
@@ -63,7 +66,7 @@
         type="button"
         class="tieni"
         aria-pressed={suona === 'tieni'}
-        onclick={() => lettore.toccaTenuti('tieni', [{ inizio: 0, fine: Infinity, punti: [[0, frequenza(nota)]] }])}
+        onclick={tieni}
         >{suona === 'tieni' ? t.unisono.ferma : t.unisono.tieni}</button
       >
       <button type="button" class="ascolta" aria-pressed={suona === 'esempio'} onclick={() => lettore.toccaTenuti('esempio', esempioUnisono(frequenza(nota)))}
