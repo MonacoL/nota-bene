@@ -118,7 +118,7 @@ _Avoid_: pezzo, partitura, canto
 _In inglese_: Piece
 
 **Voce**:
-Una delle parti di un Brano corale (Soprano, Contralto, Tenore, Basso). La Voce del corista è quella che canta in coro, e decide il registro delle note negli Esercizi pratici di canto.
+Una delle parti di un Brano corale (Soprano, Contralto, Tenore, Basso). La Voce del corista è quella che canta in coro, e decide il registro delle note negli Esercizi pratici in cui si canta.
 _Avoid_: parte, sezione, linea; registro, tipo di voce, estensione (per la Voce del corista)
 _In inglese_: Voice part: Soprano, Alto, Tenor, Bass _(evitare: part, line, Contralto)_
 
