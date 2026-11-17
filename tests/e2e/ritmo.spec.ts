@@ -2,10 +2,9 @@
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, TEMPI, type NomeTempo } from '../../src/esercizi';
-import { CAPITOLI } from './pagine';
 
-const FIGURE = CAPITOLI[2]!;
-const TEMPI_CAP = CAPITOLI[3]!;
+const FIGURE = 'figure-e-pause';
+const TEMPI_CAP = 'tempi-semplici-e-composti';
 const tastierino = (page: Page) => page.getByRole('group', { name: 'Risposta' });
 const noteSulRigo = (page: Page) => page.locator('.esercizio .pentagramma .abcjs-note');
 
@@ -54,7 +53,7 @@ test('una Serie di "Completa la battuta" nel Capitolo 3, in 4/4: conta la somma,
   await expect(page.getByText('9 su 10 giuste al primo colpo')).toBeVisible();
 });
 
-test('una Serie di "Completa la battuta" nel Capitolo 4, con gli altri Tempi', async ({ page }) => {
+test('una Serie di "Completa la battuta" nel Capitolo 5, con gli altri Tempi', async ({ page }) => {
   await page.goto(`it/capitoli/${TEMPI_CAP}/esercizi/?seed=60`);
   const foglio = page.getByRole('region', { name: 'Riscontro' });
   for (let n = 0; n < 10; n++) {

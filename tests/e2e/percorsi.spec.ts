@@ -54,7 +54,8 @@ test.describe('senza JavaScript', () => {
 });
 
 test('un Capitolo e i suoi Esercizi mostrano Percorso e Prerequisiti, anche di un altro Percorso', async ({ page }) => {
-  // DO mobile (melodico) ha fra i Prerequisiti Modo maggiore e minore, armonico: un incrocio.
+  // DO mobile (melodico) ha fra i Prerequisiti Indicazioni metriche, ritmico: un incrocio. Il riquadro mostra i
+  // Prerequisiti scritti in percorso.yml, anche quelli in preparazione.
   const voce = VOCI.find((v) => v.id === 'do-mobile')!;
   for (const pagina of ['it/capitoli/do-mobile/', 'it/capitoli/do-mobile/esercizi/']) {
     await page.goto(pagina);
@@ -66,9 +67,9 @@ test('un Capitolo e i suoi Esercizi mostrano Percorso e Prerequisiti, anche di u
     for (const [i, id] of voce.prerequisiti.entries()) {
       await expect(link.nth(i)).toHaveAttribute('href', `/nota-bene/it/capitoli/${id}/`);
     }
-    await expect(riquadro.locator('.etichetta', { hasText: 'armonico' })).toHaveCount(1);
+    await expect(riquadro.locator('.etichetta', { hasText: 'ritmico' })).toHaveCount(1);
   }
   // Il primo Capitolo non ha Prerequisiti, in inglese anche.
-  await page.goto(`en/capitoli/${CAPITOLI[0]}/`);
+  await page.goto('en/capitoli/pulsazione-e-suddivisione/');
   await expect(page.locator('main > .prerequisiti')).toContainText('No prerequisites');
 });

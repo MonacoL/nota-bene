@@ -4,9 +4,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { genera, type Chiave, type Nota } from '../../src/esercizi';
 import { altezza, installaAudioFinto, registro, type Suono } from './audio-finto';
-import { CAPITOLI } from './pagine';
 
-const INTERVALLI = CAPITOLI[7]!;
+const INTERVALLI = 'intervalli';
 const CHIAVI: Chiave[] = ['violino', 'violino-ottava-bassa', 'basso'];
 const VELOCITA = 10;
 const SEMITONI: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -59,7 +58,7 @@ test("l'intervallo melodico suona le due note una dopo l'altra, e un secondo toc
   await expect(ascolta(page)).toHaveAttribute('aria-pressed', 'false');
 });
 
-const MODO = CAPITOLI[6]!;
+const MODO = 'modo-maggiore-e-minore';
 const NOMI: Record<string, string> = { C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si' };
 const ALTERAZIONI: Record<number, string> = { [-1]: 'bemolle', 0: 'bequadro', 1: 'diesis' };
 

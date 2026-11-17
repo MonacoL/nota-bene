@@ -1,10 +1,9 @@
-// Esercizi sugli intervalli nel Capitolo 8 (ticket "Esercizi sugli intervalli"): numero, poi qualità, poi Verifica.
+// Esercizi sugli intervalli nel Capitolo 14 (ticket "Esercizi sugli intervalli"): numero, poi qualità, poi Verifica.
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, type Chiave, type Intervallo } from '../../src/esercizi';
-import { CAPITOLI } from './pagine';
 
-const INTERVALLI = CAPITOLI[7]!;
+const INTERVALLI = 'intervalli';
 const CHIAVI: Chiave[] = ['violino', 'violino-ottava-bassa', 'basso'];
 const QUALITA = { minore: 'minore', maggiore: 'maggiore', giusta: 'giusta', aumentata: 'aumentata', diminuita: 'diminuita' } as const;
 

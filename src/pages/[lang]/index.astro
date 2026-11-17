@@ -11,7 +11,8 @@ export function getStaticPaths() {
 
 const lingua = Astro.params.lang as Lingua;
 const t = testi(lingua);
-const [primo] = await capitoli(lingua);
+// Il primo Capitolo della Scaletta che ha un testo: quelli in preparazione non si possono ancora studiare (#84).
+const primo = (await capitoli(lingua)).find((c) => !c.inPreparazione);
 const parti = [t.introHome.perChi, t.introHome.comeSiUsa, t.introHome.cosaNonFa];
 ---
 <Base lingua={lingua}>

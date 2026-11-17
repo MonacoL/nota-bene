@@ -25,20 +25,39 @@ export function ordina(voci: readonly VocePercorso[]): VocePercorso[] {
   return ordinate;
 }
 
+/** Un Capitolo della Scaletta come serve ai blocchi: in preparazione se non ha ancora il testo italiano. */
+export type VoceScaletta = { id: string; prerequisiti: readonly string[]; inPreparazione?: boolean };
+
+/**
+ * I Prerequisiti che bloccano davvero (#84): un Capitolo in preparazione non si può studiare, quindi al suo posto
+ * contano i suoi Prerequisiti, a catena. Senza ripetizioni, nell'ordine in cui si incontrano.
+ */
+export function prerequisitiEffettivi(prerequisiti: readonly string[], scaletta: readonly VoceScaletta[]): string[] {
+  const voci = new Map(scaletta.map((v) => [v.id, v]));
+  const effettivi: string[] = [];
+  const espandi = (ids: readonly string[]) => {
+    for (const id of ids) {
+      const v = voci.get(id);
+      if (v?.inPreparazione) espandi(v.prerequisiti);
+      else if (!effettivi.includes(id)) effettivi.push(id);
+    }
+  };
+  espandi(prerequisiti);
+  return effettivi;
+}
+
 /** I Prerequisiti non ancora completati (ADR-0011): in Scaletta, se ce n'è almeno uno, la pagina è bloccata. */
 export function mancanti(prerequisiti: readonly string[], completati: ReadonlySet<string>): string[] {
   return prerequisiti.filter((p) => !completati.has(p));
 }
 
 /**
- * Il prossimo passo (ADR-0011): il primo Capitolo della Scaletta, già in ordine, che non è completato e ha tutti i
- * Prerequisiti completati. Nessuno se sono tutti completati.
+ * Il prossimo passo (ADR-0011): il primo Capitolo della Scaletta, già in ordine, che non è completato, non è in
+ * preparazione (#84) e ha tutti i Prerequisiti completati. Nessuno se sono tutti completati. I Prerequisiti vanno
+ * passati già effettivi (prerequisitiEffettivi).
  */
-export function prossimoPasso(
-  scaletta: readonly { id: string; prerequisiti: readonly string[] }[],
-  completati: ReadonlySet<string>,
-): string | undefined {
-  return scaletta.find((c) => !completati.has(c.id) && mancanti(c.prerequisiti, completati).length === 0)?.id;
+export function prossimoPasso(scaletta: readonly VoceScaletta[], completati: ReadonlySet<string>): string | undefined {
+  return scaletta.find((c) => !c.inPreparazione && !completati.has(c.id) && mancanti(c.prerequisiti, completati).length === 0)?.id;
 }
 
 /** Il Capitolo prima e quello dopo nel Percorso, se ci sono. */

@@ -1,7 +1,7 @@
 // Accesso ai Capitoli dalle pagine: carica le collections, applica le regole di percorso.ts
 // e, una volta per build, stampa gli avvisi di traduzione nel formato delle annotazioni di GitHub Actions.
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { avvisiTraduzione, controllaFile, ordina, scegliTesto, vicini, type AvvisoTraduzione } from './percorso';
+import { avvisiTraduzione, controllaFile, ordina, prerequisitiEffettivi, scegliTesto, vicini, type AvvisoTraduzione } from './percorso';
 import type { Lingua } from '../i18n';
 import type { DichiarazioneEsercizio, NomePercorso } from './schemi';
 
@@ -12,6 +12,10 @@ export type Capitolo = {
   percorso: NomePercorso;
   /** Gli id dei Prerequisiti, come in percorso.yml. */
   prerequisiti: string[];
+  /** I Prerequisiti che bloccano in Scaletta: quelli in preparazione lasciano il posto ai loro, a catena (#84). */
+  prerequisitiEffettivi: string[];
+  /** Senza testo italiano, quindi in nessuna lingua: non blocca e non è mai il prossimo passo (#84). */
+  inPreparazione: boolean;
   titolo: string;
   riga: string;
   provaLetture?: 'letture' | 'avanzate';
@@ -50,11 +54,14 @@ export function stampaAvvisiTraduzione(avvisi: readonly AvvisoTraduzione[]): voi
 /** Il Percorso in una lingua, in ordine, con il testo da mostrare per ogni Capitolo. */
 export async function capitoli(lingua: Lingua): Promise<Capitolo[]> {
   const { percorso, it, en } = await carica();
+  const scaletta = percorso.map((v) => ({ id: v.id, prerequisiti: v.prerequisiti, inPreparazione: !it.has(v.id) }));
   return percorso.map((v) => ({
     id: v.id,
     numero: v.numero,
     percorso: v.percorso,
     prerequisiti: v.prerequisiti,
+    prerequisitiEffettivi: prerequisitiEffettivi(v.prerequisiti, scaletta),
+    inPreparazione: !it.has(v.id),
     titolo: v[lingua].titolo,
     riga: v[lingua].riga,
     provaLetture: v.prova_letture,

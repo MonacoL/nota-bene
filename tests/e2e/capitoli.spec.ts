@@ -3,18 +3,22 @@ import { expect, test } from '@playwright/test';
 import { CAPITOLI } from './pagine';
 import { vociDelMenu } from './menu';
 
-const PRIMO = CAPITOLI[0]!;
+const PRIMO = CAPITOLI[0]!; // Pulsazione e suddivisione, in preparazione (#84)
+/** Il primo Capitolo della Scaletta con un testo: la home porta qui. */
+const PRIMO_PRONTO = 'figure-e-pause';
+/** Il Capitolo con gli esempi abc che i test guardano. */
+const NOTE = 'note-toni-e-semitoni';
 
 for (const [lingua, testi] of [
-  ['it', { comincia: 'Comincia dal capitolo 1', tutti: 'Tutti i capitoli', menu: ['Capitoli', 'Letture'] }],
-  ['en', { comincia: 'Start with chapter 1', tutti: 'All chapters', menu: ['Chapters', 'Readings'] }],
+  ['it', { comincia: 'Comincia a studiare', tutti: 'Tutti i capitoli', menu: ['Capitoli', 'Letture'] }],
+  ['en', { comincia: 'Start studying', tutti: 'All chapters', menu: ['Chapters', 'Readings'] }],
 ] as const) {
-  test(`${lingua}: la home introduce il sito e porta al Capitolo 1, ai Capitoli e alle Letture`, async ({ page }) => {
+  test(`${lingua}: la home introduce il sito e porta al primo Capitolo pronto, ai Capitoli e alle Letture`, async ({ page }) => {
     await page.goto(`${lingua}/`);
     const main = page.locator('main');
     await expect(main.locator('ol.percorso')).toHaveCount(0);
     await expect(main.getByRole('heading', { level: 2 })).toHaveCount(4);
-    await expect(main.getByRole('link', { name: testi.comincia })).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/${PRIMO}/`);
+    await expect(main.getByRole('link', { name: testi.comincia })).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/${PRIMO_PRONTO}/`);
     await expect(main.getByRole('link', { name: testi.tutti })).toHaveAttribute('href', `/nota-bene/${lingua}/capitoli/`);
     await expect(main.locator(`a[href="/nota-bene/${lingua}/letture/"]`)).toHaveCount(1);
     const menu = await vociDelMenu(page);
@@ -24,11 +28,11 @@ for (const [lingua, testi] of [
   });
 }
 
-test('la pagina Capitoli elenca i 10 Capitoli nell\'ordine della Scaletta, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
+test('la pagina Capitoli elenca i 16 Capitoli nell\'ordine della Scaletta, con i loro Esercizi, e porta alle Letture', async ({ page }) => {
   await page.goto('it/capitoli/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Capitoli');
   const voci = page.locator('#scaletta ol.elenco > li');
-  await expect(voci).toHaveCount(10);
+  await expect(voci).toHaveCount(16);
   for (const [i, id] of CAPITOLI.entries()) {
     const voce = voci.nth(i);
     await expect(voce.locator('.numero')).toHaveText(String(i + 1));
@@ -39,11 +43,18 @@ test('la pagina Capitoli elenca i 10 Capitoli nell\'ordine della Scaletta, con i
   await expect(page.locator('main').getByRole('link', { name: 'Vai alle letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
 });
 
-test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page }) => {
+test('dalla home si apre il primo Capitolo pronto', async ({ page }) => {
   await page.goto('it/');
-  await page.getByRole('link', { name: 'Comincia dal capitolo 1' }).click();
-  await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Note, toni e semitoni');
+  await page.getByRole('link', { name: 'Comincia a studiare' }).click();
+  await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO_PRONTO}/$`));
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Figure e pause');
+  await expect(page.locator('article.testo')).toBeVisible();
+});
+
+test('il Capitolo 1 è in preparazione, e si va avanti e indietro', async ({ page }) => {
+  await page.goto(`it/capitoli/${PRIMO}/`);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pulsazione e suddivisione');
+  await expect(page.getByText('Questo capitolo è in preparazione.')).toBeVisible();
 
   const seguito = page.locator('nav.seguito');
   await expect(seguito.getByRole('link', { name: 'Esercizi' })).toHaveAttribute('href', `/nota-bene/it/capitoli/${PRIMO}/esercizi/`);
@@ -56,9 +67,17 @@ test('dalla home si apre il Capitolo 1 e si va avanti e indietro', async ({ page
   await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
 });
 
+test('un Capitolo nuovo è in preparazione anche in inglese, con titolo e riga inglesi', async ({ page }) => {
+  await page.goto('en/capitoli/battimenti/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Beating');
+  await expect(page.getByText('This chapter is being prepared.')).toBeVisible();
+  await page.goto('en/capitoli/');
+  await expect(page.locator('#scaletta li[data-capitolo="battimenti"] .riga')).toHaveText('The wobble you hear when two voices are almost on the same pitch.');
+});
+
 test('gli esempi abc diventano pentagrammi sul foglio color carta, anche col telefono in tema chiaro', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' });
-  await page.goto(`it/capitoli/${PRIMO}/`);
+  await page.goto(`it/capitoli/${NOTE}/`);
   const pentagrammi = page.locator('.pentagramma svg');
   await expect(pentagrammi).toHaveCount(5);
   await expect(pentagrammi.first().locator('.abcjs-note').first()).toBeVisible();
@@ -73,27 +92,28 @@ test('gli esempi abc diventano pentagrammi sul foglio color carta, anche col tel
   expect(pagina).toBe('rgb(21, 21, 21)');
 });
 
-test('nei Capitoli 9 e 10 c\'è "Prova le letture"; il 10 porta alle avanzate ed è l\'ultimo', async ({ page }) => {
-  await page.goto(`it/capitoli/${CAPITOLI[8]}/`);
+test('in DO mobile e DO mobile avanzato c\'è "Prova le letture"; l\'avanzato porta alle avanzate ed è l\'ultimo', async ({ page }) => {
+  await page.goto('it/capitoli/do-mobile/');
   await expect(page.locator('nav.seguito').getByRole('link', { name: 'Prova le letture' })).toHaveAttribute('href', '/nota-bene/it/letture/');
 
-  await page.goto(`it/capitoli/${CAPITOLI[9]}/`);
+  expect(CAPITOLI.at(-1)).toBe('do-mobile-avanzato');
+  await page.goto('it/capitoli/do-mobile-avanzato/');
   const seguito = page.locator('nav.seguito');
   await expect(seguito.getByRole('link', { name: 'Prova le letture avanzate' })).toHaveAttribute('href', '/nota-bene/it/letture/#avanzate');
   await expect(seguito.getByRole('link', { name: 'Capitolo successivo →' })).toHaveCount(0);
 });
 
-test('il Capitolo 1 in inglese è tradotto, senza avviso, con lo stesso percorso', async ({ page }) => {
-  await page.goto(`en/capitoli/${PRIMO}/`);
+test('Note, toni e semitoni in inglese è tradotto, senza avviso, con lo stesso percorso', async ({ page }) => {
+  await page.goto(`en/capitoli/${NOTE}/`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Notes, whole steps, and half steps');
   await expect(page.locator('article.testo')).not.toHaveAttribute('lang', /.*/);
   await expect(page.getByRole('note').filter({ hasText: 'shown in Italian' })).toHaveCount(0);
   await expect(page.locator('.pentagramma svg')).toHaveCount(5);
-  await expect(page.locator('nav.seguito').getByRole('link', { name: 'Next chapter →' })).toHaveAttribute('href', `/nota-bene/en/capitoli/${CAPITOLI[1]}/`);
+  await expect(page.locator('nav.seguito').getByRole('link', { name: 'Next chapter →' })).toHaveAttribute('href', `/nota-bene/en/capitoli/${CAPITOLI[CAPITOLI.indexOf(NOTE) + 1]}/`);
 });
 
 test('dagli Esercizi si torna al Capitolo', async ({ page }) => {
-  await page.goto(`it/capitoli/${PRIMO}/esercizi/`);
+  await page.goto(`it/capitoli/${NOTE}/esercizi/`);
   await page.getByRole('link', { name: /Torna al capitolo/ }).click();
-  await expect(page).toHaveURL(new RegExp(`/it/capitoli/${PRIMO}/$`));
+  await expect(page).toHaveURL(new RegExp(`/it/capitoli/${NOTE}/$`));
 });

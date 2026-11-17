@@ -83,7 +83,10 @@ export const it = {
   provaLettureAvanzate: 'Prova le letture avanzate',
   navCapitoli: 'Capitoli',
   menu: 'Menu',
-  introCapitoli: 'Si studia su tre percorsi insieme, ritmico, armonico e melodico. La scaletta del maestro li alterna.',
+  introCapitoli: 'Si studia su tre percorsi: ritmico, melodico e armonico. La scaletta del maestro parte da ritmo e melodia, e l\'armonia arriva dopo.',
+  /** La pagina guida linkata dalla pagina dei Capitoli (#84). */
+  comeSiStudia: 'Come si studia qui',
+  avvisoPaginaNonTradotta: 'Questa pagina non è ancora tradotta: la trovi in italiano.',
   /** I tre Percorsi (ADR-0011): il nome nell'etichetta e il titolo della colonna nella vista per percorso. */
   percorsi: { ritmico: 'ritmico', armonico: 'armonico', melodico: 'melodico' },
   percorsoDi: { ritmico: 'Percorso ritmico', armonico: 'Percorso armonico', melodico: 'Percorso melodico' },
@@ -106,7 +109,7 @@ export const it = {
       titolo: 'Niente account',
       testo: 'Non ti registri: i tuoi progressi restano solo sul tuo dispositivo, e li puoi cancellare quando vuoi.',
     },
-    comincia: 'Comincia dal capitolo 1',
+    comincia: 'Comincia a studiare',
     tuttiICapitoli: 'Tutti i capitoli',
   },
   avvisoNonTradotto: 'Questo capitolo non è ancora tradotto: lo trovi in italiano.',

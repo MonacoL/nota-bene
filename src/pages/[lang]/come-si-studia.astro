@@ -1,0 +1,29 @@
+---
+// "Come si studia qui" (#84): una pagina breve sul metodo, linkata dalla pagina dei Capitoli. Il testo è il Markdown
+// di contenuti/pagine/<lingua>/come-si-studia.md; finché manca in inglese, /en/ mostra l'italiano con un avviso.
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { LINGUE, dataEstesa, riempi, testi, url, type Lingua } from '../../i18n';
+import { paginaGuida } from '../../contenuti/servizio';
+
+export function getStaticPaths() {
+  return LINGUE.map((lang) => ({ params: { lang } }));
+}
+
+const lingua = Astro.params.lang as Lingua;
+const t = testi(lingua);
+const { pagina, ripiego } = await paginaGuida(lingua, 'come-si-studia');
+const { Content } = await render(pagina);
+---
+<Base lingua={lingua} titolo={t.comeSiStudia}>
+  <h1>{t.comeSiStudia}</h1>
+  <p class="aggiornata muted">{riempi(t.servizio.aggiornata, { data: dataEstesa(pagina.data.aggiornata, lingua) })}</p>
+  {ripiego && <p class="avviso" role="note">{t.avvisoPaginaNonTradotta}</p>}
+  <article class="testo" lang={ripiego ? 'it' : undefined}><Content /></article>
+  <p><a class="pulsante" href={url(lingua, 'capitoli/')}>{t.navCapitoli}</a></p>
+</Base>
+
+<style>
+  .aggiornata { margin-top: -0.4em; font-size: 0.94rem; }
+  .avviso { padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+</style>

@@ -38,28 +38,32 @@ describe('avvisi di traduzione delle pagine di servizio', () => {
   });
 });
 
-const TUTTE =['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'];
+const TUTTE = ['privacy', 'intelligenza-artificiale', 'crediti', 'contatti'];
+/** In italiano ci sono anche le pagine guida (#84), che in inglese possono mancare. */
+const IT = [...TUTTE, 'come-si-studia'];
 
 describe('controllaPagine', () => {
-  it('accetta le quattro pagine in tutte e due le lingue', () => {
-    expect(controllaPagine(TUTTE, TUTTE)).toEqual([]);
+  it('accetta le quattro pagine in tutte e due le lingue, e la pagina guida in italiano', () => {
+    expect(controllaPagine(IT, TUTTE)).toEqual([]);
+    expect(controllaPagine(IT, [...TUTTE, 'come-si-studia'])).toEqual([]);
   });
 
   it("blocca una pagina che manca in inglese: le pagine di servizio non ripiegano sull'italiano", () => {
-    expect(controllaPagine(TUTTE, ['privacy', 'crediti', 'contatti'])).toEqual([
+    expect(controllaPagine(IT, ['privacy', 'crediti', 'contatti'])).toEqual([
       "contenuti/pagine/en/intelligenza-artificiale.md: manca, e le pagine di servizio non ripiegano sull'italiano",
     ]);
   });
 
-  it('blocca una pagina che manca in italiano', () => {
+  it('blocca una pagina che manca in italiano, compresa la pagina guida', () => {
     expect(controllaPagine(['privacy', 'crediti', 'contatti'], TUTTE)).toEqual([
       'contenuti/pagine/it/intelligenza-artificiale.md: manca',
+      'contenuti/pagine/it/come-si-studia.md: manca',
     ]);
   });
 
-  it('blocca un file che non è una pagina di servizio', () => {
-    expect(controllaPagine([...TUTTE, 'chi-siamo'], TUTTE)).toEqual([
-      'contenuti/pagine/it/chi-siamo.md: "chi-siamo" non è una pagina di servizio (privacy, intelligenza-artificiale, crediti, contatti)',
+  it('blocca un file che non è una pagina di servizio né una pagina guida', () => {
+    expect(controllaPagine([...IT, 'chi-siamo'], TUTTE)).toEqual([
+      'contenuti/pagine/it/chi-siamo.md: "chi-siamo" non è una pagina di servizio (privacy, intelligenza-artificiale, crediti, contatti) né una pagina guida (come-si-studia)',
     ]);
   });
 });

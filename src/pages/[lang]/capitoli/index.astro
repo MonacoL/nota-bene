@@ -20,6 +20,8 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
 <Base lingua={lingua} titolo={t.navCapitoli}>
   <h1>{t.navCapitoli}</h1>
   <p class="intro">{t.introCapitoli}</p>
+  {/* Fuori da .modo, che senza JavaScript resta nascosto (#84). */}
+  <p class="guida"><a href={url(lingua, 'come-si-studia/')}>{t.comeSiStudia}</a></p>
 
   <div class="modo" hidden>
     <button type="button" class="cambia-modo" aria-pressed="false">{t.progressi.studioLibero}</button>
@@ -170,6 +172,8 @@ const capitoloUrl = (id: string) => url(lingua, `capitoli/${id}/`);
 
 <style>
   .intro { margin: 0 0 0.6em; color: var(--muted); }
+  .guida { margin: 0 0 0.6em; }
+  .guida a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; }
   .viste { display: flex; gap: 8px; margin: 0 0 8px; }
   .viste a {
     display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px;
