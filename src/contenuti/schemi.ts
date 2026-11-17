@@ -27,6 +27,7 @@ const dichiarazioneEsercizio = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('riconosci-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('rivolta-intervallo'), chiavi: z.array(z.enum(CHIAVI)).nonempty() }).strict(),
   z.object({ tipo: z.literal('batti-la-pulsazione'), importanza }).strict(),
+  z.object({ tipo: z.literal('trova-l-unisono'), importanza }).strict(),
   z.object({ tipo: z.literal('semplice-o-composto'), importanza }).strict(),
   z.object({ tipo: z.literal('pallini'), importanza }).strict(),
   z.object({ tipo: z.literal('semplice-o-composto-ascolto'), importanza }).strict(),

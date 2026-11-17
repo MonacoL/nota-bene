@@ -8,6 +8,7 @@
 import { SplendidGrandPiano } from 'smplr';
 import { fileCampione, VELOCITY, VELOCITY_SUONATA } from './campioni';
 import type { NotaDaSuonare } from './note';
+import { ARMONICHE, type SuonoTenuto } from './battimenti';
 
 /** Nelle Letture il Riferimento tonale e l'Ascolto di verifica; nei Capitoli un Ascolto dell'esempio per esempio. */
 export type Funzione = string;
@@ -39,6 +40,9 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
   /** true se tutti i campioni sono arrivati; false se ne manca almeno uno, e allora si suona con l'oscillatore. */
   let pronto: Promise<boolean> | undefined;
   let inCorso: Esecuzione<F> | undefined;
+  /** Il volume dei suoni tenuti, da 0 a 1, e l'uscita di quelli che suonano adesso. */
+  let livello = 1;
+  let uscitaTenuti: GainNode | undefined;
 
   function sblocca(): AudioContext {
     const sessione = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
@@ -171,6 +175,45 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
     }));
   }
 
+  /**
+   * Suoni tenuti con l'organo (#90): gli esempi dei battimenti e la nota tenuta di "Trova l'unisono". Un suono con
+   * fine Infinity suona finché non si ferma. Come tocca(), va chiamata nel gestore del click; non aspetta i campioni.
+   */
+  function toccaTenuti(funzione: F, suoni: readonly SuonoTenuto[]) {
+    const ctx = sblocca();
+    const eraQuesta = inCorso?.funzione === funzione;
+    ferma();
+    if (eraQuesta) return;
+    const uscita = ctx.createGain();
+    uscita.gain.value = livello;
+    uscita.connect(ctx.destination);
+    uscitaTenuti = uscita;
+    const azioni: (() => void)[] = [];
+    const esecuzione: Esecuzione<F> = {
+      funzione,
+      ferma: () => {
+        azioni.forEach((a) => a());
+        if (uscitaTenuti === uscita) uscitaTenuti = undefined;
+      },
+    };
+    inCorso = esecuzione;
+    opzioni.cambio(funzione);
+    const zero = ctx.currentTime + ANTICIPO;
+    for (const s of suoni) azioni.push(suonaOrgano(ctx, uscita, zero, s));
+    const fine = Math.max(...suoni.map((s) => s.fine));
+    if (Number.isFinite(fine)) {
+      azioni.push(segui(ctx, zero, [], fine + 0.2, undefined, () => {
+        if (inCorso === esecuzione) ferma();
+      }));
+    }
+  }
+
+  /** Il volume dei suoni tenuti, da 0 a 1: cambia anche quello che sta suonando. */
+  function volume(v: number) {
+    livello = v;
+    if (uscitaTenuti && ctx) uscitaTenuti.gain.setTargetAtTime(v, ctx.currentTime, 0.05);
+  }
+
   function suonaPiano(midi: number, quando: number, durata: number): () => void {
     const stop = piano!.start({ note: midi, time: quando, duration: durata, velocity: VELOCITY_SUONATA });
     return () => stop();
@@ -179,6 +222,8 @@ export function creaLettore<F extends Funzione = 'riferimento' | 'ascolto'>(opzi
   return {
     tocca,
     toccaBattiti,
+    toccaTenuti,
+    volume,
     ferma,
     /** La funzione che sta suonando, o che aspetta i campioni per farlo. */
     inCorso: (): F | null => inCorso?.funzione ?? null,
@@ -229,6 +274,42 @@ function suonaOscillatore(ctx: AudioContext, midi: number, quando: number, durat
   osc.connect(volume).connect(ctx.destination);
   osc.start(quando);
   osc.stop(quando + durata + 0.2);
+  return () => {
+    const adesso = ctx.currentTime;
+    volume.gain.cancelScheduledValues(adesso);
+    volume.gain.setValueAtTime(volume.gain.value, adesso);
+    volume.gain.linearRampToValueAtTime(0, adesso + 0.05);
+    osc.stop(adesso + 0.06);
+  };
+}
+
+/** Le onde dell'organo, una per contesto. */
+const onde = new WeakMap<AudioContext, PeriodicWave>();
+
+/** Un suono tenuto con l'organo: la frequenza segue i punti, e l'inviluppo è morbido all'inizio e alla fine. */
+function suonaOrgano(ctx: AudioContext, uscita: AudioNode, zero: number, suono: SuonoTenuto): () => void {
+  let onda = onde.get(ctx);
+  if (!onda) {
+    const reale = new Float32Array([0, ...ARMONICHE]);
+    onda = ctx.createPeriodicWave(reale, new Float32Array(reale.length));
+    onde.set(ctx, onda);
+  }
+  const osc = ctx.createOscillator();
+  osc.setPeriodicWave(onda);
+  const [primo, ...altri] = suono.punti;
+  osc.frequency.setValueAtTime(primo![1], zero + primo![0]);
+  for (const [t, f] of altri) osc.frequency.linearRampToValueAtTime(f, zero + t);
+  const volume = ctx.createGain();
+  const [inizio, fine] = [zero + suono.inizio, zero + suono.fine];
+  volume.gain.setValueAtTime(0, inizio);
+  volume.gain.linearRampToValueAtTime(0.25, inizio + 0.1);
+  if (Number.isFinite(fine)) {
+    volume.gain.setValueAtTime(0.25, fine - 0.3);
+    volume.gain.linearRampToValueAtTime(0, fine);
+  }
+  osc.connect(volume).connect(uscita);
+  osc.start(inizio);
+  if (Number.isFinite(fine)) osc.stop(fine + 0.05);
   return () => {
     const adesso = ctx.currentTime;
     volume.gain.cancelScheduledValues(adesso);

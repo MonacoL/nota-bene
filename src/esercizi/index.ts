@@ -136,7 +136,7 @@ export function valuta<T extends Tipo>(esercizio: Esercizio<T>, risposta: Rispos
 }
 
 /** Gli Esercizi pratici in cui si batte o si canta: si fanno, ma non hanno una risposta giusta (ADR-0012). */
-export const NON_CONTANO = ['batti-la-pulsazione'] as const;
+export const NON_CONTANO = ['batti-la-pulsazione', 'trova-l-unisono'] as const;
 export type TipoCheNonConta = (typeof NON_CONTANO)[number];
 
 /** I tipi dichiarati in un Capitolo che contano per il Capitolo completato, nell'ordine della dichiarazione. */

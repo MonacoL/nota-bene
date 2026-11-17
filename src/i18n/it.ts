@@ -20,7 +20,7 @@ export const it = {
   ascoltaEsempio: "Ascolta l'esempio",
   tornaAlCapitolo: '← Torna al capitolo',
   serie: {
-    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'trova-tonica-e-modo': 'Trova tonica e modo', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo', 'scegli-le-figure': 'Scegli le figure', 'batti-la-pulsazione': 'Batti la pulsazione', 'semplice-o-composto': 'Semplice o composto?', pallini: 'I pallini', 'semplice-o-composto-ascolto': "Semplice o composto all'ascolto" },
+    tipi: { 'nomina-la-nota': 'Nomina la nota', 'nomina-la-sillaba': 'Nomina la sillaba', 'riconosci-intervallo': "Riconosci l'intervallo", 'rivolta-intervallo': "Rivolta l'intervallo", 'costruisci-la-scala': 'Costruisci la scala', 'trova-la-tonalita': 'Trova la tonalità', 'trova-tonica-e-modo': 'Trova tonica e modo', 'completa-la-battuta': 'Completa la battuta', 'riconosci-il-tempo': 'Riconosci il tempo', 'scegli-le-figure': 'Scegli le figure', 'batti-la-pulsazione': 'Batti la pulsazione', 'trova-l-unisono': "Trova l'unisono", 'semplice-o-composto': 'Semplice o composto?', pallini: 'I pallini', 'semplice-o-composto-ascolto': "Semplice o composto all'ascolto" },
     schede: 'Tipi di esercizio',
     avanzamento: 'Esercizio {n} di 10',
     domande: {
@@ -48,6 +48,20 @@ export const it = {
     /** L'Importanza degli Esercizi pratici (#86, ADR-0012). PROVVISORIE: le parole si scelgono vedendo la pagina. */
     importanza: { 1: 'approfondimento', 2: 'utile', 3: 'essenziale' },
     /** "Batti la pulsazione" (#86). */
+    /** "Trova l'unisono" (#90): la Voce si sceglie qui e non si salva, finché non c'è la Voce del corista (#89). */
+    unisono: {
+      spiegazione: "Il sito tiene una nota con l'organo e tu la raggiungi con la voce, da poco sopra e da poco sotto, finché i battimenti spariscono. Non serve il microfono: ascolti e giudichi tu.",
+      voce: 'La tua voce',
+      voci: { basso: 'basso', tenore: 'tenore', contralto: 'contralto', soprano: 'soprano' },
+      nota: 'La nota: {nota}',
+      tieni: 'Tieni la nota', ferma: 'Ferma la nota', esempio: "Ascolta l'esempio", altra: "Un'altra nota", volume: 'Volume della nota',
+      passi: [
+        "Ascolta l'esempio: una seconda voce entra poco sopra la nota e scende piano finché i battimenti spariscono, poi fa lo stesso da sotto.",
+        'Fai partire la nota e canta su "a" o "o", un poco più in alto.',
+        "Scendi piano, con un glissando, finché il tremolio rallenta e sparisce. Lì sei all'unisono: tieni la voce lì qualche secondo.",
+        'Ora parti un poco più in basso e sali, finché i battimenti spariscono di nuovo.',
+      ],
+    },
     batti: {
       spiegazione: 'Parte un brano: batti la pulsazione con la barra spaziatrice o toccando il pulsante grande. La prima battuta è per ascoltare, si conta dalla seconda.',
       avvia: 'Ascolta e batti', batti: 'Batti', ferma: 'Ferma', ancora: 'Un altro brano',

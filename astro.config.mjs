@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import { satteri } from '@astrojs/markdown-satteri';
 import { pentagrammi } from './src/markdown/pentagrammi.ts';
+import { battimenti } from './src/markdown/battimenti.ts';
 
 // Il base path vive solo qui (ADR-0006): il resto del codice usa import.meta.env.BASE_URL.
 // Con NOTA_BENE_LETTURE il catalogo delle Letture è un altro (quello d'esempio degli e2e, ticket #32) e il sito
@@ -14,5 +15,5 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [svelte()],
-  markdown: { processor: satteri({ mdastPlugins: [pentagrammi] }) },
+  markdown: { processor: satteri({ mdastPlugins: [pentagrammi, battimenti] }) },
 });

@@ -60,14 +60,19 @@ test('un Prerequisito in preparazione non blocca: al suo posto contano i suoi Pr
 });
 
 test('un Capitolo in preparazione non è mai bloccato, anche se i suoi Prerequisiti mancano', async ({ page }) => {
-  // Battimenti richiede Unisono e Intervalli, non completati.
-  for (const pagina of ['it/capitoli/battimenti/', 'it/capitoli/battimenti/esercizi/']) {
+  // DO e SOL richiede La scala cantata, non completata.
+  for (const pagina of ['it/capitoli/do-e-sol/', 'it/capitoli/do-e-sol/esercizi/']) {
     await page.goto(pagina);
     await expect(page.locator('.blocco')).toBeHidden();
     await expect(page.getByText(/^(Questo capitolo|Gli esercizi di questo capitolo) (è|sono) in preparazione\.$/)).toBeVisible();
   }
   await page.goto('it/capitoli/');
-  await expect(page.locator('#scaletta li[data-capitolo="battimenti"] .lucchetto')).toBeHidden();
+  await expect(page.locator('#scaletta li[data-capitolo="do-e-sol"] .lucchetto')).toBeHidden();
+});
+
+test('Battimenti, pronto, chiede Intervalli e non Unisono, che è in preparazione', async ({ page }) => {
+  await page.goto('it/capitoli/battimenti/');
+  await expect(page.locator('.blocco li[data-capitolo]')).toHaveText([/Intervalli/]);
 });
 
 test('dalla pagina dei Capitoli si apre "Come si studia qui"', async ({ page }) => {

@@ -92,6 +92,7 @@ export async function installaAudioFinto(page: Page, opzioni: { velocita?: numbe
         close() { this.#cambia('closed'); return Promise.resolve(); }
         /** Solo per i test: il telefono interrompe l'audio, come per una chiamata su iOS. */
         interrompi() { this.#cambia('interrupted'); }
+        createPeriodicWave() { return {}; }
         createGain() { return nodo({ gain: parametro(1) }); }
         createBiquadFilter() { return nodo({ type: 'lowpass', frequency: parametro(350), Q: parametro(1), gain: parametro(0) }); }
         createStereoPanner() { return nodo({ pan: parametro(0) }); }
@@ -129,6 +130,7 @@ export async function installaAudioFinto(page: Page, opzioni: { velocita?: numbe
           const ctx = this;
           return nodo({
             type: 'sine',
+            setPeriodicWave() { this.type = 'custom'; },
             frequency: parametro(440),
             detune: parametro(0),
             onended: null as null | (() => void),
