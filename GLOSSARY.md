@@ -56,7 +56,7 @@ _Avoid_: quiz, test
 _In inglese_: Theory exercise
 
 **Esercizio pratico**:
-Esercizio che si fa con la voce, le mani o l'orecchio: cantare una nota o una Sequenza, battere la Pulsazione, riconoscere all'ascolto se un Tempo è semplice o composto. Conta per il Capitolo completato solo se ha una risposta giusta, cioè se è un riconoscimento.
+Esercizio che si fa con la voce, le mani o l'orecchio: cantare una nota o una Sequenza melodica, battere la Pulsazione, riconoscere all'ascolto se un Tempo è semplice o composto. Conta per il Capitolo completato solo se ha una risposta giusta, cioè se è un riconoscimento.
 _Avoid_: esercizio di canto, esercizio audio, attività
 _In inglese_: Practice exercise
 
@@ -65,10 +65,10 @@ Quanto il maestro ritiene necessario un Esercizio pratico, da 1 a 3. Dice al cor
 _Avoid_: priorità, difficoltà, livello
 _In inglese_: Importance
 
-**Sequenza**:
+**Sequenza melodica**:
 Breve successione di note da cantare con il DO mobile, generata dalla piattaforma su un rigo senza Chiave, dove è segnato solo il DO, con teste nere senza Figura. È un Esercizio pratico, non una Lettura.
-_Avoid_: lettura generata, melodia, solfeggio
-_In inglese_: Pitch sequence
+_Avoid_: sequenza (da sola, si confonde con la Scaletta), lettura generata, melodia, solfeggio
+_In inglese_: Pitch pattern _(evitare: sequence, riservato alla Scaletta)_
 
 **Serie**:
 Dieci esercizi dello stesso tipo con una risposta giusta, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva; con almeno 8 risposte giuste al primo colpo conta però per il Capitolo completato.

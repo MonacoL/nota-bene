@@ -6,7 +6,7 @@ Nella lezione registrata del 16 novembre 2026 il maestro Matteo Sabetta ha dato 
 - Il Percorso armonico raccoglie solo i Capitoli sui suoni simultanei, a cominciare da "Battimenti". Scale, Modo e Intervalli passano al melodico. Gli id restano gli stessi, quindi i Progressi salvati non si perdono.
 - Accanto agli Esercizi di teoria nascono gli **Esercizi pratici**: si fanno con la voce, le mani o l'orecchio. Un Capitolo può avere tutti e due i tipi, o uno solo.
 - Per il Capitolo completato contano solo gli Esercizi pratici che hanno una risposta giusta, come i riconoscimenti all'ascolto. Si fanno in Serie, con la stessa soglia degli Esercizi di teoria. Quelli in cui si canta o si batte non contano.
-- Le **Sequenze** di note da cantare sono generate dalla piattaforma: non sono Letture, e l'ADR-0001 resta valido.
+- Le **Sequenze melodiche** da cantare sono generate dalla piattaforma: non sono Letture, e l'ADR-0001 resta valido.
 - Si parla come il maestro. **Indicazione metrica** è il segno scritto (3/4, 6/8), **Tempo** è la sua classificazione (binario composto). Prima il glossario chiamava Tempo il segno: il tipo di Esercizio "riconosci il tempo" e i testi esistenti si adeguano.
 
 Deciso con l'utente il 17 novembre 2026, sulla lezione del giorno prima. Le lezioni future arriveranno in ordine sparso e cambieranno ordine e contenuti: la divisione dei Capitoli e la Scaletta in `contenuti/percorso.yml` restano provvisorie.
@@ -16,7 +16,7 @@ Deciso con l'utente il 17 novembre 2026, sulla lezione del giorno prima. Le lezi
 - **Un Capitolo armonico da fare dal primo giorno** (domanda aperta di #80): contraddice l'indicazione del maestro.
 - **Lasciare scale e intervalli nell'armonico**: il maestro definisce l'armonia come combinazione simultanea di suoni, e scale e intervalli si studiano qui come successioni.
 - **Giudicare il canto con il microfono per completare il Capitolo**: un microfono di telefono in una stanza rumorosa sbaglia troppo, e il Capitolo resterebbe bloccato per colpa dello strumento.
-- **Le Sequenze come Letture generate**: cancellerebbe la distinzione dell'ADR-0001 fra la musica vera delle Letture e l'allenamento su un solo concetto.
+- **Le Sequenze melodiche come Letture generate**: cancellerebbe la distinzione dell'ADR-0001 fra la musica vera delle Letture e l'allenamento su un solo concetto.
 
 ## Consequences
 
