@@ -1,6 +1,6 @@
 # Nota Bene
 
-Piattaforma di studio per coristi che partono da zero: teoria musicale di base ed esercizi in tre Percorsi, ritmico, armonico e melodico, fino alla lettura a prima vista con il DO mobile.
+Piattaforma di studio per coristi che partono da zero: teoria musicale di base ed esercizi, da cantare, ascoltare e risolvere, in tre Percorsi, ritmico, armonico e melodico, fino alla lettura a prima vista con il DO mobile.
 
 Ogni termine ha il suo nome inglese (`_In inglese_`) in inglese americano (ADR-0007): traduzioni e interfaccia usano quello, e una revisione umana ne controlla l'uso.
 
@@ -9,7 +9,7 @@ La maiuscola dei termini serve solo a riconoscerli in questo glossario, negli AD
 ## Percorso
 
 **Percorso**:
-Uno dei tre filoni di studio, ritmico, armonico e melodico, che partono tutti dal primo giorno. È un gruppo ordinato di Capitoli; i Percorsi si incrociano solo attraverso i Prerequisiti.
+Uno dei tre filoni di studio: ritmico (durate e Pulsazione), melodico (suoni uno dopo l'altro) e armonico (suoni simultanei). Il ritmico e il melodico partono dal primo giorno, l'armonico più avanti. È un gruppo ordinato di Capitoli; i Percorsi si incrociano solo attraverso i Prerequisiti.
 _Avoid_: corso, programma, ramo, binario
 _In inglese_: Path: Rhythm path, Harmony path, Melody path
 
@@ -29,12 +29,12 @@ _Avoid_: prossimo capitolo, prossima lezione
 _In inglese_: Next step
 
 **Capitolo**:
-Unità di teoria su un solo argomento (es. scala minore, intervalli), con spiegazione ed Esercizi di teoria. Appartiene a un solo Percorso.
+Unità di studio su un solo argomento (es. unisono, scala minore), con una spiegazione ed Esercizi di teoria, Esercizi pratici o tutti e due. Appartiene a un solo Percorso.
 _Avoid_: lezione (si confonde con le lezioni dal maestro), modulo, unità
 _In inglese_: Chapter
 
 **Capitolo completato**:
-Capitolo di cui il corista ha fatto, per ogni tipo di Esercizio di teoria, una Serie con almeno 8 risposte giuste al primo colpo, oppure che ha segnato come già studiato.
+Capitolo di cui il corista ha fatto, per ogni tipo di esercizio che ha una risposta giusta (Esercizi di teoria ed Esercizi pratici di riconoscimento), una Serie con almeno 8 risposte giuste al primo colpo, oppure che ha segnato come già studiato.
 _Avoid_: capitolo superato, finito, fatto
 _In inglese_: Completed chapter
 
@@ -44,19 +44,34 @@ _Avoid_: account, profilo, storico, punteggio
 _In inglese_: Progress
 
 **Prerequisito**:
-Capitolo che serve aver completato per affrontare un Capitolo, i suoi Esercizi di teoria o una Lettura, anche se sta in un altro Percorso. Chi segue la Scaletta trova bloccato ciò di cui manca un Prerequisito. I Prerequisiti di una Lettura ne definiscono la difficoltà.
+Capitolo che serve aver completato per affrontare un Capitolo, i suoi esercizi o una Lettura, anche se sta in un altro Percorso. Chi segue la Scaletta trova bloccato ciò di cui manca un Prerequisito. I Prerequisiti di una Lettura ne definiscono la difficoltà.
 _Avoid_: livello, difficoltà numerica, requisito
 _In inglese_: Prerequisite
 
 ## Esercizi
 
 **Esercizio di teoria**:
-Domanda su un singolo concetto, creata dalla piattaforma. Ce ne sono di otto tipi: nominare una Nota (o la sua Sillaba) in una Chiave, riconoscere un Intervallo, rivoltare un Intervallo, costruire una scala, trovare la Tonalità da un'Armatura, trovare Tonica e Modo di una melodia, completare una Battuta, riconoscere il Tempo.
+Domanda su un singolo concetto, creata dalla piattaforma. Ce ne sono di nove tipi: nominare una Nota (o la sua Sillaba) in una Chiave, riconoscere un Intervallo, rivoltare un Intervallo, costruire una scala, trovare la Tonalità da un'Armatura, trovare Tonica e Modo di una melodia, completare una Battuta, riconoscere il Tempo da un'Indicazione metrica, scegliere le Figure di Suddivisione, Pulsazione e Battuta di un'Indicazione metrica.
 _Avoid_: quiz, test
 _In inglese_: Theory exercise
 
+**Esercizio pratico**:
+Esercizio che si fa con la voce, le mani o l'orecchio: cantare una nota o una Sequenza, battere la Pulsazione, riconoscere all'ascolto se un Tempo è semplice o composto. Conta per il Capitolo completato solo se ha una risposta giusta, cioè se è un riconoscimento.
+_Avoid_: esercizio di canto, esercizio audio, attività
+_In inglese_: Practice exercise
+
+**Importanza**:
+Quanto il maestro ritiene necessario un Esercizio pratico, da 1 a 3. Dice al corista dove insistere, ma non cambia il Capitolo completato.
+_Avoid_: priorità, difficoltà, livello
+_In inglese_: Importance
+
+**Sequenza**:
+Breve successione di note da cantare con il DO mobile, generata dalla piattaforma su un rigo senza Chiave, dove è segnato solo il DO, con teste nere senza Figura. È un Esercizio pratico, non una Lettura.
+_Avoid_: lettura generata, melodia, solfeggio
+_In inglese_: Pitch sequence
+
 **Serie**:
-Dieci Esercizi di teoria dello stesso tipo, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva; con almeno 8 risposte giuste al primo colpo conta però per il Capitolo completato.
+Dieci esercizi dello stesso tipo con una risposta giusta, uno dopo l'altro, chiusi da un riepilogo delle risposte giuste al primo colpo. Non si salva; con almeno 8 risposte giuste al primo colpo conta però per il Capitolo completato.
 _Avoid_: sessione, quiz, test
 _In inglese_: Set _(evitare: quiz, test, session)_
 
@@ -103,8 +118,8 @@ _Avoid_: pezzo, partitura, canto
 _In inglese_: Piece
 
 **Voce**:
-Una delle parti di un Brano corale (Soprano, Contralto, Tenore, Basso).
-_Avoid_: parte, sezione, linea
+Una delle parti di un Brano corale (Soprano, Contralto, Tenore, Basso). La Voce del corista è quella che canta in coro, e decide il registro delle note negli Esercizi pratici di canto.
+_Avoid_: parte, sezione, linea; registro, tipo di voce, estensione (per la Voce del corista)
 _In inglese_: Voice part: Soprano, Alto, Tenor, Bass _(evitare: part, line, Contralto)_
 
 **Testo**:
@@ -175,24 +190,34 @@ _Avoid_: chiave di Do (non trattata)
 _In inglese_: Clef: treble, octave treble (treble 8vb), bass _(evitare: tenor clef, che in inglese è la chiave di Do sulla 4ª riga)_
 
 **Figura**:
-Il segno che indica la durata di una nota o di una pausa (semibreve, minima, semiminima, croma, semicroma).
+Il segno che indica la durata di una nota o di una pausa (breve, semibreve, minima, semiminima, croma, semicroma, biscroma), ciascuna il doppio della successiva. In italiano ha anche un nome numerico (intero, mezzo, quarto, ottavo...), che si usa leggendo l'Indicazione metrica.
 _Avoid_: valore, nota (riservato alla Nota)
 _In inglese_: Note value; nomi americani (quarter note), con il nome britannico (crotchet) la prima volta
 
 **Battuta**:
 Lo spazio tra due stanghette, che contiene le Pulsazioni stabilite dal Tempo.
-_Avoid_: misura, battito
+_Avoid_: battito; "misura" si nomina una volta nei Capitoli come sinonimo che si sente in prova
 _In inglese_: Measure; "bar" solo la prima volta, come nome britannico
 
 **Pulsazione**:
 Il singolo battito regolare su cui si conta una Battuta.
-_Avoid_: tempo, movimento, beat
+_Avoid_: tempo, beat; "movimento" si nomina una volta nei Capitoli come sinonimo che si sente in prova
 _In inglese_: Beat
 
+**Suddivisione**:
+Ciascuna delle parti uguali in cui si divide una Pulsazione: due nei Tempi semplici, tre nei composti.
+_Avoid_: divisione, frazione
+_In inglese_: Subdivision
+
 **Tempo**:
-L'indicazione scritta all'inizio del brano (es. 3/4, 6/8) che dice quante Pulsazioni ha una Battuta e come si suddividono. Può essere semplice o composto.
-_Avoid_: metro, ritmo; non usarlo per la velocità (Andamento) né per il singolo battito (Pulsazione)
-_In inglese_: Time signature (simple/compound) _(evitare: tempo, che in inglese è l'Andamento)_
+Come sono organizzate le Pulsazioni di una Battuta: binario, ternario, quaternario, quinario o misto per il loro numero, semplice o composto per la Suddivisione (es. "binario composto").
+_Avoid_: metro, ritmo; non usarlo per la velocità (Andamento), per il singolo battito (Pulsazione) né per il segno scritto (Indicazione metrica)
+_In inglese_: Meter: duple, triple, quadruple; simple/compound _(evitare: tempo, che in inglese è l'Andamento)_
+
+**Indicazione metrica**:
+Il segno all'inizio del brano (es. 3/4, 6/8) che dice il Tempo. Non è una frazione: il numero sopra conta le Pulsazioni nei Tempi semplici e le Suddivisioni nei composti, quello sotto dice quale Figura le rappresenta.
+_Avoid_: tempo, frazione, metro
+_In inglese_: Time signature
 
 **Andamento**:
 La velocità a cui si esegue un brano (es. Allegro, ♩ = 100).
