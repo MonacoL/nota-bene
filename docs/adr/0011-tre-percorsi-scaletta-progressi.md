@@ -1,5 +1,7 @@
 # Tre Percorsi, una Scaletta e Prerequisiti che bloccano, con i Progressi salvati nel browser
 
+> Aggiornato dall'ADR-0012: il Percorso armonico non parte più dal primo giorno.
+
 Dopo un colloquio con il maestro Matteo Sabetta, lo studio si divide dal primo giorno in tre **Percorsi**: ritmico, armonico e melodico. Ogni Capitolo appartiene a uno solo. I Percorsi si incrociano soltanto attraverso i **Prerequisiti**: un Capitolo, i suoi Esercizi o una Lettura possono richiedere Capitoli di un altro Percorso (capita soprattutto fra ritmico e melodico). Il maestro indica un ordine consigliato, la **Scaletta**: una sola sequenza che alterna i tre Percorsi. Il corista sceglie se seguire la Scaletta o fare **Studio libero**. In Scaletta, ciò di cui mancano i Prerequisiti è bloccato finché non li ha completati. In Studio libero è tutto aperto. Per sapere che cosa è completato, il sito salva i **Progressi** in `localStorage`, solo su quel dispositivo. Deciso nel grilling del 13 novembre 2026. Sostituisce la regola "non si salva niente" della specifica v1 (#21, storia 57) e la frase del glossario "ogni Capitolo è sempre accessibile".
 
 ## Considered Options
