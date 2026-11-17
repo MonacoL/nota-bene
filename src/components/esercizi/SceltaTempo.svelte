@@ -41,6 +41,8 @@
   .numeri { grid-template-columns: repeat(6, 1fr); }
   .numeri button { grid-column: span 2; }
   .numeri button:nth-child(n + 4) { grid-column: span 3; }
+  /* "quaternario" non deve andare a capo nemmeno a 320 px. */
+  .numeri button { font-size: 0.95rem; white-space: nowrap; padding: 0 2px; }
   .generi { grid-template-columns: repeat(2, 1fr); }
   .invio { display: flex; justify-content: flex-end; margin-top: 4px; }
   .domanda { margin: 4px 0 0; font-weight: 700; }

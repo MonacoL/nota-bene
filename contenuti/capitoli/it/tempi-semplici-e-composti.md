@@ -1,5 +1,8 @@
 ---
 revisione: { da: "nessuno, bozza di Claude", data: 2026-11-17 }
+esercizi:
+  - { tipo: pallini, importanza: 3 }
+  - { tipo: semplice-o-composto-ascolto, importanza: 3 }
 ---
 
 Il capitolo "Pulsazione e suddivisione" ha mostrato che le pulsazioni si raggruppano in battute e che ognuna si divide in due o in tre. Messe insieme, queste due cose danno il **tempo** di un brano: quante pulsazioni ha la battuta e come si suddividono.
@@ -73,3 +76,9 @@ Questi due esempi hanno battute della stessa lunghezza, sei crome. Nel primo le 
 Questa classificazione vale per la musica occidentale come la si scriveva per tradizione, ed è quella che si studia nei corsi di teoria. Non è universale: dal Novecento i compositori sperimentano molto, e si trovano battute che non entrano in queste caselle.
 
 Come la partitura scrive il tempo, con i numeri all'inizio del rigo, lo spiega il capitolo "Indicazioni metriche".
+
+## Negli esercizi
+
+In "I pallini" suona un brano e intanto vedi la battuta come una fila di pallini: uno grande per ogni pulsazione, e piccoli per le altre suddivisioni. Il pallino grande conta anche come prima suddivisione. Dici che tempo è, per esempio binario composto.
+
+In "Semplice o composto all'ascolto" senti un brano per pianoforte, senza spartito, e dici se il tempo è semplice o composto. Il pianoforte aiuta, perché l'attacco di ogni nota si sente bene. Se sei in dubbio, prova le sillabe "du-de" e "du-da-di" del capitolo "Pulsazione e suddivisione".

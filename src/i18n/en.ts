@@ -21,7 +21,7 @@ export const en: Dizionario = {
   ascoltaEsempio: 'Listen to the example',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the meter', 'scegli-le-figure': 'Choose the note values' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the meter', 'scegli-le-figure': 'Choose the note values', 'batti-la-pulsazione': 'Tap the beat', 'semplice-o-composto': 'Simple or compound?', pallini: 'The dots', 'semplice-o-composto-ascolto': 'Simple or compound by ear' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
     domande: {
@@ -32,6 +32,9 @@ export const en: Dizionario = {
       'completa-la-battuta': 'Which note values complete the measure?',
       'riconosci-il-tempo': 'What meter does this time signature show?',
       'scegli-le-figure': 'Which note values are the subdivision, the beat, and the measure?',
+      'semplice-o-composto': 'Listen to the clapping: is the meter simple or compound?',
+      pallini: 'Listen and watch the dots: what meter is it?',
+      'semplice-o-composto-ascolto': 'Listen to the piece: is the meter simple or compound?',
       'trova-tonica-e-modo': 'What key is this melody in?',
     },
     risposta: 'Answer',
@@ -42,6 +45,13 @@ export const en: Dizionario = {
     cancella: 'Delete the last note',
     figure: { semibreve: 'whole note', minima: 'half note', semiminima: 'quarter note', croma: 'eighth note', semicroma: 'sixteenth note' },
     tempo: { numero: 'How many beats?', genere: 'How are they divided?', binario: 'duple', ternario: 'triple', quaternario: 'quadruple', quinario: 'quintuple', misto: 'septuple', semplice: 'simple', composto: 'compound' },
+    importanza: { 1: 'extra practice', 2: 'useful', 3: 'essential' },
+    batti: {
+      spiegazione: 'A piece starts: tap the beat with the space bar or the big button. The first measure is for listening; counting starts with the second.',
+      avvia: 'Listen and tap', batti: 'Tap', ferma: 'Stop', ancora: 'Another piece',
+      inTempo: '✓ on the beat', inAnticipo: 'early', inRitardo: 'late', doppio: 'twice on the same beat',
+      riepilogo: '{n} taps on the beat out of {m} beats',
+    },
     caselle: { suddivisione: 'Subdivision', pulsazione: 'Beat', battuta: 'Measure', legata: 'tied to', vuota: 'choose' },
     punto: 'dot',
     verifica: 'Check',
