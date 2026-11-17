@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { genera, metrica, tipiCheContano, valuta, valutaBattiti, BRANI_DI_PROVA, type Brano } from '../../src/esercizi';
 import { creaProgressi, type Archivio } from '../../src/progressi';
+import { schemaCapitoloIt } from '../../src/contenuti/schemi';
 
 const inMemoria = (): Archivio => {
   const dati = new Map<string, string>();
@@ -20,6 +21,13 @@ describe('Esercizi pratici: quali contano per il Capitolo completato', () => {
     expect(progressi.completato('pulsazione-e-suddivisione')).toBe(false);
     progressi.registraSerie('pulsazione-e-suddivisione', 'semplice-o-composto', 8);
     expect(progressi.completato('pulsazione-e-suddivisione')).toBe(true);
+  });
+
+  it('"Trova l\'unisono" si dichiara con l\'Importanza e non conta: si canta (#90)', () => {
+    const revisione = { da: 'nessuno, bozza di Claude', data: '2026-11-17' };
+    expect(schemaCapitoloIt.safeParse({ revisione, esercizi: [{ tipo: 'trova-l-unisono', importanza: 2 }] }).success).toBe(true);
+    expect(schemaCapitoloIt.safeParse({ revisione, esercizi: [{ tipo: 'trova-l-unisono' }] }).success).toBe(false);
+    expect(tipiCheContano([{ tipo: 'trova-l-unisono', importanza: 2 }])).toEqual([]);
   });
 
   it('Esercizi di teoria e pratici insieme contano tutti, tranne quelli in cui si batte', () => {

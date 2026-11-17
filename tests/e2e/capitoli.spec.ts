@@ -68,11 +68,11 @@ test('dal Capitolo 1 si va avanti e indietro', async ({ page }) => {
 });
 
 test('un Capitolo nuovo è in preparazione anche in inglese, con titolo e riga inglesi', async ({ page }) => {
-  await page.goto('en/capitoli/battimenti/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Beating');
+  await page.goto('en/capitoli/do-e-sol/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('DO and SOL');
   await expect(page.getByText('This chapter is being prepared.')).toBeVisible();
   await page.goto('en/capitoli/');
-  await expect(page.locator('#scaletta li[data-capitolo="battimenti"] .riga')).toHaveText('The wobble you hear when two voices are almost on the same pitch.');
+  await expect(page.locator('#scaletta li[data-capitolo="do-e-sol"] .riga')).toHaveText('The tonic and the fifth: finding them and singing them.');
 });
 
 test('gli esempi abc diventano pentagrammi sul foglio color carta, anche col telefono in tema chiaro', async ({ page }) => {

@@ -233,3 +233,18 @@ _In inglese_: Tempo
 Distanza tra due note, indicata con numero e qualità (es. terza maggiore).
 _Avoid_: salto (che è solo un intervallo melodico più ampio di una seconda)
 _In inglese_: Interval
+
+**Unisono**:
+Due o più voci che cantano la stessa Nota, alla stessa altezza.
+_Avoid_: stessa nota (quando si parla di intonazione)
+_In inglese_: Unison
+
+**Battimenti**:
+La terza vibrazione che pulsa quando due suoni con frequenze molto vicine, ma non uguali, suonano insieme. Più i suoni sono vicini, più la pulsazione è lenta; all'Unisono perfetto sparisce. Si sentono anche sull'ottava e sulla quinta stonate, e gli Intervalli con un rapporto di frequenze semplice ne producono meno degli altri.
+_Avoid_: vibrato, tremolo (che sono della voce, non dell'incontro di due suoni), battiti (che sono della Pulsazione)
+_In inglese_: Beating; beats
+
+**Microintonazione**:
+L'aggiustamento fine dell'altezza, più piccolo di un semitono, con cui il corista porta la sua voce dove i Battimenti spariscono.
+_Avoid_: accordatura (che è degli strumenti)
+_In inglese_: Fine tuning

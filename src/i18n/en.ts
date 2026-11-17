@@ -21,7 +21,7 @@ export const en: Dizionario = {
   ascoltaEsempio: 'Listen to the example',
   tornaAlCapitolo: '← Back to the chapter',
   serie: {
-    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the meter', 'scegli-le-figure': 'Choose the note values', 'batti-la-pulsazione': 'Tap the beat', 'semplice-o-composto': 'Simple or compound?', pallini: 'The dots', 'semplice-o-composto-ascolto': 'Simple or compound by ear' },
+    tipi: { 'nomina-la-nota': 'Name the note', 'nomina-la-sillaba': 'Name the syllable', 'riconosci-intervallo': 'Name the interval', 'rivolta-intervallo': 'Invert the interval', 'costruisci-la-scala': 'Build the scale', 'trova-la-tonalita': 'Find the key', 'trova-tonica-e-modo': 'Find the tonic and mode', 'completa-la-battuta': 'Complete the measure', 'riconosci-il-tempo': 'Name the meter', 'scegli-le-figure': 'Choose the note values', 'batti-la-pulsazione': 'Tap the beat', 'trova-l-unisono': 'Find the unison', 'semplice-o-composto': 'Simple or compound?', pallini: 'The dots', 'semplice-o-composto-ascolto': 'Simple or compound by ear' },
     schede: 'Exercise types',
     avanzamento: 'Exercise {n} of 10',
     domande: {
@@ -46,6 +46,20 @@ export const en: Dizionario = {
     figure: { semibreve: 'whole note', minima: 'half note', semiminima: 'quarter note', croma: 'eighth note', semicroma: 'sixteenth note' },
     tempo: { numero: 'How many beats?', genere: 'How are they divided?', binario: 'duple', ternario: 'triple', quaternario: 'quadruple', quinario: 'quintuple', misto: 'septuple', semplice: 'simple', composto: 'compound' },
     importanza: { 1: 'extra practice', 2: 'useful', 3: 'essential' },
+    /** "Find the unison" (#90). */
+    unisono: {
+      spiegazione: 'The site holds a note on the organ and you reach it with your voice, from just above and from just below, until the beating disappears. No microphone needed: you listen and judge for yourself.',
+      voce: 'Your voice part',
+      voci: { basso: 'bass', tenore: 'tenor', contralto: 'alto', soprano: 'soprano' },
+      nota: 'The note: {nota}',
+      tieni: 'Hold the note', ferma: 'Stop the note', esempio: 'Listen to the example', altra: 'Another note', volume: 'Note volume',
+      passi: [
+        'Listen to the example: a second sound comes in just above the note and slides down slowly until the beating disappears, then does the same from below.',
+        'Start the note and sing on "ah" or "oh", a little higher.',
+        'Slide down slowly until the beating slows down and disappears. That is the unison: stay there for a few seconds.',
+        'Now start a little lower and slide up, until the beating disappears again.',
+      ],
+    },
     batti: {
       spiegazione: 'A piece starts: tap the beat with the space bar or the big button. The first measure is for listening; counting starts with the second.',
       avvia: 'Listen and tap', batti: 'Tap', ferma: 'Stop', ancora: 'Another piece',

@@ -8,7 +8,7 @@
   import { ascoltoIlluminato } from '../../audio/ascolto';
   import { creaLettore } from '../../audio/lettore';
   import { noteDelleChiavi } from '../../audio/note';
-  import { genera, valuta, NOTE_BRANI, type Esercizio, type Riscontro, type Tipo, type TipoCheNonConta } from '../../esercizi';
+  import { genera, valuta, NON_CONTANO, NOTE_BRANI, type Esercizio, type Riscontro, type Tipo, type TipoCheNonConta } from '../../esercizi';
   import type { DichiarazioneEsercizio } from '../../contenuti/schemi';
   import type { Lingua } from '../../i18n';
   import type { Dizionario } from '../../i18n/it';
@@ -25,6 +25,7 @@
   import Pallini from './Pallini.svelte';
   import SceltaGenere from './SceltaGenere.svelte';
   import BattiLaPulsazione from './BattiLaPulsazione.svelte';
+  import TrovaLUnisono from './TrovaLUnisono.svelte';
   import Importanza from './Importanza.svelte';
   import Foglio from './Foglio.svelte';
   import { SOGLIA_COMPLETATO } from '../../progressi';
@@ -63,10 +64,13 @@
 
   const dichiarazione = $derived(dichiarazioni[scheda]!);
   const finita = $derived(n >= LUNGHEZZA);
-  /** "Batti la pulsazione" non è una Serie: ha il suo componente, e nessun Esercizio da generare (#86). */
-  const battere = $derived(dichiarazione.tipo === 'batti-la-pulsazione');
+  /**
+   * Gli Esercizi pratici che non contano, come "Batti la pulsazione" (#86) e "Trova l'unisono" (#90), non sono Serie:
+   * hanno il loro componente, e nessun Esercizio da generare.
+   */
+  const senzaSerie = $derived((NON_CONTANO as readonly string[]).includes(dichiarazione.tipo));
   const esercizio = $derived<Esercizio | undefined>(
-    finita || battere
+    finita || senzaSerie
       ? undefined
       : genera(dichiarazione.tipo, dichiarazione as never, base + serieIniziate * LUNGHEZZA + n),
   );
@@ -75,7 +79,7 @@
   let esito = $state<{ conta: boolean; completato: boolean } | undefined>();
   let registrata = -1;
   $effect(() => {
-    if (!finita || registrata === serieIniziate || battere) return;
+    if (!finita || registrata === serieIniziate || senzaSerie) return;
     registrata = serieIniziate;
     const progressi = progressiDelSito();
     const conta = progressi.registraSerie(idCapitolo, dichiarazione.tipo, giuste);
@@ -160,8 +164,10 @@
     </div>
   {/if}
 
-  {#if battere}
+  {#if dichiarazione.tipo === 'batti-la-pulsazione'}
     <BattiLaPulsazione {t} seed={base + serieIniziate} />
+  {:else if dichiarazione.tipo === 'trova-l-unisono'}
+    <TrovaLUnisono {t} {lingua} seed={base + serieIniziate} />
   {:else if esercizio}
     {@const numero = n + 1}
     <div class="avanzamento">
