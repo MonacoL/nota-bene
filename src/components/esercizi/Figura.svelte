@@ -1,7 +1,9 @@
 <script lang="ts">
   // Il segno di una Figura per i pulsanti della tavolozza: testa vuota o piena, gambo, coda; il punto a parte.
   // Disegnato a mano in SVG perché il font delle alterazioni ha solo ♭ ♮ ♯. Segue il colore del testo.
-  let { figura }: { figura: 'semibreve' | 'minima' | 'semiminima' | 'croma' | 'semicroma' | 'punto' } = $props();
+  import type { NomeFigura } from '../../esercizi';
+
+  let { figura }: { figura: NomeFigura | 'punto' } = $props();
   const piena = $derived(figura === 'semiminima' || figura === 'croma' || figura === 'semicroma');
 </script>
 

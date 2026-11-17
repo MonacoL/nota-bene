@@ -2,7 +2,7 @@
 // Con ?seed=s l'Esercizio n della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 // Cambiare scheda fa ripartire la Serie: i seed vanno avanti di 10.
 import { expect, test, type Page } from '@playwright/test';
-import { genera, metrica, TEMPI, INDICAZIONI, INDICAZIONI_FIGURE } from '../../src/esercizi';
+import { genera, metrica, INDICAZIONI_BATTUTA, INDICAZIONI, INDICAZIONI_FIGURE } from '../../src/esercizi';
 
 const FIGURE = 'figure-e-pause';
 const METRICHE = 'indicazioni-metriche';
@@ -29,7 +29,7 @@ test('una Serie di "Completa la battuta" in Figure e pause, in 4/4: conta la som
   await page.goto(`it/capitoli/${FIGURE}/esercizi/?seed=30`);
   const verifica = tastierino(page).getByRole('button', { name: 'Verifica' });
   for (let n = 0; n < 10; n++) {
-    const es = genera('completa-la-battuta', { tempi: ['4/4'] }, 30 + n);
+    const es = genera('completa-la-battuta', { indicazioni: ['4/4'] }, 30 + n);
     const scritte = es.scritte.flat().length;
     await expect(noteSulRigo(page)).toHaveCount(scritte);
     await expect(verifica).toBeDisabled();
@@ -142,10 +142,10 @@ test('una Serie di "Completa la battuta" in Indicazioni metriche, con i tempi se
   await page.goto(`it/capitoli/${METRICHE}/esercizi/?seed=60`);
   await page.getByRole('tab', { name: 'Completa la battuta' }).click();
   for (let n = 0; n < 10; n++) {
-    const es = genera('completa-la-battuta', { tempi: [...TEMPI] }, 70 + n);
+    const es = genera('completa-la-battuta', { indicazioni: [...INDICAZIONI_BATTUTA] }, 70 + n);
     await completa(page, es.mancano, false);
     await tastierino(page).getByRole('button', { name: 'Verifica' }).click();
-    await expect(foglio(page)).toContainText(`Una battuta di ${es.tempo}`);
+    await expect(foglio(page)).toContainText(`Una battuta di ${es.indicazione}`);
     await expect(foglio(page)).toContainText('✓ Giusto');
     await foglio(page).getByRole('button', { name: 'Avanti →' }).click();
   }

@@ -1,7 +1,7 @@
 // "Completa la battuta" (Figure e pause, Indicazioni metriche) e "Riconosci il tempo" (Indicazioni metriche, #85). L'ABC si legge con abcjs, indipendente dal modulo.
 import abcjs from 'abcjs';
 import { describe, expect, it } from 'vitest';
-import { genera, valuta, INDICAZIONI, TEMPI, type EsercizioCompletaLaBattuta, type EsercizioRiconosciIlTempo, type Figura, type NomeIndicazione } from '../../src/esercizi';
+import { genera, valuta, INDICAZIONI, INDICAZIONI_BATTUTA, type EsercizioCompletaLaBattuta, type EsercizioRiconosciIlTempo, type Figura, type NomeIndicazione } from '../../src/esercizi';
 
 const SEED = Array.from({ length: 300 }, (_, i) => i * 7919 + 17);
 
@@ -48,7 +48,7 @@ function travePerPulsazione(battuta: { durata: number; trave?: string }[], pulsa
 describe('Completa la battuta: genera', () => {
   it('in Figure e pause solo 4/4; alla Battuta scritta mancano almeno una croma e mai più di metà', () => {
     for (const s of SEED) {
-      const es = genera('completa-la-battuta', { tempi: ['4/4'] }, s);
+      const es = genera('completa-la-battuta', { indicazioni: ['4/4'] }, s);
       const l = letto(es.abc);
       expect(l.tempo).toBe('4/4');
       expect(l.battute).toHaveLength(1);
@@ -63,7 +63,7 @@ describe('Completa la battuta: genera', () => {
   it('in Indicazioni metriche semplici e composti, e la Battuta ha la durata giusta', () => {
     const visti = new Set<string>();
     for (const s of SEED) {
-      const es = genera('completa-la-battuta', { tempi: [...TEMPI] }, s);
+      const es = genera('completa-la-battuta', { indicazioni: [...INDICAZIONI_BATTUTA] }, s);
       const l = letto(es.abc);
       visti.add(l.tempo!);
       expect(somma(l.battute[0]!) + es.mancano).toBe(BATTUTA[l.tempo!]);
@@ -75,8 +75,8 @@ describe('Completa la battuta: genera', () => {
 
 const f = (s: string): Figura => ({ figura: s.replace('.', '') as Figura['figura'], punto: s.endsWith('.') });
 const figure = (s: string) => ({ figure: s.split(' ').map(f) });
-const completa = (tempo: EsercizioCompletaLaBattuta['tempo'], scritte: number[][], mancano: number): EsercizioCompletaLaBattuta =>
-  ({ tipo: 'completa-la-battuta', tempo, scritte, mancano, abc: '' });
+const completa = (indicazione: EsercizioCompletaLaBattuta['indicazione'], scritte: number[][], mancano: number): EsercizioCompletaLaBattuta =>
+  ({ tipo: 'completa-la-battuta', indicazione, scritte, mancano, abc: '' });
 
 describe('Completa la battuta: valuta', () => {
   const mancaMinima = completa('4/4', [[4], [2, 2]], 8);
@@ -116,7 +116,7 @@ describe('Completa la battuta: valuta', () => {
 
   it('per ogni seed la Figura giusta completa la Battuta', () => {
     for (const s of SEED) {
-      const es = genera('completa-la-battuta', { tempi: [...TEMPI] }, s);
+      const es = genera('completa-la-battuta', { indicazioni: [...INDICAZIONI_BATTUTA] }, s);
       const croma = { figura: 'croma', punto: false } as const;
       expect(valuta(es, { figure: Array(es.mancano / 2).fill(croma) }).esito).toBe('giusto');
     }

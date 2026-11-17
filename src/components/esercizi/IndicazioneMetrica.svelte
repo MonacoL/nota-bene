@@ -1,7 +1,9 @@
 <script lang="ts">
   // L'Indicazione metrica da riconoscere (#85): i due numeri uno sopra l'altro, come all'inizio di un rigo, senza
   // linea in mezzo, perché non è una frazione.
-  let { indicazione }: { indicazione: string } = $props();
+  import type { NomeIndicazione } from '../../esercizi';
+
+  let { indicazione }: { indicazione: NomeIndicazione } = $props();
   const [sopra, sotto] = $derived(indicazione.split('/'));
 </script>
 

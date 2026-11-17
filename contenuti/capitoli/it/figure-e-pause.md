@@ -1,14 +1,14 @@
 ---
 revisione: { da: "nessuno, bozza di Claude", data: 2026-11-17 }
 esercizi:
-  - { tipo: completa-la-battuta, tempi: ["4/4"] }
+  - { tipo: completa-la-battuta, indicazioni: ["4/4"] }
 ---
 
 La posizione sul pentagramma dice quale nota cantare. La forma della nota dice quanto a lungo tenerla. Questo capitolo parla della seconda cosa: le figure, le pause e i segni che allungano una nota.
 
 ## Note e pause
 
-In un brano ci sono suoni e silenzi, e la partitura li scrive tutti e due. I suoni si scrivono con le **note**, i silenzi con le **pause**. Il segno che dice quanto dura una nota o una pausa si chiama figura.
+In un brano ci sono suoni e silenzi, e la partitura li scrive tutti e due. I suoni si scrivono con le note, i silenzi con le **pause**. Il segno che dice quanto dura una nota o una pausa si chiama figura.
 
 ## Le figure
 

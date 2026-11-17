@@ -1,15 +1,15 @@
-// Esercizio "Completa la battuta" (Capitoli 3 e 4): una Battuta a cui manca la fine; si aggiungono Figure dalla
+// Esercizio "Completa la battuta" (Figure e pause, Indicazioni metriche): una Battuta a cui manca la fine; si aggiungono Figure dalla
 // tavolozza (semibreve, minima, semiminima, croma, più il punto) e conta la somma (ticket "Interazione negli Esercizi
 // di teoria da telefono").
 import { casuale } from './casuale';
-import { abcBattute, durata, durataBattuta, figura, inCrome, nomeFigura, pulsazione, RIEMPIMENTI, semplice, tempo, type Figura, type NomeTempo } from './ritmo';
+import { abcBattute, durata, durataBattuta, figura, inCrome, nomeFigura, pulsazione, RIEMPIMENTI, semplice, tempo, type Figura, type IndicazioneBattuta } from './ritmo';
 import type { Testi } from './testi';
 
-export type Parametri = { tempi: NomeTempo[] };
+export type Parametri = { indicazioni: IndicazioneBattuta[] };
 
 export type Esercizio = {
   tipo: 'completa-la-battuta';
-  tempo: NomeTempo;
+  indicazione: IndicazioneBattuta;
   /** Le Figure scritte, a gruppi per Pulsazione, in semicrome. */
   scritte: number[][];
   /** Quanto manca alla fine della Battuta, in semicrome. */
@@ -21,7 +21,7 @@ export type Risposta = { figure: Figura[] };
 
 export function genera(parametri: Parametri, seed: number): Esercizio {
   const caso = casuale(seed);
-  const nome = caso.scegli(parametri.tempi);
+  const nome = caso.scegli(parametri.indicazioni);
   const t = tempo(nome);
   const battuta = durataBattuta(t);
   const p = pulsazione(t);
@@ -42,11 +42,11 @@ export function genera(parametri: Parametri, seed: number): Esercizio {
   const resto = (battuta - mancano) % p;
   if (resto === 2) scritte.push([2]);
   if (resto === 4) scritte.push(caso.scegli([[4], [2, 2]]));
-  return { tipo: 'completa-la-battuta', tempo: nome, scritte, mancano, abc: abcBattute(nome, [scritte]) };
+  return { tipo: 'completa-la-battuta', indicazione: nome, scritte, mancano, abc: abcBattute(nome, [scritte]) };
 }
 
 export function valuta(es: Esercizio, risposta: Risposta) {
-  const t = tempo(es.tempo);
+  const t = tempo(es.indicazione);
   const battuta = durataBattuta(t);
   const data = durata(risposta.figure);
   const giusto = data === es.mancano;
@@ -54,10 +54,10 @@ export function valuta(es: Esercizio, risposta: Risposta) {
   const manca = es.mancano === 2;
   const spiegazione: Testi = {
     it:
-      `Una battuta di ${es.tempo} vale ${crome(battuta)} crome. Le note scritte ne valgono ${crome(battuta - es.mancano)}: ` +
+      `Una battuta di ${es.indicazione} vale ${crome(battuta)} crome. Le note scritte ne valgono ${crome(battuta - es.mancano)}: ` +
       `${manca ? 'ne manca' : 'ne mancano'} ${crome(es.mancano)}. La tua risposta ne vale ${crome(data)}`,
     en:
-      `A ${es.tempo} measure is worth ${crome(battuta)} eighth notes. The written notes are worth ${crome(battuta - es.mancano)}: ` +
+      `A ${es.indicazione} measure is worth ${crome(battuta)} eighth notes. The written notes are worth ${crome(battuta - es.mancano)}: ` +
       `${crome(es.mancano)} ${manca ? 'is' : 'are'} missing. Your answer is worth ${crome(data)}`,
   };
   if (giusto) {

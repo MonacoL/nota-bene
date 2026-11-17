@@ -21,7 +21,7 @@ export type EsercizioCompletaLaBattuta = completaLaBattuta.Esercizio;
 export type EsercizioRiconosciIlTempo = riconosciIlTempo.Esercizio;
 export type EsercizioScegliLeFigure = scegliLeFigure.Esercizio;
 export { INDICAZIONI_FIGURE, FIGURE_METRICA } from './scegli-le-figure';
-export { TEMPI, FIGURE, abcBattute, durata, nomeFigura, type Figura, type NomeFigura, type NomeTempo } from './ritmo';
+export { INDICAZIONI_BATTUTA, FIGURE, abcBattute, durata, nomeFigura, type Figura, type NomeFigura, type IndicazioneBattuta } from './ritmo';
 export { INDICAZIONI, NUMERI_TEMPO, GENERI, metrica, type NomeIndicazione, type NumeroTempo, type Genere } from './metrica';
 export type EsercizioTrovaLaTonalita = trovaLaTonalita.Esercizio;
 export type { Modo } from './trova-la-tonalita';

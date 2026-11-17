@@ -8,7 +8,7 @@ Il capitolo "Pulsazione e suddivisione" ha mostrato che le pulsazioni si raggrup
 
 Se ogni pulsazione si divide in due suddivisioni, il tempo è **semplice**.
 
-Se si divide in tre, il tempo è **composto**. Conta solo questo: non la velocità del brano, non il numero di pulsazioni, non il segno scritto all'inizio.
+Se si divide in tre, il tempo è **composto**. Conta solo questo, e non la velocità del brano né il segno scritto all'inizio.
 
 Nei due esempi qui sotto la battuta ha due pulsazioni. Nel primo ogni pulsazione si divide in due, e si conta "uno-e, due-e"; nel secondo si divide in tre, e si conta "uno-e-a, due-e-a".
 
@@ -30,7 +30,7 @@ K:C
 BBB BBB | B3 B3 | BBB BBB | B3 B3 |]
 ```
 
-Il primo è un tempo semplice, il secondo un tempo composto. Molte ninne nanne e barcarole sono in tempo composto: la divisione in tre dà quel dondolio.
+Il primo è un tempo semplice, il secondo un tempo composto. Molte ninne nanne e barcarole sono in tempo composto: la suddivisione in tre dà quel dondolio.
 
 ## Quante pulsazioni
 
@@ -66,10 +66,10 @@ K:C
 BBB BBB | B3 B3 |]
 ```
 
-Questi due esempi hanno battute della stessa lunghezza, sei crome. Nel primo le crome vanno a coppie: tre pulsazioni divise in due, ternario semplice. Nel secondo vanno a gruppi di tre: due pulsazioni divise in tre, binario composto. Cambia come si contano, e cambia come suonano.
+Questi due esempi hanno battute della stessa lunghezza, sei crome. Nel primo le crome vanno a coppie: tre pulsazioni divise in due, ternario semplice. Nel secondo vanno a gruppi di tre: due pulsazioni divise in tre, binario composto.
 
 ## Una regola tradizionale
 
-Questa classificazione vale per la musica occidentale come la si scriveva per tradizione, ed è quella che si trova nella grande maggioranza dei brani corali. Non è universale: dal Novecento i compositori sperimentano molto, e si trovano battute che non entrano in queste caselle. Per cominciare a leggere, però, è la mappa giusta.
+Questa classificazione vale per la musica occidentale come la si scriveva per tradizione, ed è quella che si studia nei corsi di teoria. Non è universale: dal Novecento i compositori sperimentano molto, e si trovano battute che non entrano in queste caselle.
 
 Come la partitura scrive il tempo, con i numeri all'inizio del rigo, lo spiega il capitolo "Indicazioni metriche".

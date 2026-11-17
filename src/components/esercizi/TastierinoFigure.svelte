@@ -2,25 +2,25 @@
   // Risposta di "Completa la battuta": la tavolozza di Figure (semibreve, minima, semiminima, croma) più il punto.
   // Si possono mettere più Figure, ognuna compare sul rigo, e conta la somma; ⌫ cancella l'ultima
   // (ticket "Interazione negli Esercizi di teoria da telefono").
-  import { abcBattute, durata, FIGURE, type Figura as F, type NomeTempo } from '../../esercizi';
+  import { abcBattute, durata, FIGURE, type Figura as F, type IndicazioneBattuta } from '../../esercizi';
   import type { Dizionario } from '../../i18n/it';
   import Figura from './Figura.svelte';
 
   interface Props {
     t: Dizionario['serie'];
-    tempo: NomeTempo;
+    indicazione: IndicazioneBattuta;
     /** Le Figure già scritte, a gruppi per Pulsazione, in semicrome. */
     scritte: number[][];
     onbozza: (abc: string) => void;
     onrisposta: (risposta: { figure: F[] }) => void;
   }
-  let { t, tempo, scritte, onbozza, onrisposta }: Props = $props();
+  let { t, indicazione, scritte, onbozza, onrisposta }: Props = $props();
 
   let punto = $state(false);
   let aggiunte = $state<F[]>([]);
 
   // Le Figure aggiunte vanno ognuna per conto suo, dopo quelle scritte.
-  $effect(() => onbozza(abcBattute(tempo, [[...scritte, ...aggiunte.map((f) => [durata([f])])]])));
+  $effect(() => onbozza(abcBattute(indicazione, [[...scritte, ...aggiunte.map((f) => [durata([f])])]])));
 
   function aggiungi(figura: F['figura']) {
     aggiunte = [...aggiunte, { figura, punto }];

@@ -3,7 +3,7 @@ revisione: { da: "nessuno, bozza di Claude", data: 2026-11-17 }
 esercizi:
   - { tipo: riconosci-il-tempo, indicazioni: ["2/2", "2/4", "3/4", "4/4", "5/4", "7/4", "3/8", "6/4", "6/8", "9/8", "12/8", "15/8", "21/8"] }
   - { tipo: scegli-le-figure, indicazioni: ["2/2", "2/4", "3/4", "4/4", "5/4", "7/4", "3/8", "6/4", "6/8", "9/8", "12/8", "15/8"] }
-  - { tipo: completa-la-battuta, tempi: ["2/4", "3/4", "4/4", "6/8", "9/8", "12/8"] }
+  - { tipo: completa-la-battuta, indicazioni: ["2/4", "3/4", "4/4", "6/8", "9/8", "12/8"] }
 ---
 
 All'inizio del rigo, dopo la chiave e l'armatura, ci sono due numeri uno sopra l'altro, come 3/4 o 6/8. È l'**indicazione metrica**, e dice in che tempo è il brano: quante pulsazioni ha la battuta e se si suddividono in due o in tre. Questo capitolo spiega come si legge.

@@ -48,9 +48,9 @@ K:C
 BBB BBB | BBB BBB | BBB BBB |]
 ```
 
-Si possono anche suonare insieme una divisione in due e una in tre: è un gioco ritmico che i compositori usano. Chi ascolta però ne segue una sola, e l'altra la sente come un contrasto.
+Si possono anche suonare insieme una suddivisione in due e una in tre: è un gioco ritmico che i compositori usano. Chi ascolta però ne segue una sola, e l'altra la sente come un contrasto.
 
-Riconoscere se la pulsazione si divide in due o in tre è la prima cosa da capire di un brano. Da questo dipende se il tempo è semplice o composto, come spiega il capitolo "Tempi semplici e composti".
+Riconoscere se la pulsazione si divide in due o in tre è una delle prime cose da riconoscere in un brano. Da questo dipende se il tempo è semplice o composto, come spiega il capitolo "Tempi semplici e composti".
 
 ## La battuta
 
@@ -58,7 +58,7 @@ Le pulsazioni non sono tutte uguali: a intervalli regolari ne arriva una più im
 
 In prova sentirai dire anche "misura" per la battuta e "movimento" per la pulsazione: sono sinonimi. In Nota Bene usiamo battuta e pulsazione.
 
-La prima pulsazione della battuta si chiama **battere**, tutte le altre insieme si chiamano **levare**. I nomi vengono dal gesto di chi dirige: sulla prima pulsazione la mano scende, sull'ultima risale.
+La prima pulsazione della battuta si chiama **battere**, e tutte le altre insieme si chiamano levare. Il nome battere viene dal gesto di chi dirige: sulla prima pulsazione la mano scende con decisione.
 
 ## L'andamento
 

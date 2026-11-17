@@ -2,7 +2,7 @@
 // Niente gruppi irregolari (terzine e simili): il Percorso non li insegna (ADR-0003).
 import { metrica, type NomeIndicazione } from './metrica';
 
-/** La tavolozza di "Completa la battuta". "Scegli le figure" aggiunge la semicroma (metrica.ts). */
+/** La tavolozza di "Completa la battuta". "Scegli le figure" aggiunge la semicroma (scegli-le-figure.ts). */
 export const FIGURE = ['semibreve', 'minima', 'semiminima', 'croma'] as const;
 export type NomeFigura = (typeof FIGURE)[number] | 'semicroma';
 export type Figura = { figura: NomeFigura; punto: boolean };
@@ -30,10 +30,10 @@ export function semplice(tempo: Tempo): boolean {
  * Le Indicazioni metriche di "Completa la battuta": Pulsazione di semiminima nei semplici, di semiminima col punto
  * nei composti. Il 3/8 non c'è: è semplice, con la Pulsazione di croma, e la tavolozza non ha la semicroma.
  */
-export const TEMPI = ['2/4', '3/4', '4/4', '6/8', '9/8', '12/8'] as const;
-export type NomeTempo = (typeof TEMPI)[number];
+export const INDICAZIONI_BATTUTA = ['2/4', '3/4', '4/4', '6/8', '9/8', '12/8'] as const;
+export type IndicazioneBattuta = (typeof INDICAZIONI_BATTUTA)[number];
 
-export function tempo(nome: NomeTempo): Tempo {
+export function tempo(nome: IndicazioneBattuta): Tempo {
   const [battiti, unita] = nome.split('/').map(Number) as [number, 4 | 8];
   return { battiti, unita };
 }
@@ -63,7 +63,7 @@ export const RIEMPIMENTI: Record<4 | 6, number[][]> = {
  * Una Battuta in ABC, sul Si4 (la riga centrale): un gruppo per Pulsazione, le note di un gruppo unite.
  * Le note dopo la Battuta scritta ("Completa la battuta") vanno ognuna per conto suo.
  */
-export function abcBattute(nome: NomeTempo | undefined, battute: number[][][], { aCapo = false } = {}): string {
+export function abcBattute(nome: IndicazioneBattuta | undefined, battute: number[][][], { aCapo = false } = {}): string {
   // Con aCapo ogni Battuta va su un rigo suo: due Battute di 12/8 non stanno in un rigo da telefono.
   const corpo = battute.map((gruppi) => gruppi.map((g) => g.map((d) => `B${d}`).join('')).join(' ')).join(aCapo ? ' |\n' : ' | ');
   return `X:1\nM:${nome ?? 'none'}\nL:1/16\nK:C clef=treble\n${corpo} |]\n`;

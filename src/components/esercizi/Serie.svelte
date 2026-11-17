@@ -166,7 +166,7 @@
           {#if dichiarazione.tipo === 'nomina-la-sillaba'}
             <TastierinoSillaba {t} cromatiche={dichiarazione.cromatiche} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'completa-la-battuta'}
-            <TastierinoFigure {t} tempo={esercizio.tempo} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
+            <TastierinoFigure {t} indicazione={esercizio.indicazione} scritte={esercizio.scritte} onbozza={(abc) => (bozza = abc)} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'riconosci-il-tempo'}
             <SceltaTempo {t} onrisposta={rispondi} />
           {:else if esercizio.tipo === 'scegli-le-figure'}

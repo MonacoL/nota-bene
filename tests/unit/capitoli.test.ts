@@ -74,13 +74,12 @@ describe('scaletta del Percorso', () => {
     ]);
   });
 
-  it('chi entra in Scaletta senza Progressi non trova bloccato Figure e pause, che è il prossimo passo (#84)', () => {
+  it('chi entra in Scaletta senza Progressi ha come prossimo passo il primo Capitolo, Pulsazione e suddivisione (#84, #85)', () => {
     const conFile = scaletta.map((v) => ({ ...v, inPreparazione: !existsSync(`contenuti/capitoli/it/${v.id}.md`) }));
     const effettivi = conFile.map((v) => ({ ...v, prerequisiti: prerequisitiEffettivi(v.prerequisiti, conFile) }));
-    expect(prossimoPasso(effettivi, new Set())).toBe('figure-e-pause');
-    expect(effettivi.find((v) => v.id === 'do-mobile')!.prerequisiti).toEqual([
-      'figure-e-pause', 'tempi-semplici-e-composti', 'chiavi', 'modo-maggiore-e-minore',
-    ]);
+    expect(prossimoPasso(effettivi, new Set())).toBe('pulsazione-e-suddivisione');
+    // DO e SOL è in preparazione e dietro ha solo Capitoli in preparazione: non resta niente al suo posto.
+    expect(effettivi.find((v) => v.id === 'do-mobile')!.prerequisiti).toEqual(['indicazioni-metriche', 'chiavi', 'modo-maggiore-e-minore']);
   });
 
   it('usa slug senza numero', () => {
