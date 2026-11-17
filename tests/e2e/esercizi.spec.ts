@@ -2,10 +2,9 @@
 // Con ?seed=s l'Esercizio n (da 0) della Serie usa il seed s + n: il test genera lo stesso Esercizio e sa la risposta.
 import { expect, test, type Page } from '@playwright/test';
 import { genera, type Chiave, type Nota } from '../../src/esercizi';
-import { CAPITOLI } from './pagine';
 
-const PRIMO = CAPITOLI[0]!;
-const SECONDO = CAPITOLI[1]!;
+const PRIMO = 'note-toni-e-semitoni';
+const SECONDO = 'chiavi';
 const NOMI_IT = { C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si' } as const;
 const SEGNI_IT = { '-1': 'bemolle', '0': 'bequadro', '1': 'diesis' } as const;
 
@@ -76,7 +75,7 @@ test('lo stesso tasto con un altro nome è sbagliato, e la spiegazione lo dice',
   await expect(foglio).toContainText('stesso tasto');
 });
 
-test('nel Capitolo 2 compaiono tutte e tre le Chiavi', async ({ page }) => {
+test('in Chiavi compaiono tutte e tre le Chiavi', async ({ page }) => {
   await page.goto(`it/capitoli/${SECONDO}/esercizi/?seed=0`);
   const chiavi = new Set<string>();
   const foglio = page.getByRole('region', { name: 'Riscontro' });

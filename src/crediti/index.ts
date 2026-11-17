@@ -22,6 +22,9 @@ const ESCLUSE = new Set([
   'anteprime', 'letture', 'contenuti', 'docs', 'tests',
 ]);
 
+/** Gli ambienti Python degli strumenti (es. strumenti/trascrizione/.venv), a qualunque profondità: sono dipendenze locali, fuori da git. */
+const ESCLUSE_OVUNQUE = new Set(['.venv']);
+
 const testiPerLingua = z.object({ it: z.string().min(1), en: z.string().min(1) }).strict();
 
 /** Un asset nel repo, con i suoi file di licenza nella stessa cartella. */
@@ -72,6 +75,7 @@ function cartelle(radice: string): string[] {
     for (const voce of readdirSync(join(radice, relativa), { withFileTypes: true })) {
       if (!voce.isDirectory()) continue;
       if (relativa === '' && ESCLUSE.has(voce.name)) continue;
+      if (ESCLUSE_OVUNQUE.has(voce.name)) continue;
       const figlia = relativa ? `${relativa}/${voce.name}` : voce.name;
       trovate.push(figlia);
       visita(figlia);

@@ -1,8 +1,8 @@
 // Regole del Percorso e dei Capitoli: schema del frontmatter, ordine, ripiego sull'italiano, avvisi di traduzione.
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { parse } from 'yaml';
 import { describe, expect, it } from 'vitest';
-import { avvisiTraduzione, controllaFile, mancanti, ordina, prossimoPasso, scegliTesto, vicini } from '../../src/contenuti/percorso';
+import { avvisiTraduzione, controllaFile, mancanti, ordina, prerequisitiEffettivi, prossimoPasso, scegliTesto, vicini } from '../../src/contenuti/percorso';
 import { schemaCapitoloEn, schemaCapitoloIt, schemaVocePercorso, type VocePercorso } from '../../src/contenuti/schemi';
 import { htmlPentagramma, pentagrammi } from '../../src/markdown/pentagrammi';
 
@@ -66,11 +66,20 @@ describe('frontmatter dei Capitoli', () => {
 describe('scaletta del Percorso', () => {
   const scaletta = ordina(parse(readFileSync('contenuti/percorso.yml', 'utf8')).map((v: unknown) => schemaVocePercorso.parse(v)));
 
-  it('ha i 10 Capitoli, con "Prova le letture" solo nel 9 e nel 10', () => {
-    expect(scaletta).toHaveLength(10);
+  it('ha i 16 Capitoli, con "Prova le letture" solo nel 13 e nel 16', () => {
+    expect(scaletta).toHaveLength(16);
     expect(scaletta.filter((v) => v.prova_letture).map((v) => [v.numero, v.prova_letture])).toEqual([
-      [9, 'letture'],
-      [10, 'avanzate'],
+      [13, 'letture'],
+      [16, 'avanzate'],
+    ]);
+  });
+
+  it('chi entra in Scaletta senza Progressi non trova bloccato Figure e pause, che è il prossimo passo (#84)', () => {
+    const conFile = scaletta.map((v) => ({ ...v, inPreparazione: !existsSync(`contenuti/capitoli/it/${v.id}.md`) }));
+    const effettivi = conFile.map((v) => ({ ...v, prerequisiti: prerequisitiEffettivi(v.prerequisiti, conFile) }));
+    expect(prossimoPasso(effettivi, new Set())).toBe('figure-e-pause');
+    expect(effettivi.find((v) => v.id === 'do-mobile')!.prerequisiti).toEqual([
+      'figure-e-pause', 'tempi-semplici-e-composti', 'chiavi', 'modo-maggiore-e-minore',
     ]);
   });
 
@@ -116,6 +125,46 @@ describe('Prerequisiti mancanti e prossimo passo', () => {
     // d segnato come già studiato senza c: il prossimo passo è c.
     expect(prossimoPasso(scaletta, new Set(['a', 'b', 'd']))).toBe('c');
     expect(prossimoPasso(scaletta, new Set(['a', 'b', 'c', 'd']))).toBeUndefined();
+  });
+});
+
+describe('Capitoli in preparazione nella Scaletta', () => {
+  // La Scaletta di #84, con i Capitoli senza testo segnati: un Prerequisito in preparazione non blocca, e al suo
+  // posto contano i suoi Prerequisiti, a catena.
+  const p = (id: string, prerequisiti: string[] = [], inPreparazione = false) => ({ id, prerequisiti, inPreparazione });
+  const scaletta = [
+    p('pulsazione', [], true),
+    p('unisono', [], true),
+    p('figure', ['pulsazione']),
+    p('scala-cantata', ['unisono'], true),
+    p('tempi', ['pulsazione']),
+    p('do-e-sol', ['scala-cantata'], true),
+    p('indicazioni', ['figure', 'tempi'], true),
+    p('note', ['scala-cantata']),
+    p('chiavi', ['note']),
+    p('maggiore', ['note']),
+    p('minore', ['maggiore']),
+    p('modo', ['minore']),
+    p('do-mobile', ['do-e-sol', 'indicazioni', 'chiavi', 'modo']),
+  ];
+
+  it('un Prerequisito in preparazione lascia il posto ai suoi Prerequisiti, a catena', () => {
+    expect(prerequisitiEffettivi(['do-e-sol', 'indicazioni', 'chiavi', 'modo'], scaletta)).toEqual(['figure', 'tempi', 'chiavi', 'modo']);
+    expect(prerequisitiEffettivi(['pulsazione'], scaletta)).toEqual([]);
+    expect(prerequisitiEffettivi(['chiavi', 'modo'], scaletta)).toEqual(['chiavi', 'modo']);
+  });
+
+  it('un Prerequisito ereditato due volte compare una volta sola, al primo posto in cui arriva', () => {
+    expect(prerequisitiEffettivi(['figure', 'indicazioni'], scaletta)).toEqual(['figure', 'tempi']);
+    expect(prerequisitiEffettivi(['indicazioni', 'tempi', 'figure'], scaletta)).toEqual(['figure', 'tempi']);
+  });
+
+  it('il prossimo passo salta i Capitoli in preparazione e ne eredita i Prerequisiti', () => {
+    const conEffettivi = scaletta.map((c) => ({ ...c, prerequisiti: prerequisitiEffettivi(c.prerequisiti, scaletta) }));
+    expect(prossimoPasso(conEffettivi, new Set())).toBe('figure');
+    expect(prossimoPasso(conEffettivi, new Set(['figure']))).toBe('tempi');
+    expect(prossimoPasso(conEffettivi, new Set(['figure', 'tempi']))).toBe('note');
+    expect(prossimoPasso(conEffettivi, new Set(['figure', 'tempi', 'note', 'chiavi', 'maggiore', 'minore', 'modo']))).toBe('do-mobile');
   });
 });
 

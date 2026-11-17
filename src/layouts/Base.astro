@@ -17,8 +17,14 @@ const t = testi(lingua);
 const tAltra = testi(altraLingua(lingua));
 const titoloPagina = titolo ? `${titolo} / ${t.nomeSito}` : t.nomeSito;
 const base = import.meta.env.BASE_URL;
-// Per i Progressi (ADR-0011, src/progressi/sito.ts): i Capitoli con i tipi dei loro Esercizi e i Prerequisiti.
-const datiCapitoli = (await capitoli(lingua)).map((c) => ({ id: c.id, tipi: c.esercizi.map((e) => e.tipo), prerequisiti: c.prerequisiti }));
+// Per i Progressi (ADR-0011, src/progressi/sito.ts): i Capitoli con i tipi dei loro Esercizi, i Prerequisiti che
+// bloccano e se sono in preparazione (#84).
+const datiCapitoli = (await capitoli(lingua)).map((c) => ({
+  id: c.id,
+  tipi: c.esercizi.map((e) => e.tipo),
+  prerequisiti: c.prerequisitiEffettivi,
+  ...(c.inPreparazione ? { inPreparazione: true } : {}),
+}));
 // Le voci del menu: link nell'intestazione da 440 px in su, pulsante con le lineette sotto (ticket "Home introduttiva con menu verso Capitoli e Letture").
 const voci = [
   { href: url(lingua, 'capitoli/'), testo: t.navCapitoli },

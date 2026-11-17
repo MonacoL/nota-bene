@@ -3,7 +3,8 @@
 // Chi cambia i Progressi (Serie, segna, cancella, modo) lo annuncia con l'evento CAMBIO, e chi li mostra si aggiorna.
 import { creaProgressi, type Archivio, type CapitoloDaCompletare } from '.';
 
-export type CapitoloDelSito = CapitoloDaCompletare & { prerequisiti: string[] };
+/** prerequisiti: quelli che bloccano, già effettivi (prerequisitiEffettivi in contenuti/percorso.ts). */
+export type CapitoloDelSito = CapitoloDaCompletare & { prerequisiti: string[]; inPreparazione?: boolean };
 
 export const CAMBIO = 'nb:progressi';
 

@@ -14,7 +14,7 @@ _Avoid_: corso, programma, ramo, binario
 _In inglese_: Path: Rhythm path, Harmony path, Melody path
 
 **Scaletta**:
-L'ordine di studio consigliato dal maestro, una sola sequenza che alterna Capitoli dei tre Percorsi. Seguire la Scaletta è il modo di studio di partenza: ciò di cui mancano dei Prerequisiti resta bloccato finché non sono Capitoli completati.
+L'ordine di studio consigliato dal maestro, una sola sequenza che alterna Capitoli del ritmico e del melodico; quelli dell'armonico vengono più avanti. Seguire la Scaletta è il modo di studio di partenza: ciò di cui mancano dei Prerequisiti resta bloccato finché non sono Capitoli completati.
 _Avoid_: programma, piano di studio, sequenza
 _In inglese_: Sequence; "follow the sequence"
 
@@ -24,7 +24,7 @@ _Avoid_: free roaming, modalità libera, navigazione libera
 _In inglese_: Free study
 
 **Prossimo passo**:
-Il primo Capitolo della Scaletta che non è completato e ha tutti i Prerequisiti completati.
+Il primo Capitolo della Scaletta che non è completato, non è in preparazione e ha tutti i Prerequisiti completati.
 _Avoid_: prossimo capitolo, prossima lezione
 _In inglese_: Next step
 
@@ -32,6 +32,11 @@ _In inglese_: Next step
 Unità di studio su un solo argomento (es. unisono, scala minore), con una spiegazione ed Esercizi di teoria, Esercizi pratici o tutti e due. Appartiene a un solo Percorso.
 _Avoid_: lezione (si confonde con le lezioni dal maestro), modulo, unità
 _In inglese_: Chapter
+
+**Capitolo in preparazione**:
+Capitolo che sta già nella Scaletta ma non ha ancora la spiegazione. Non blocca niente: come Prerequisito non conta, e al suo posto contano i suoi Prerequisiti.
+_Avoid_: capitolo vuoto, bozza, in arrivo
+_In inglese_: Chapter being prepared
 
 **Capitolo completato**:
 Capitolo di cui il corista ha fatto, per ogni tipo di esercizio che ha una risposta giusta (Esercizi di teoria ed Esercizi pratici di riconoscimento), una Serie con almeno 8 risposte giuste al primo colpo, oppure che ha segnato come già studiato.
@@ -44,7 +49,7 @@ _Avoid_: account, profilo, storico, punteggio
 _In inglese_: Progress
 
 **Prerequisito**:
-Capitolo che serve aver completato per affrontare un Capitolo, i suoi esercizi o una Lettura, anche se sta in un altro Percorso. Chi segue la Scaletta trova bloccato ciò di cui manca un Prerequisito. I Prerequisiti di una Lettura ne definiscono la difficoltà.
+Capitolo che serve aver completato per affrontare un Capitolo, i suoi esercizi o una Lettura, anche se sta in un altro Percorso. Chi segue la Scaletta trova bloccato ciò di cui manca un Prerequisito. Un Capitolo in preparazione non è un Prerequisito che manca: lo sostituiscono i suoi Prerequisiti, a catena. I Prerequisiti di una Lettura ne definiscono la difficoltà.
 _Avoid_: livello, difficoltà numerica, requisito
 _In inglese_: Prerequisite
 

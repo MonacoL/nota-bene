@@ -7,8 +7,8 @@ import { assetDiTerzi, braniDeiCrediti, type Asset, type BranoDeiCrediti } from 
 import type { Lingua } from '../i18n';
 import { capitoli, stampaAvvisiTraduzione } from './capitoli';
 import { letture } from './letture';
-import { controllaPagine, type PaginaServizio } from './pagine';
-import { avvisiTraduzione } from './percorso';
+import { controllaPagine, type PaginaGuida, type PaginaServizio } from './pagine';
+import { avvisiTraduzione, scegliTesto } from './percorso';
 import { controllaRevisori, formulaRevisione } from './revisori';
 import { schemaRevisori } from './schemi';
 
@@ -21,6 +21,19 @@ let avvisiStampati = false;
  * una traduzione indietro rispetto alla revisione italiana dà solo un avviso, una volta per build (ADR-0006).
  */
 export async function paginaServizio(lingua: Lingua, id: PaginaServizio): Promise<Pagina> {
+  const { it, en } = await pagine();
+  return (lingua === 'it' ? it : en).find((p) => p.id === id)!;
+}
+
+/** Una pagina guida (#84): in inglese, finché manca la traduzione, il testo italiano con l'avviso (ripiego). */
+export async function paginaGuida(lingua: Lingua, id: PaginaGuida): Promise<{ pagina: Pagina; ripiego: boolean }> {
+  const { it, en } = await pagine();
+  const scelta = scegliTesto<Pagina>(lingua, it.find((p) => p.id === id), en.find((p) => p.id === id))!;
+  return { pagina: scelta.testo, ripiego: scelta.ripiego };
+}
+
+/** Le pagine in tutte e due le lingue; la build si ferma se ne manca una o c'è un file in più (controllaPagine). */
+async function pagine() {
   const it = await getCollection('pagineIt');
   const en = await getCollection('pagineEn');
   const errori = controllaPagine(it.map((p) => p.id), en.map((p) => p.id));
@@ -31,7 +44,7 @@ export async function paginaServizio(lingua: Lingua, id: PaginaServizio): Promis
       avvisiTraduzione(new Map(it.map((p) => [p.id, p.data])), new Map(en.map((p) => [p.id, p.data])), 'pagine'),
     );
   }
-  return (lingua === 'it' ? it : en).find((p) => p.id === id)!;
+  return { it, en };
 }
 
 /**

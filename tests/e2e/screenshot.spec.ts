@@ -16,7 +16,7 @@ const SCHERMATE = [
   { nome: 'capitoli-per-percorso', percorso: 'capitoli/#per-percorso' },
   // Il riquadro di blocco: Chiavi richiede il primo Capitolo, e si parte in Scaletta (ADR-0011).
   { nome: 'capitolo-bloccato', percorso: 'capitoli/chiavi/' },
-  { nome: 'capitolo-1', percorso: `capitoli/${CAPITOLI[0]}/` },
+  { nome: 'capitolo-1', percorso: 'capitoli/note-toni-e-semitoni/' },
 ];
 
 for (const { nome, percorso } of SCHERMATE) {
@@ -40,7 +40,7 @@ for (const { nome, percorso } of SCHERMATE) {
   }
 }
 
-// Il foglio di riscontro, giusto e sbagliato, sul primo Esercizio del Capitolo 2 con seed fisso.
+// Il foglio di riscontro, giusto e sbagliato, sul primo Esercizio di Chiavi con seed fisso.
 // Lo screenshot è della finestra e non della pagina intera, perché il foglio è fisso in basso.
 for (const esito of ['giusto', 'sbagliato'] as const) {
   for (const lingua of LINGUE) {
@@ -51,7 +51,7 @@ for (const esito of ['giusto', 'sbagliato'] as const) {
         const { nota } = genera('nomina-la-nota', { chiavi: ['violino', 'violino-ottava-bassa', 'basso'] }, SEED_FOGLIO);
         const risposta = esito === 'giusto' ? nota : { lettera: nota.lettera === 'C' ? 'D' : 'C', alterazione: 0 };
         await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
-        await page.goto(`${lingua}/capitoli/${CAPITOLI[1]}/esercizi/?seed=${SEED_FOGLIO}`);
+        await page.goto(`${lingua}/capitoli/chiavi/esercizi/?seed=${SEED_FOGLIO}`);
         await page.evaluate(() => document.fonts.ready);
         await expect(page.locator('.esercizio .pentagramma svg')).toHaveCount(1);
         const tastierino = page.locator('.tastierino');
@@ -88,7 +88,7 @@ for (const tema of TEMI) {
   test(`esercizi intervalli it`, async ({ page }, info) => {
     test.skip(info.project.name !== 'phone-360-chromium', 'solo a 360 px');
     await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
-    await page.goto(`it/capitoli/${CAPITOLI[7]}/esercizi/?seed=${SEED_FOGLIO}`);
+    await page.goto(`it/capitoli/intervalli/esercizi/?seed=${SEED_FOGLIO}`);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('.esercizio .pentagramma svg')).toHaveCount(1);
     const tastierino = page.getByRole('group', { name: 'Risposta' });

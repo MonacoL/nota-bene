@@ -6,15 +6,18 @@
 // contenuto non compare per un attimo per poi sparire; lo script del modulo decide. Se il modulo non arriva, dopo
 // qualche secondo il contenuto torna.
 import { capitoli } from '../../contenuti/capitoli';
+import { prerequisitiEffettivi } from '../../contenuti/percorso';
 import { testi, url, type Lingua } from '../../i18n';
 
 interface Props {
   lingua: Lingua;
   prerequisiti: readonly string[];
 }
-const { lingua, prerequisiti } = Astro.props;
+const { lingua } = Astro.props;
 const t = testi(lingua).progressi;
 const tutti = await capitoli(lingua);
+// Un Prerequisito in preparazione non blocca: al suo posto i suoi, a catena (#84).
+const prerequisiti = prerequisitiEffettivi(Astro.props.prerequisiti, tutti);
 const elenco = prerequisiti.map((id) => tutti.find((c) => c.id === id)!);
 ---
 {elenco.length > 0 && (

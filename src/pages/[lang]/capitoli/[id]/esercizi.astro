@@ -34,7 +34,8 @@ const successivoHref = successivo && url(lingua, `capitoli/${successivo.id}/`);
   <p class="indietro"><a href={url(lingua, `capitoli/${capitolo.id}/`)}>{t.tornaAlCapitolo}</a></p>
   <h1>{titolo}</h1>
   <Prerequisiti lingua={lingua} capitolo={capitolo} tutti={tutti} />
-  <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />
+  {/* Un Capitolo in preparazione non si blocca mai: c'è solo l'avviso (#84). */}
+  {!capitolo.inPreparazione && <Blocco lingua={lingua} prerequisiti={capitolo.prerequisiti} />}
 
   <div class="bloccabile">
     {capitolo.esercizi.length
